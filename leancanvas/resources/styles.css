@@ -1,0 +1,51 @@
+/* style for the main table */
+
+.Canvas_main {
+    width: 100%;
+    height: inherit;
+    border: 2px solid;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: #413E4A;
+    font-size: 8pt;
+}
+
+.Canvas_main_column {
+    width: 20%;
+    height: inherit;
+    border: 1px solid;
+    vertical-align: top;
+    background-color: #F7E4BE;
+}
+
+.Canvas_column_table {
+    margin: auto;
+    height: inherit;
+    width: 100%;
+}
+
+.Canvas_main_column_row {
+    min-height: 100px;
+    height: inherit;
+    width: inherit;
+    vertical-align: text-top;
+}
+
+/* unvisited link */
+a:link {
+    color: #F7EDBD;
+}
+
+/* visited link */
+a:visited {
+    color: #F7EDBD;
+}
+
+/* mouse over link */
+a:hover {
+    color: #FAF3D4;
+}
+
+/* selected link */
+a:active {
+    color: #F1E190;
+}

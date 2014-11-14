@@ -1,0 +1,41 @@
+.Row_content {
+    min-height: 150px;
+    height: 100%;
+    background-color: #F0B49E;
+    padding: 5px;
+    border: 1px solid #73626E;
+}
+
+.Row_content_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px 10px;
+}
+
+.Row_content_note {
+    width: 100%;
+    background-color: #B38184;
+    border: 1px solid #73626E;
+}
+
+.Row_content_note_menu {
+    width:100%;
+}
+
+.Row_content_note_menu_element {
+    width: 100%;
+    text-align: right;
+}
+
+.Row_content_note_menu_text {
+    white-space: pre-wrap;
+    color: white;
+    font-size: 11pt;
+    margin: 3px;
+}
+
+.Row_content_table_placeholder {
+    white-space: pre-wrap;
+    font-size: 9pt;
+    color: #696174;
+}

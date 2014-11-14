@@ -1,0 +1,21 @@
+.Row_content_title {
+    width: 100%;
+    padding: 5px;
+}
+
+.Row_content_title_menu {
+    width: 100%;
+    height: 20px;
+    font-size: 10pt;
+    background-color: #73626E;
+    color: white;
+    padding: 5px;
+}
+
+.Row_content_title_menu_text {
+    text-align: left;
+}
+
+.Row_content_title_menu_bar {
+    text-align: right;
+}
