@@ -11,7 +11,7 @@
 .Canvas_main_column {
     width: 20%;
     height: inherit;
-    border: 1px solid #4183C4;
+    /*border: 1px solid #4183C4;*/
     vertical-align: top;
     background-color: #FFFFFF;
 }
