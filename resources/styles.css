@@ -3,7 +3,6 @@
 .Canvas_main {
     width: 100%;
     height: inherit;
-    border: 2px solid;
     font-family: 'Helvetica Neue', arial, freesans, clean, sans-serif;
     color: #393939;
     font-size: 8pt;
@@ -32,20 +31,20 @@
 
 /* unvisited link */
 a:link {
-    color: #F7EDBD;
+    color: #4183C4;
 }
 
 /* visited link */
 a:visited {
-    color: #F7EDBD;
+    color: #4183C4;
 }
 
 /* mouse over link */
 a:hover {
-    color: #FAF3D4;
+    color: #4183C4;
 }
 
 /* selected link */
 a:active {
-    color: #F1E190;
+    color: #4183C4;
 }
