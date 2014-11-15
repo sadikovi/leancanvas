@@ -5,7 +5,7 @@
     height: inherit;
     border: 2px solid;
     font-family: 'Helvetica Neue', arial, freesans, clean, sans-serif;
-    color: #413E4A;
+    color: #393939;
     font-size: 8pt;
 }
 
@@ -14,7 +14,7 @@
     height: inherit;
     border: 1px solid;
     vertical-align: top;
-    background-color: #F7E4BE;
+    background-color: #000000;
 }
 
 .Canvas_column_table {
