@@ -29,16 +29,20 @@
             
             var code = parseGet("code");
             if (code) {
+                var data = JSON.stringify(
+                  {
+                  "client_id":"74f038939436ecfc8eb1",
+                  "client_secret":"d13263f446109f787dcab99153faf5e92df2efa2",
+                  "code" : code
+                  }
+                );
+                
                 var loader = new Loader();
                 loader.send(
                     "POST",
                     false,
                     "https://github.com/login/oauth/access_token",
-                    {
-                        "client_id":"74f038939436ecfc8eb1",
-                        "client_secret":"d13263f446109f787dcab99153faf5e92df2efa2",
-                        "code" : code
-                    },
+                    data,
                     null,
                     null
                 );
