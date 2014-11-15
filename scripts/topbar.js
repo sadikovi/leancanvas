@@ -42,6 +42,9 @@ var TopBar = function(id, parent, loadHandler, saveHandler) {
         if (saveHandler)
             saveHandler.call(this, menuTableTdBarSpanSave, this);
         
+        var login = createElement("a", null, "", null, menuTableTdBar);
+        login.href = "https://github.com/login/oauth/authorize?client_id=74f038939436ecfc8eb1&scope=gist";
+        
         menuTableTdBar.appendChild(menuTableTdBarSpanLoad);
         menuTableTdBar.appendChild(newSpace());
         menuTableTdBar.appendChild(menuTableTdBarSpanSave);
