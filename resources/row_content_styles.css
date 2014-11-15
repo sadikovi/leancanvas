@@ -1,7 +1,7 @@
 .Row_content {
     min-height: 150px;
     height: 100%;
-    background-color: #000000;
+    background-color: #FFFFFF;
     padding: 5px;
     border: 1px solid #73626E;
 }
@@ -14,7 +14,7 @@
 
 .Row_content_note {
     width: 100%;
-    background-color: #000000;
+    background-color: #FFFFFF;
     border: 1px solid #BFBFBF;
 }
 
