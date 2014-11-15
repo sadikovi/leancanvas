@@ -33,7 +33,7 @@
                   {
                   "client_id":"74f038939436ecfc8eb1",
                   "client_secret":"d13263f446109f787dcab99153faf5e92df2efa2",
-                  "code" : code
+                  "code":code
                   }
                 );
                 
@@ -42,7 +42,7 @@
                     "POST",
                     false,
                     "https://github.com/login/oauth/access_token",
-                    "application/json;charset=UTF-8",
+                    "application/x-www-form-urlencoded",
                     data,
                     null,
                     null
@@ -51,8 +51,3 @@
         </script>
     </body>
 </html>
-
-client_id	string	Required. The client ID you received from GitHub when you registered.
-client_secret	string	Required. The client secret you received from GitHub when you registered.
-code	string	Required. The code you received as a response to Step 1.
-redirect_uri	string	The URL in your app where users will be sent after authorization. See details below about redirect urls.
