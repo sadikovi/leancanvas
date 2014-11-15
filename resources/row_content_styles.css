@@ -14,8 +14,8 @@
 
 .Row_content_note {
     width: 100%;
-    background-color: #B38184;
-    border: 1px solid #73626E;
+    background-color: #000000;
+    border: 1px solid #BFBFBF;
 }
 
 .Row_content_note_menu {
@@ -37,5 +37,5 @@
 .Row_content_table_placeholder {
     white-space: pre-wrap;
     font-size: 9pt;
-    color: #696174;
+    color: #BBBBBB;
 }
