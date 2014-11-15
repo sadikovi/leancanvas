@@ -98,10 +98,15 @@ var DataManager = function() {
         }
         
         var cont = {};
-        if ((typeof content) === "string")
-            cont = JSON.parse(content);
-        else
-            cont = content;
+        try {
+            if ((typeof content) === "string") {
+                cont = JSON.parse(content);
+            } else {
+                cont = content;
+            }
+        } catch (e) {
+            cont = DEFAULT_CONTENT;
+        }
         
         var data = cont.data;
         

@@ -6,11 +6,23 @@ function isArray(obj) {
     }
 }
 
-function addEvent(elem, evnt, func) {
+function addEvent(elem, evnt, handler) {
     if (elem.addEventListener)
-        elem.addEventListener(evnt, func, false);
+        elem.addEventListener(evnt, handler, false);
     else if (elem.attachEvent) {
-        elem.attachEvent("on"+evnt, func);
+        elem.attachEvent("on"+evnt, handler);
+    } else {
+        elem["on" + evnt] = null;
+    }
+}
+
+function removeEvent(elem, evnt, handler) {
+    if (elem.removeEventListener) {
+        elem.removeEventListener(evnt, handler, false);
+    } else if (elem.detachEvent) {
+        elem.detachEvent("on" + evnt, handler);
+    } else {
+        elem["on" + evnt] = null;
     }
 }
 
