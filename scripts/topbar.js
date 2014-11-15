@@ -34,11 +34,11 @@ var TopBar = function(id, parent, loadHandler, saveHandler) {
         
         // add controls
         var menuTableTdBar = createElement("td", null, "Row_content_title_menu_bar", null, menuTableTr);
-        var menuTableTdBarSpanLoad = newButton("resources/images/github_load.png", "Load from Github", "Load from Github", null, "Load from Github");
+        var menuTableTdBarSpanLoad = newButton(Source.IMG_GITHUB_LOAD, "Load from Github", "Load from Github", null, "Load from Github");
         if (loadHandler)
             loadHandler.call(this, menuTableTdBarSpanLoad, this);
         
-        var menuTableTdBarSpanSave = newButton("resources/images/github_save.png", "Save on Github", "Save on Github", null, "Save on Github");
+        var menuTableTdBarSpanSave = newButton(Source.IMG_GITHUB_SAVE, "Save on Github", "Save on Github", null, "Save on Github");
         if (saveHandler)
             saveHandler.call(this, menuTableTdBarSpanSave, this);
         

@@ -30,8 +30,8 @@ var Note = function(noteId, text, directory, editHandler, removeHandler) {
         var nTableTrTd = createElement("td", null, "Row_content_note_menu_element", null, nTableTr);
         
         // add note controls
-        var nTableTrTdSpanDelete = newButton("resources/images/note_delete.png", "Delete note", "Delete note", null);
-        var nTableTrTdSpanEdit = newButton("resources/images/note_edit.png", "Edit note", "Edit note", null);
+        var nTableTrTdSpanDelete = newButton(Source.IMG_NOTE_DELETE, "Delete note", "Delete note", null);
+        var nTableTrTdSpanEdit = newButton(Source.IMG_NOTE_EDIT, "Edit note", "Edit note", null);
         // add handlers
         removeHandler.call(this, nTableTrTdSpanDelete, this);
         editHandler.call(this, nTableTrTdSpanEdit, this);

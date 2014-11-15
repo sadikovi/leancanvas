@@ -62,7 +62,7 @@ function loadHandler(trigger, obj) {
             textfield.style.width = "200px";
             textfield.focus();
             
-            var ok = newButton("resources/images/small_ok.png", "Ok", "Ok",
+            var ok = newButton(Source.IMG_OK_SMALL, "Ok", "Ok",
             function() {
                 obj.li.startLoading("Loading gist file...");
                 manager.loadGistFromGithub(textfield.value,
@@ -78,7 +78,7 @@ function loadHandler(trigger, obj) {
                     }
                 );
             }, null);
-            var cancel = newButton("resources/images/small_cancel.png", "Cancel", "Cancel", function() {obj.li.parent.innerHTML=""});
+            var cancel = newButton(Source.IMG_CANCEL_SMALL, "Cancel", "Cancel", function() {obj.li.parent.innerHTML=""});
             span.appendChild(ok);
             span.appendChild(cancel);
         }

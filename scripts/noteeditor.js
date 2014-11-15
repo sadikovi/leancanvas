@@ -23,12 +23,12 @@ var NoteEditor = function() {
                 headView = createElement("span", null, "", null, coatd);
                 var cobtd = createElement("td", null, "NoteEditor_content_heading_controls", null, cotr);
                 
-                var ok = newButton("resources/images/editor_submit.png", "Ok", "Ok",
+                var ok = newButton(Source.IMG_EDITOR_OK, "Ok", "Ok",
                     function() {
                        NoteEditor.hide(true);
                     }
                 );
-                var cancel = newButton("resources/images/editor_close.png", "Cancel", "Cancel",
+                var cancel = newButton(Source.IMG_EDITOR_CANCEL, "Cancel", "Cancel",
                     function() {
                         NoteEditor.hide(false);
                     }

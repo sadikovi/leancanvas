@@ -31,7 +31,7 @@ var LoadingIndicator = function(id, parent) {
             var ttdIm = createElement("td", null, "", null, ttr);
             var ttdTx = createElement("td", null, "", null, ttr);
         
-            var im = newImage("resources/images/spinner.gif", "Loading", "Loading");
+            var im = newImage(Source.IMG_SPINNER, "Loading", "Loading");
             im.style.width = "32px";
             im.style.height = "32px";
             ttdIm.appendChild(im);

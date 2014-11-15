@@ -54,7 +54,7 @@ var Directory = function(id, name, content, callback) {
         
         // add controls
         var menuTableTdBar = createElement("td", null, "Row_content_title_menu_bar", null, menuTableTr);
-        var menuTableTdBarSpan = newButton("resources/images/note_add.png", "Add note", "Add note", null);
+        var menuTableTdBarSpan = newButton(Source.IMG_ADD_NOTE, "Add note", "Add note", null);
         // 1. Add note
         addNoteHandler.call(this, menuTableTdBarSpan, this);
         menuTableTdBar.appendChild(menuTableTdBarSpan);
