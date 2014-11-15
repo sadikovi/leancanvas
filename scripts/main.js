@@ -1,103 +1,108 @@
 // create data manager
 var manager = new DataManager();
+// identify global parent id
+var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 
+
+// called  only once at the begging of the loading the page
 function buildCanvas() {
+    var globalParent = document.getElementById(GLOBAL_PARENT_ID);
+    
+    if (!globalParent)
+        throw ("global div is not found!");
+    
     var content = DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
+    
+    var b = document.getElementById(globalParent.id+"&header_holder");
+    
+    if (!b)
+        throw ("header div is not found!");
+    
+    header.display(b, loadHandler, saveHandler);
 }
 
 //----------------------------------------------
 function updateDOM() {
-    for (i=0; i<document.body.childNodes.length; i++) {
-        if (document.body.childNodes[i] == manager.root) {
-            document.body.removeChild(manager.root);
+    var globalParent = document.getElementById(GLOBAL_PARENT_ID);
+    var localParent = document.getElementById(globalParent.id+"&body_holder");
+    
+    if (!localParent)
+        throw ("footer div is not found!");
+    
+    for (i=0; i<localParent.childNodes.length; i++) {
+        if (localParent.childNodes[i] == manager.root) {
+            localParent.removeChild(manager.root);
             break;
         }
     }
-    
+
     manager.updateDOM();
-    document.body.appendChild(manager.root);
+    localParent.appendChild(manager.root);
 }
 
 //-------Save on Github-----------------
-function saveHandler(trigger, obj) {
-    addEvent(trigger, "click",
-        function(e) {
-            obj.li.startLoading("Saving...");
-            manager.saveGistOnGithub(
-                function(result) {
-                    var result = JSON.parse(result);
-                    obj.li.stopLoading();
-                    saveShowLink.call(this, obj.li.parent, result);
-                },
-                function(result) {
-                    var result = JSON.parse(result);
-                    obj.li.stopLoading();
-                    saveShowError.call(this, obj.li.parent, result);
-                }
-            );
+function saveHandler(spinner) {
+    header.hideAll();
+    spinner.startLoading("Saving...");
+    manager.saveGistOnGithub(
+        function(result) {
+            var result = JSON.parse(result);
+            spinner.stopLoading();
+            saveShowLink.call(this, result);
+        },
+        function(result) {
+            var result = JSON.parse(result);
+            spinner.stopLoading();
+            saveShowError.call(this, result);
         }
     );
 }
 
-function saveShowLink(parent, result) {
+function saveShowLink(result) {
     var docUrl = "<a href=\"" + result.html_url + "\" target=\"blank\">" + result.html_url + "</a>";
-    var span = createElement("span", null, "", "@"+getCurrentDateTime() + " #Saved file: " + docUrl + ". Dont forget to copy link somewhere!", parent);
+    var msg = "@"+getCurrentDateTime() + " #Saved file: " + docUrl + ". Dont forget to copy link somewhere!";
+    header.showMessage(msg);
 }
 
-function saveShowError(parent, result) {
+function saveShowError(result) {
     var docUrl = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-    var span = createElement("span", null, "", "@"+getCurrentDateTime()+" #Error: " + result.message + ", documentation: " + docUrl, parent);
+    var msg = "@"+getCurrentDateTime()+" #Error: " + result.message + ", documentation: " + docUrl;
+    header.showMessage(msg);
 }
 
 //----------Load from Github--------------
-function loadHandler(trigger, obj) {
-    addEvent(trigger, "click",
-        function(e) {
-            var title = obj.li.parent;
-            title.innerHTML = "";
-            var span = createElement("span", "loadgistlink62345", "", "Submit Gist link: ", title);
-            var textfield = createElement("input", null, "", null, span);
-            textfield.style.width = "200px";
-            textfield.focus();
-            
-            var ok = newButton(Source.IMG_OK_SMALL, "Ok", "Ok",
-            function() {
-                obj.li.startLoading("Loading gist file...");
-                manager.loadGistFromGithub(textfield.value,
-                    function(result){
-                        var result = JSON.parse(result);
-                        obj.li.stopLoading();
-                        loadShowResult.call(this, obj.li.parent, result);
-                    },
-                    function(result) {
-                        var result = JSON.parse(result);
-                        obj.li.stopLoading();
-                        loadShowError.call(this, obj.li.parent, result);
-                    }
-                );
-            }, null);
-            var cancel = newButton(Source.IMG_CANCEL_SMALL, "Cancel", "Cancel", function() {obj.li.parent.innerHTML=""});
-            span.appendChild(ok);
-            span.appendChild(cancel);
+function loadHandler(text, spinner) {
+    spinner.startLoading("Loading gist file...");
+    manager.loadGistFromGithub(text,
+        function(result) {
+            var result = JSON.parse(result);
+            spinner.stopLoading();
+            loadShowResult.call(this, result);
+        },
+        function(result) {
+            var result = JSON.parse(result);
+            spinner.stopLoading();
+            loadShowError.call(this, result);
         }
     );
 }
 
-function loadShowResult(parent, result) {
+function loadShowResult(result) {
     var files = result.files;
     var content = null;
     if (files && files[Object.keys(files)[0]].content)
         content = files[Object.keys(files)[0]].content;
-    
+
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 }
 
-function loadShowError(parent, result) {
+function loadShowError(result) {
     var docUrl = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-    var span = createElement("span", null, "", "@" + getCurrentDateTime() + " #Error: " + result.message + ", documentation: " + docUrl, parent);
+    var msg = "@" + getCurrentDateTime() + " #Error: " + result.message + ", documentation: " + docUrl;
+    header.showMessage(msg);
 }
 
 //-----------Working with notes------------------

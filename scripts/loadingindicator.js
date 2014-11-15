@@ -24,6 +24,8 @@ var LoadingIndicator = function(id, parent) {
     }
     
     this.buildNode = function(text) {
+        this.removeNode();
+        
         if (!this.node) {
             var t = createElement("div", this.id, "", null, null);
             var ttable = createElement("table", null, "", null, t);
@@ -32,22 +34,24 @@ var LoadingIndicator = function(id, parent) {
             var ttdTx = createElement("td", null, "", null, ttr);
         
             var im = newImage(Source.IMG_SPINNER, "Loading", "Loading");
-            im.style.width = "32px";
-            im.style.height = "32px";
+            im.style.width = "20px";
+            im.style.height = "20px";
             ttdIm.appendChild(im);
             var span = createElement("span", null, "", text, ttdTx);
-            span.style.color = "#CACACC";
+            span.style.color = "#BBBBBB";
             span.style.fontSize = "11pt";
         
+            this.textNode = span;
             this.node = t;
         }
         
-        this.parent.innerHTML = "";
         this.parent.appendChild(this.node);
     }
     
     this.removeNode = function() {
-        var t = document.getElementById(this.id);
-        this.parent.removeChild(t);
+        if (this.node) {
+            this.parent.removeChild(this.node);
+            this.node = null;
+        }
     }
 }

@@ -2,19 +2,6 @@
 var DEFAULT_CONTENT = {
     "data": [
         {
-            "parentid": "canvas_top_bar",
-            "columns": [
-                {
-                    "id": "topbar_column",
-                    "directories": [
-                        {
-                            "id": "123_topbar"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "parentid": "canvas_top",
             "columns": [
                 {
@@ -79,7 +66,7 @@ var DEFAULT_CONTENT = {
                         {
                             "id": "canvas_customer_segments",
                             "name": "Customer segments",
-                            "placeholder": "Target customers",
+                            "placeholder": "Target customers...",
                             "notes": []
                         }
                     ]

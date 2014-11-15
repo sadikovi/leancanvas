@@ -5,14 +5,14 @@
 .NoteEditor_main {
     width: 400px;
     height: 300px;
-    background-color: #F0B49E;
-    border: 1px solid #F7E4BE;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
     position:fixed;
     z-index: 100;
     top:50%;
     left:50%;
     margin:-200px 0 0 -150px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: 'Helvetica Neue', arial, freesans, clean, sans-serif;
 }
 
 .NoteEditor_background {
@@ -33,11 +33,13 @@
 }
 
 td.NoteEditor_content_heading {
-    font-size: 10pt;
-    color: white;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #393939;
     height: 20px;
     padding: 5px;
-    background-color: #73626E;
+    background-color: #F2F2F2;
+    border: 1px solid #E5E5E5;
 }
 
 .NoteEditor_content_heading_controls {

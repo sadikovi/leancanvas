@@ -52,9 +52,10 @@ function newImage(src, title, alt) {
     return img;
 }
 
-function newSpace() {
+function newSpace(p) {
     var element = createElement("span", null, "space", null);
-    element.style.cssText = "margin-left:5px; margin-right: 5px;"
+    var size = 1*((!p)?5:p);
+    element.style.cssText = "margin-left:"+size+"px; margin-right: "+size+"px;"
     return element;
 }
 
@@ -65,10 +66,13 @@ function newButton(src, title, alt, callback, text) {
     textNode.style.verticalAlign = "middle";
     
     var span = createElement("span", null, "simplebutton", null, null);
-    span.style.cssText = "cursor: pointer";
+    span.style.cssText = "cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none;";
+    
     
     span.appendChild(newSpace());
     span.appendChild(img);
+    if (text)
+        span.appendChild(newSpace(1));
     span.appendChild(textNode);
     
     if (callback)
