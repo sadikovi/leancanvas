@@ -58,6 +58,7 @@ var DataManager = function() {
                     "POST",
                     true,
                     "https://api.github.com/gists",
+                    "application/x-www-form-urlencoded",
                     JSON.stringify(data),
                     function(result) {
                         success.call(this, result);
@@ -79,6 +80,7 @@ var DataManager = function() {
             "GET",
             true,
             "https://api.github.com/gists/"+gistid,
+            "application/x-www-form-urlencoded",
             null,
             function(result) {
                 success.call(this, result);

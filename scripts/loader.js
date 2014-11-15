@@ -9,7 +9,7 @@ var Loader = function() {
     
     this.xmlhttp = xmlhttp;
     
-    this.send = function(method, isAsync, url, params, success, error) {
+    this.send = function(method, isAsync, url, contentType, params, success, error) {
         xmlhttp.onreadystatechange=function() {
             if (xmlhttp.readyState==4 && (xmlhttp.status>=200 && xmlhttp.status<300)) {
                 if (success)
@@ -21,7 +21,7 @@ var Loader = function() {
         }
         
         xmlhttp.open(method, url, isAsync);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.setRequestHeader("Content-type", contentType);
         xmlhttp.send(params);
     }
 };
