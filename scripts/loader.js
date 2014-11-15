@@ -21,7 +21,8 @@ var Loader = function() {
         }
         
         xmlhttp.open(method, url, isAsync);
-        xmlhttp.setRequestHeader("Content-type", contentType);
+        xmlhttp.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+        xmlhttp.setRequestHeader('Content-Type', contentType);
         xmlhttp.send(params);
     }
 };
