@@ -206,7 +206,7 @@ var DataManager = function() {
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
 
-        console.log(parts[parts.length-1]);
+        console.log("All cookie: " + c);
 
         if (parts.length == 2)
             return parts[parts.length-1];
@@ -219,7 +219,6 @@ var DataManager = function() {
     this.saveContentIntoCookie = function() {
         var d = new Date();
         d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
-        console.log("To store: " + JSON.stringify(this.getJSON()));
         document.cookie = this.COOKIE_NAME + "=" + JSON.stringify(this.getJSON()) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
