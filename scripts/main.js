@@ -42,7 +42,7 @@ function buildCanvas() {
         NotificationCenter.showNotification(NotificationType.WARNING, "Cookies are disabled. Autosave is off");
     } else {
         isAutosaveOn = true;
-        NotificationCenter.showNotification(NotificationType.INFO, "Autosave is on");
+        NotificationCenter.showNotification(NotificationType.WARNING, "Autosave is on");
     }
 
     manager.toggleAutosaveContent(isAutosaveOn, onAutosaved);
