@@ -4,7 +4,7 @@ var manager = new DataManager();
 var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 
 // autosave feature
-var isAutosaveOn = true;
+var isAutosaveOn = false;
 
 
 // called  only once at the begging of the loading the page
