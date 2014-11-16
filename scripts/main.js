@@ -131,8 +131,6 @@ function loadShowError(result) {
 }
 
 //-----------Autosave and manual save---------------
-
-/--------------Autosave------------------
 function processResult(resData) {
     if (!resData)
         return;
