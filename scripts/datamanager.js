@@ -219,6 +219,7 @@ var DataManager = function() {
     this.saveContentIntoCookie = function() {
         var d = new Date();
         d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
+        console.log("To store: " + JSON.stringify(this.getJSON()));
         document.cookie = this.COOKIE_NAME + "=" + JSON.stringify(this.getJSON()) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
