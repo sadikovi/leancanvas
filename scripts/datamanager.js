@@ -199,7 +199,7 @@ var DataManager = function() {
     // returns content from cookie, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
         var resData = {type : "", message: "", data: null};
-        
+
         var c = document.cookie;
         if (!c || c.length == 0)
             return null;
@@ -216,22 +216,25 @@ var DataManager = function() {
                     resData.type = "success";
                     resData.message = "Loaded...";
                     resData.data = result;
-                    tempLoadHandler.call(this, resData);
+                    if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
+                    return result;
                 },
                 /* error */
                 function(result) {
                     resData.type = "error";
                     resData.message = "Something went wrong";
                     resData.data = result;
-                    tempLoadHandler.call(this, resData);
+                    if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
                 }
             );
         } else {
             resData.type = "warning";
             resData.message = "Cookies are empty. No data is stored.";
             resData.data = null;
-            tempLoadHandler.call(this, resData);
+            if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
         }
+
+        return null;
     }
 
     // [Public]

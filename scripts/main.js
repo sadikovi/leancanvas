@@ -24,7 +24,7 @@ function buildCanvas() {
 
     // 2. build main body
     // get content from cookie or (if it is empty) load default content
-    var content = manager.getContentFromCookie() || DEFAULT_CONTENT;
+    var content = manager.getContentFromCookie(mLoadHandler) || DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 
@@ -130,7 +130,7 @@ function loadShowError(result) {
     header.showMessage(msg);
 }
 
-//-----------Autosave and manual save---------------
+//-----------Autosave and manual save and load---------------
 function processResult(resData) {
     if (!resData)
         return;
@@ -150,6 +150,10 @@ function msaveHandler() {
             processResult(resData);
         }
     );
+}
+
+function mLoadHandler(resData) {
+    processResult(resData);
 }
 
 //-----------Create new content-----------
