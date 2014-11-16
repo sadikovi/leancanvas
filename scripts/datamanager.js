@@ -115,6 +115,7 @@ var DataManager = function() {
             }
         } catch (e) {
             cont = DEFAULT_CONTENT;
+            console.log("something went wrong. Load default content");
         }
 
         var data = cont.data;
@@ -203,12 +204,12 @@ var DataManager = function() {
 
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
-        
+
         console.log(parts[parts.length-1]);
-        
+
         if (parts.length == 2)
             return parts[parts.length-1];
-        
+
         return null;
     }
 
