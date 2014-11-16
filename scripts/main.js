@@ -107,7 +107,9 @@ function loadHandler(text, spinner) {
             loadShowResult.call(this, result);
         },
         function(result) {
+                               console.log(result);
             var result = JSON.parse(result);
+                               console.log(result);
             spinner.stopLoading();
             loadShowError.call(this, result);
         }
