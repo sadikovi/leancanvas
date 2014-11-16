@@ -194,7 +194,17 @@ var DataManager = function() {
     // [Public]
     // returns content from cookie, if it is not found returns null
     this.getContentFromCookie = function() {
-        console.log(document.cookie);
+        var c = document.cookie;
+        if (!c || c.length == 0)
+            return null;
+
+        c = "; " + c;
+        var parts = c.split("; " + this.COOKIE_NAME + "=");
+        console.log(parts);
+        if (parts.length == 2)
+            return parts.pop().split(";").shift();
+
+        return null;
     }
 
     // [Public]
