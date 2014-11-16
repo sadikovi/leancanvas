@@ -22,15 +22,14 @@ function buildCanvas() {
         throw ("header div is not found!");
     header.display(b, loadHandler, saveHandler, msaveHandler, crnewHandler);
 
-    // 2. build main body
+    // 2. init notifications
+    NotificationCenter.init("notify_wrapper");
+
+    // 3. build main body
     // get content from cookie or (if it is empty) load default content
     var content = manager.getContentFromCookie(mLoadHandler) || DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
-
-    // 3. init notifications
-    NotificationCenter.init("notify_wrapper");
-
 
     // 4. enable/disable autosave
     // page is loaded
