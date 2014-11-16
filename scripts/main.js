@@ -29,6 +29,9 @@ function buildCanvas() {
     // page is loaded
     // now it is good time to start a timer to update [aka "autosave content"] cookie
     // but before that check if cookies are enabled
+    
+    // init notifications
+    NotificationCenter.init("notify_wrapper");
     if (!navigator.cookieEnabled) {
         // display notification that cookies disabled and turn off autosave
         isAutosaveOn = false;
