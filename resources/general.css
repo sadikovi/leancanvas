@@ -1,8 +1,26 @@
+/*
+ * general elements of a web page
+ * something like tables, inputs, textareas and etc.
+ *
+ */
+
 table.gTable {
     width: 100%;
     height: 100%;
     border-collapse: collapse;
     border-spacing: 0px 0px;
+}
+
+.hAlignLeft {
+    text-align: left;
+}
+
+.hAlignRight {
+    text-align: right;
+}
+
+.hAlignCenter {
+    text-align: center;
 }
 
 input[type="text"].gInput.focus,
