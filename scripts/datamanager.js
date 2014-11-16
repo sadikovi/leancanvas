@@ -221,13 +221,18 @@ var DataManager = function() {
 
     // [Public]
     // toggles autosave feature
-    this.toggleAutosaveContent = function(isOn) {
+    this.toggleAutosaveContent = function(isOn, onAutosaved) {
         if (isOn) {
             // turn on and start updating
             if (this.autosaveTimer)
                 this.toggleAutosaveContent(!isOn);
 
-            this.autosaveTimer = setInterval(function() {this.saveContentIntoCookie();console.log("Saving...")}, this.autosaveTime);
+            var te = this;
+            this.autosaveTimer = setInterval(
+                function() {
+                    te.saveContentIntoCookie();
+                    if (onAutosaved) {onAutosaved.call(this);}
+                }, this.autosaveTime);
             console.log("timer is on");
         } else {
             // turn off and remove all events

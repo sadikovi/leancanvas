@@ -28,7 +28,7 @@ function buildCanvas() {
 
     // page is loaded
     // now it is good time to start a timer to update [aka "autosave content"] cookie
-    manager.toggleAutosaveContent(isAutosaveOn);
+    manager.toggleAutosaveContent(isAutosaveOn, onAutosaved);
 }
 
 //----------------------------------------------
@@ -150,4 +150,9 @@ function noteEditHandler(trigger, editNode) {
     addEvent(trigger, "click", function(e) {
         openEditor(editNode.getText(), editNode, editNode.parent);
     });
+}
+
+//--------------Autosave------------------
+function onAutosaved() {
+    console.log("@" + getCurrentDateTime() + " #Saved...");
 }
