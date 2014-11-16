@@ -6,14 +6,6 @@
     z-index: 1001;
 }
 
-.extend {
-    /*leave it empty to assign default positon*/
-}
-
-.collapse {
-    position: fixed;
-}
-
 .notify {
     border-radius: 3px;
     margin: 9px;

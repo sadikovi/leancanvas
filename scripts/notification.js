@@ -31,7 +31,6 @@ var NotificationCenter = function() {
                 typeclass = "notify_info";
             }
 
-            NotificationCenter.extend(parent);
             var ospan = createElement("span", null, "notify " + typeclass, null, parent);
             var ispan = createElement("span", null, "", message, ospan);
             setTimeout(function() {NotificationCenter.hideNotification(ospan);}, time);
@@ -43,15 +42,6 @@ var NotificationCenter = function() {
             if (!notification)
                 return;
             parent.removeChild(notification);
-            NotificationCenter.collapse(parent);
-        },
-        collapse: function(parent) {
-            removeClass(parent, "extend");
-            addClass(parent, "collapse");
-        },
-        extend: function(parent) {
-            removeClass(parent, "collapse");
-            addClass(parent, "extend");
         }
     }
 }();
