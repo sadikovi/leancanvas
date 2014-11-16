@@ -21,17 +21,18 @@ function buildCanvas() {
     if (!b)
         throw ("header div is not found!");
     header.display(b, loadHandler, saveHandler);
-    
+
     // 2. build main body
     // get content from cookie or (if it is empty) load default content
+    console.log("manager: " + manager.getContentFromCookie());
     var content = manager.getContentFromCookie() || DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 
     // 3. init notifications
     NotificationCenter.init("notify_wrapper");
-    
-    
+
+
     // 4. enable/disable autosave
     // page is loaded
     // now it is good time to start a timer to update [aka "autosave content"] cookie
