@@ -6,7 +6,7 @@ var DataManager = function() {
     this.root = createElement("div", null, "canvas", null, null);
 
     // constants for saving and loading content from cookies
-    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONTENT_URL";
+    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONURL";
     this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
     // timer for autosave
     this.autosaveTimer = null;
@@ -207,8 +207,6 @@ var DataManager = function() {
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         if (parts.length == 2) {
-            // decode cookie (Safari issue)
-            //return decodeURIComponent(parts[parts.length-1]);
             var fileurl = decodeURIComponent(parts[parts.length-1]);
             this.loadGistFromGithub(fileurl,
                 /* success */
@@ -240,17 +238,6 @@ var DataManager = function() {
     // [Public]
     // saves current content into cookie
     this.saveContentIntoCookie = function(tempSaveHandler) {
-        /*
-        var d = new Date();
-        d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
-        // encode cookie (Safari issue)
-        document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(this.getJSON())) + "; "
-                        + "expires=" + d.toUTCString() + "; "
-                        + "Path=/; Domain=.sadikovi.github.io";
-        */
-        var d = new Date();
-        d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
-        // encode cookie (Safari issue)
         // 1. create gist and get url back
         // 2. save url as cookie
         var fileurl = "";
@@ -261,7 +248,8 @@ var DataManager = function() {
                 fileurl = result.html_url;
                 resData.type = "success";
                 resData.message = "Saved...";
-
+                var d = new Date();
+                d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
                 document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
