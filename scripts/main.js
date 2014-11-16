@@ -2,6 +2,8 @@
 var manager = new DataManager();
 // identify global parent id
 var GLOBAL_PARENT_ID = "wrapper_canvas_main";
+// identify global notify parent id
+var GLOBAL_NOTIFY_ID = "notify_wrapper";
 
 // autosave feature
 var isAutosaveOn = true;
@@ -14,24 +16,26 @@ function buildCanvas() {
     if (!globalParent)
         throw ("global div is not found!");
 
+    // 1. build header
+    var b = document.getElementById(globalParent.id+"&header_holder");
+    if (!b)
+        throw ("header div is not found!");
+    header.display(b, loadHandler, saveHandler);
+    
+    // 2. build main body
     // get content from cookie or (if it is empty) load default content
     var content = manager.getContentFromCookie() || DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 
-    var b = document.getElementById(globalParent.id+"&header_holder");
-
-    if (!b)
-        throw ("header div is not found!");
-
-    header.display(b, loadHandler, saveHandler);
-
+    // 3. init notifications
+    NotificationCenter.init("notify_wrapper");
+    
+    
+    // 4. enable/disable autosave
     // page is loaded
     // now it is good time to start a timer to update [aka "autosave content"] cookie
     // but before that check if cookies are enabled
-    
-    // init notifications
-    NotificationCenter.init("notify_wrapper");
     if (!navigator.cookieEnabled) {
         // display notification that cookies disabled and turn off autosave
         isAutosaveOn = false;
