@@ -38,10 +38,14 @@ var NoteEditor = function() {
                 controls.appendChild(cancel);
 
                 // add content
+                var chtr = createElement("tr", null, "", null, table);
+                var chtd = createElement("td", null, "NoteEditor_content_help", null, chtr);
+                var hdiv = createElement("div", null, "NoteEditor_content_help_notify", helpMessage, chtd);
+
                 var ctr = createElement("tr", null, "", null, table);
                 var ctd = createElement("td", null, "NoteEditor_content_content", null, ctr);
-                var hdiv = createElement("div", null, "NoteEditor_content_help", helpMessage, ctd);
                 editView = createElement("textarea", neid+"&editview", "NoteEditor_content_textfield", null, ctd);
+                editView.placeholder = "Type something...";
             }
 
             editView.value = text;
@@ -70,7 +74,7 @@ var NoteEditor = function() {
             if (isOk)
                 NoteEditor.submit();
 
-            removeEvent(document.body, "keypress", NoteEditor.globalOkEventListener);
+            removeEvent(document.body, "keydown", NoteEditor.globalOkEventListener);
             removeEvent(document.body, "keydown", NoteEditor.globalCancelEventListener);
 
             return false;

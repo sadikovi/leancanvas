@@ -3,7 +3,8 @@
     height: 100%;
     background-color: #FFFFFF;
     padding: 5px;
-    border: 1px solid #E5E5E5;
+    /*border: 1px solid #E5E5E5;*/
+    border: 1px solid #BDC4C9;
 }
 
 .Row_content_table {

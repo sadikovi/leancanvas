@@ -10,7 +10,8 @@ var Source = {
     IMG_EDITOR_OK :     "/resources/images/editor_submit.png",
     IMG_EDITOR_CANCEL : "/resources/images/editor_close.png",
     IMG_GITHUB_LOAD :   "/resources/images/github_load.png",
-    IMG_GITHUB_SAVE :   "/resources/images/github_save.png"
+    IMG_GITHUB_SAVE :   "/resources/images/github_save.png",
+    IMG_CONTENT_SAVE :  "/resources/images/content_save.png"
 };
 
 /*
@@ -24,6 +25,7 @@ var Source = {
     IMG_EDITOR_OK :     "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/editor_submit.png",
     IMG_EDITOR_CANCEL : "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/editor_close.png",
     IMG_GITHUB_LOAD :   "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/github_load.png",
-    IMG_GITHUB_SAVE :   "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/github_save.png"
+    IMG_GITHUB_SAVE :   "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/github_save.png",
+    IMG_CONTENT_SAVE :  "file:///Users/sadikovi/Developer/sadikovi.github.io/resources/images/content_save.png"
 };
 */

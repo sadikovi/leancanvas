@@ -1,12 +1,12 @@
 var header = function() {
     var parent, changer, controls;
     var loader, loaderInput, loadIsOn=false;
-    var loadSubmitter, saveSubmitter;
+    var loadSubmitter, saveSubmitter, msaveSubmitter;
     var spinner;
     var messenger;
 
     return {
-        display: function(elem, onLoadSubmit, onSaveSubmit) {
+        display: function(elem, onLoadSubmit, onSaveSubmit, onMSaveSubmit) {
             if (!elem)
                 throw ("Parent is not specified");
             parent = elem;
@@ -15,8 +15,14 @@ var header = function() {
             changer = createElement("td", null, "header_table_title", null, tr);
             controls = createElement("td", null, "header_table_controls", null, tr);
 
-            var load = newButton(Source.IMG_GITHUB_LOAD, "Load from Github", "Load from Github", header.toggleLoad, "Load from Github");
-            var save = newButton(Source.IMG_GITHUB_SAVE, "Save on Github", "Save on Github", header.toggleSave, "Save on Github");
+            // for manual save
+            var msave = newButton(Source.IMG_CONTENT_SAVE, "Save", "Save", header.save, "Save");
+            controls.appendChild(msave);
+            controls.appendChild(newSpace(10)); // to separate one section from another
+
+            // for github
+            var load = newButton(Source.IMG_GITHUB_LOAD, "Load Gist", "Load Gist", header.toggleLoad, "Load Gist");
+            var save = newButton(Source.IMG_GITHUB_SAVE, "Save as Gist", "Save as Gist", header.toggleSave, "Save as Gist");
             controls.appendChild(load);
             controls.appendChild(save);
 
@@ -24,6 +30,8 @@ var header = function() {
                 loadSubmitter = onLoadSubmit;
             if (onSaveSubmit)
                 saveSubmitter = onSaveSubmit;
+            if (onMSaveSubmit)
+                msaveSubmitter = onMSaveSubmit;
 
             spinner = new LoadingIndicator(parent.id+"&loadingindicator", changer);
         },
@@ -31,6 +39,7 @@ var header = function() {
             if (!loader) {
                 loader = createElement("span", null, "", "Submit Gist link: ", changer);
                 loaderInput = createElement("input", null, "header_load_textfield", null, loader);
+                loaderInput.type = "text";
 
                 var ok = newButton(Source.IMG_OK_SMALL, "Ok", "Ok", header.submit);
                 var cancel = newButton(Source.IMG_CANCEL_SMALL, "Cancel", "Cancel", header.hide);
@@ -82,6 +91,10 @@ var header = function() {
         hideAll: function() {
             header.hide();
             header.hideMessage();
+        },
+        save: function() {
+            if (msaveSubmitter)
+                msaveSubmitter.call(this);
         }
     }
 }();

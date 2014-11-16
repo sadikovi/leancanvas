@@ -9,7 +9,8 @@
     font-size: 11pt;
     font-weight: bold;
     background-color: #F2F2F2;
-    border: 1px solid #E5E5E5;
+    /*border: 1px solid #E5E5E5;*/
+    border: 1px solid #BDC4C9;
     padding: 5px;
 }
 

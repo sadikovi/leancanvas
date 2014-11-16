@@ -20,7 +20,7 @@ function buildCanvas() {
     var b = document.getElementById(globalParent.id+"&header_holder");
     if (!b)
         throw ("header div is not found!");
-    header.display(b, loadHandler, saveHandler);
+    header.display(b, loadHandler, saveHandler, msaveHandler);
 
     // 2. build main body
     // get content from cookie or (if it is empty) load default content
@@ -128,6 +128,13 @@ function loadShowError(result) {
     var docUrl = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
     var msg = "@" + getCurrentDateTime() + " #Error: " + result.message + ", documentation: " + docUrl;
     header.showMessage(msg);
+}
+
+
+//-----------Manual save---------------
+function msaveHandler() {
+    manager.saveContentIntoCookie();
+    if (onAutosaved) {onAutosaved.call(this);}
 }
 
 //-----------Working with notes------------------

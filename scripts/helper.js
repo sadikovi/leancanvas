@@ -64,8 +64,11 @@ function newSpace(p) {
 function newButton(src, title, alt, callback, text) {
     var img = newImage(src, title, alt);
     img.style.verticalAlign = "middle";
-    var textNode = createElement("span", null, null, text, null);
+    var textNode = createElement("span", null, "", null, null);
+    var atext = createElement("a", null, "", text, textNode);
     textNode.style.verticalAlign = "middle";
+    textNode.style.fontSize = "10pt";
+    textNode.style.color = "";
 
     var span = createElement("span", null, "simplebutton", null, null);
     span.style.cssText = "cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none;";
@@ -74,7 +77,7 @@ function newButton(src, title, alt, callback, text) {
     span.appendChild(newSpace());
     span.appendChild(img);
     if (text)
-        span.appendChild(newSpace(1));
+        span.appendChild(newSpace(2));
     span.appendChild(textNode);
 
     if (callback)
