@@ -199,6 +199,7 @@ var DataManager = function() {
     // returns content from cookie, if it is not found returns null
     this.getContentFromCookie = function() {
         var c = document.cookie;
+        console.log("document.cookie: " + document.cookie);
         if (!c || c.length == 0)
             return null;
 
