@@ -245,7 +245,8 @@ var DataManager = function() {
         this.saveGistOnGithub(
             /* success */
             function(result) {
-                fileurl = result.html_url;
+                jresult = JSON.parse(result);
+                fileurl = jresult.html_url;
                 resData.type = "success";
                 resData.message = "Saved...";
                 var d = new Date();
@@ -258,17 +259,17 @@ var DataManager = function() {
                                 + "Path=/; Domain=.sadikovi.github.io";
                 console.log(wholestring);
                 console.log(fileurl);
-                console.log(result);
+                console.log(jresult);
 
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
             },
             /* error */
             function(result) {
-                console.log(result);
-                fileurl = result.html_url;
+                jresult = JSON.parse(result);
+                fileurl = jresult.html_url;
                 resData.type = "error";
-                resData.message = result.message;
+                resData.message = jresult.message;
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
             }
