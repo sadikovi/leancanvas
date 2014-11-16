@@ -6,7 +6,7 @@ var DataManager = function() {
     this.root = createElement("div", null, "canvas", null, null);
 
     // constants for saving and loading content from cookies
-    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONTENT";
+    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONTENT_URL";
     this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
     // timer for autosave
     this.autosaveTimer = null;
@@ -197,37 +197,83 @@ var DataManager = function() {
 
     // [Public]
     // returns content from cookie, if it is not found returns null
-    this.getContentFromCookie = function() {
+    this.getContentFromCookie = function(tempLoadHandler) {
         var c = document.cookie;
         if (!c || c.length == 0)
             return null;
 
         c = "; " + c;
-        console.log("loaded cookie: " + c);
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         if (parts.length == 2) {
             // decode cookie (Safari issue)
-            return decodeURIComponent(parts[parts.length-1]);
+            //return decodeURIComponent(parts[parts.length-1]);
+            var fileurl = decodeURIComponent(parts[parts.length-1]);
+            var resData = {type : "", message: "", data: null};
+            this.loadGistFromGithub(fileurl,
+                /* success */
+                function(result) {
+                    resData.type = "success";
+                    resData.message = "Loaded...";
+                    resData.data = result;
+                    tempLoadHandler.call(this, resData);
+                },
+                /* error */
+                function(result) {
+                    resData.type = "error";
+                    resData.message = "Something went wrong";
+                    resData.data = result;
+                    tempLoadHandler.call(this, resData);
+                }
+            );
+        } else {
+            resData.type = "warning";
+            resData.message = "Cookies are empty. No data is stored.";
+            resData.data = null;
+            tempLoadHandler.call(this, resData);
         }
-
-        return null;
     }
 
     // [Public]
     // saves current content into cookie
-    this.saveContentIntoCookie = function() {
+    this.saveContentIntoCookie = function(tempSaveHandler) {
+        /*
         var d = new Date();
         d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
         // encode cookie (Safari issue)
-        // log
-        console.log(JSON.stringify(this.getJSON()));
-        // --- test -----
-        var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "hello world.txt");
-
         document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(this.getJSON())) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
+        */
+        var d = new Date();
+        d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
+        // encode cookie (Safari issue)
+        // 1. create gist and get url back
+        // 2. save url as cookie
+        var fileurl = "";
+        var resData = {type : "", message: ""};
+        this.saveGistOnGithub(
+            /* success */
+            function(result) {
+                fileurl = result.html_url;
+                resData.type = "success";
+                resData.message = "Saved...";
+
+                document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
+                                + "expires=" + d.toUTCString() + "; "
+                                + "Path=/; Domain=.sadikovi.github.io";
+
+                if (tempSaveHandler)
+                    tempSaveHandler.call(this, resData);
+            },
+            /* error */
+            function(result) {
+                fileurl = result.html_url;
+                resData.type = "error";
+                resData.message = result.message;
+                if (tempSaveHandler)
+                    tempSaveHandler.call(this, resData);
+            }
+        );
     }
 
     // [Public]
@@ -241,8 +287,7 @@ var DataManager = function() {
             var te = this;
             this.autosaveTimer = setInterval(
                 function() {
-                    te.saveContentIntoCookie();
-                    if (onAutosaved) {onAutosaved.call(this);}
+                    te.saveContentIntoCookie(onAutosavedHandler);
                 }, this.autosaveTime);
         } else {
             // turn off and remove all events

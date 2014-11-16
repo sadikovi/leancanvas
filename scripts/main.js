@@ -45,7 +45,7 @@ function buildCanvas() {
         NotificationCenter.showNotification(NotificationType.WARNING, "Autosave is on");
     }
 
-    manager.toggleAutosaveContent(isAutosaveOn, onAutosaved);
+    manager.toggleAutosaveContent(isAutosaveOn, msaveHandler);
 }
 
 //----------------------------------------------
@@ -130,11 +130,28 @@ function loadShowError(result) {
     header.showMessage(msg);
 }
 
+//-----------Autosave and manual save---------------
 
-//-----------Manual save---------------
+/--------------Autosave------------------
+function processResult(resData) {
+    if (!resData)
+        return;
+    if (resData.type == "success") {
+        NotificationCenter.showNotification(NotificationType.SUCCESS, resData.message);
+    } else if (resData.type == "error") {
+        NotificationCenter.showNotification(NotificationType.ERROR, resData.message);
+    } else {
+        NotificationCenter.showNotification(NotificationType.WARNING, resData.message);
+    }
+}
+
 function msaveHandler() {
-    manager.saveContentIntoCookie();
-    if (onAutosaved) {onAutosaved.call(this);}
+    manager.saveContentIntoCookie(
+        /* callback */
+        function(resData) {
+            processResult(resData);
+        }
+    );
 }
 
 //-----------Create new content-----------
@@ -181,10 +198,4 @@ function noteEditHandler(trigger, editNode) {
     addEvent(trigger, "click", function(e) {
         openEditor(editNode.getText(), editNode, editNode.parent);
     });
-}
-
-//--------------Autosave------------------
-function onAutosaved() {
-    var message = "@" + getCurrentDateTime() + " #Saved...";
-    NotificationCenter.showNotification(NotificationType.SUCCESS, message);
 }
