@@ -205,11 +205,10 @@ var DataManager = function() {
 
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
-
-        console.log("All cookie: " + c);
-
-        if (parts.length == 2)
-            return parts[parts.length-1];
+        if (parts.length == 2) {
+            // decode cookie (Safari issue)
+            return decodeURIComponent(parts[parts.length-1]);
+        }
 
         return null;
     }
@@ -219,7 +218,8 @@ var DataManager = function() {
     this.saveContentIntoCookie = function() {
         var d = new Date();
         d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
-        document.cookie = this.COOKIE_NAME + "=" + JSON.stringify(this.getJSON()) + "; "
+        // encode cookie (Safari issue)
+        document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(this.getJSON())) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
     }
