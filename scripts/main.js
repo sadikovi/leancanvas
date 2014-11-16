@@ -3,6 +3,9 @@ var manager = new DataManager();
 // identify global parent id
 var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 
+// autosave feature
+var isAutosaveOn = true;
+
 
 // called  only once at the begging of the loading the page
 function buildCanvas() {
@@ -11,7 +14,8 @@ function buildCanvas() {
     if (!globalParent)
         throw ("global div is not found!");
 
-    var content = DEFAULT_CONTENT;
+    // get content from cookie or (if it is empty) load default content
+    var content = manager.getContentFromCookie() || DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 
@@ -22,11 +26,9 @@ function buildCanvas() {
 
     header.display(b, loadHandler, saveHandler);
 
-
-    // cookie
-    manager.saveContentIntoCookie();
-    var c2 = manager.getContentFromCookie();
-    console.log(c2);
+    // page is loaded
+    // now it is good time to start a timer to update [aka "autosave content"] cookie
+    manager.toggleAutosaveContent(isAutosaveOn);
 }
 
 //----------------------------------------------

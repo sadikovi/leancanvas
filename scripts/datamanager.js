@@ -8,6 +8,9 @@ var DataManager = function() {
     // constants for saving and loading content from cookies
     this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONTENT";
     this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
+    // timer for autosave
+    this.autosaveTimer = null;
+    this.autosaveTime = 1000; // 1 second autosave interval
 
     // [Public]
     // adds content to existing array
@@ -200,7 +203,6 @@ var DataManager = function() {
 
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
-        console.log(parts);
         if (parts.length == 2)
             return parts[parts.length-1];
 
@@ -215,5 +217,23 @@ var DataManager = function() {
         document.cookie = this.COOKIE_NAME + "=" + JSON.stringify(this.getJSON()) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
+    }
+
+    // [Public]
+    // toggles autosave feature
+    this.toggleAutosaveContent = function(isOn) {
+        if (isOn) {
+            // turn on and start updating
+            if (this.autosaveTimer)
+                this.toggleAutosaveContent(!isOn);
+
+            this.autosaveTimer = setInterval(function() {this.saveContentIntoCookie();console.log("Saving...")}, this.autosaveTime);
+            console.log("timer is on");
+        } else {
+            // turn off and remove all events
+            if (this.autosaveTimer)
+                clearInterval(this.autosaveTimer);
+            console.log("timer is off");
+        }
     }
 };
