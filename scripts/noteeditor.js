@@ -7,7 +7,7 @@ var NoteEditor = function() {
         "[Tab] => focus on editor view<br/>" +
         "[Esc] => close editor<br/>" +
         "[Ctrl+Enter] => submit";
-    
+
     return {
         show: function(text, heading, callData, onSubmit) {
             if (!elem) {
@@ -15,14 +15,14 @@ var NoteEditor = function() {
                 var table = createElement("table", neid+"&content", "NoteEditor_content", null, elem);
                 var tr = createElement("tr", null, "", null, table);
                 var td = createElement("td", null, "NoteEditor_content_heading", null, tr);
-                
+
                 // add table for controls
                 var cotable = createElement("table", null, "", null, td);
                 var cotr = createElement("tr", null, "", null, cotable);
                 var coatd = createElement("td", null, "", null, cotr);
                 headView = createElement("span", null, "", null, coatd);
                 var cobtd = createElement("td", null, "NoteEditor_content_heading_controls", null, cotr);
-                
+
                 var ok = newButton(Source.IMG_EDITOR_OK, "Ok", "Ok",
                     function() {
                        NoteEditor.hide(true);
@@ -36,28 +36,28 @@ var NoteEditor = function() {
                 var controls = createElement("div", neid+"&controls", "", null, cobtd);
                 controls.appendChild(ok);
                 controls.appendChild(cancel);
-                
+
                 // add content
                 var ctr = createElement("tr", null, "", null, table);
                 var ctd = createElement("td", null, "NoteEditor_content_content", null, ctr);
                 var hdiv = createElement("div", null, "NoteEditor_content_help", helpMessage, ctd);
                 editView = createElement("textarea", neid+"&editview", "NoteEditor_content_textfield", null, ctd);
             }
-            
+
             editView.value = text;
             headView.innerHTML = heading;
             data = callData;
             if (onSubmit) {subm = onSubmit};
-            
+
             if (!back) {
                 back = createElement("div", neid+"&background", "NoteEditor_background", null, document.body);
             }
-            
+
             elem.style.display = "block";
             back.style.display = "block";
-            addEvent(document.body, "keypress", NoteEditor.globalOkEventListener);
+            addEvent(document.body, "keydown", NoteEditor.globalOkEventListener);
             addEvent(document.body, "keydown", NoteEditor.globalCancelEventListener);
-            
+
             return false;
         },
         hide: function(isOk) {
@@ -69,10 +69,10 @@ var NoteEditor = function() {
                 back.style.display = "none";
             if (isOk)
                 NoteEditor.submit();
-            
+
             removeEvent(document.body, "keypress", NoteEditor.globalOkEventListener);
             removeEvent(document.body, "keydown", NoteEditor.globalCancelEventListener);
-            
+
             return false;
         },
         submit: function() {

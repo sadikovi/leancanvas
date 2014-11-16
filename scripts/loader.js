@@ -1,14 +1,14 @@
 var Loader = function() {
     var xmlhttp = null;
-    
+
     if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
     } else {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    
+
     this.xmlhttp = xmlhttp;
-    
+
     this.send = function(method, isAsync, url, contentType, params, success, error) {
         xmlhttp.onreadystatechange=function() {
             if (xmlhttp.readyState==4 && (xmlhttp.status>=200 && xmlhttp.status<300)) {
@@ -19,10 +19,15 @@ var Loader = function() {
                     error.call(this, xmlhttp.responseText);
             }
         }
-        
-        xmlhttp.open(method, url, isAsync);
-        xmlhttp.setRequestHeader('Accept', 'application/json');
-        xmlhttp.setRequestHeader('Content-Type', contentType);
-        xmlhttp.send(params);
+        try {
+            xmlhttp.open(method, url, isAsync);
+            xmlhttp.setRequestHeader('Accept', 'application/json');
+            xmlhttp.setRequestHeader('Content-Type', contentType);
+            xmlhttp.send(params);
+        } catch (er) {
+            error.cal(this, {"message" : er.message, "documentation_url" : "https://www.google.com"});
+            this.xmlhttp = xmlhttp = null;
+        }
+
     }
 };
