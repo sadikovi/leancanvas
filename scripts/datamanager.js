@@ -202,7 +202,7 @@ var DataManager = function() {
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         console.log(parts);
         if (parts.length == 2)
-            return parts.pop().split(";").shift();
+            return parts[parts.length-1];
 
         return null;
     }

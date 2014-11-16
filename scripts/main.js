@@ -25,7 +25,8 @@ function buildCanvas() {
 
     // cookie
     manager.saveContentIntoCookie();
-    manager.getContentFromCookie();
+    var c2 = manager.getContentFromCookie();
+    console.log(c2);
 }
 
 //----------------------------------------------
