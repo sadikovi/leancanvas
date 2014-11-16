@@ -218,6 +218,8 @@ var DataManager = function() {
         var d = new Date();
         d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
         // encode cookie (Safari issue)
+        // log
+        console.log(JSON.stringify(this.getJSON()));
         document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(this.getJSON())) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
