@@ -5,6 +5,10 @@ var DataManager = function() {
     this.loader = {};
     this.root = createElement("div", null, "canvas", null, null);
 
+    // constants for saving and loading content from cookies
+    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONTENT";
+    this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
+
     // [Public]
     // adds content to existing array
     this.addContent = function(content) {
@@ -185,5 +189,21 @@ var DataManager = function() {
     this.updateDOM = function() {
         this.root.innerHTML = "";
         this.buildDOM();
+    }
+
+    // [Public]
+    // returns content from cookie, if it is not found returns null
+    this.getContentFromCookie = function() {
+        console.log(document.cookie);
+    }
+
+    // [Public]
+    // saves current content into cookie
+    this.saveContentIntoCookie = function() {
+        var d = new Date();
+        d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
+        document.cookie = this.COOKIE_NAME + "=" + JSON.stringify(this.getJSON()) + "; "
+                        + "expires=" + d.toUTCString() + "; "
+                        + "Path=/; Domain=.sadikovi.github.io";
     }
 };

@@ -7,30 +7,35 @@ var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 // called  only once at the begging of the loading the page
 function buildCanvas() {
     var globalParent = document.getElementById(GLOBAL_PARENT_ID);
-    
+
     if (!globalParent)
         throw ("global div is not found!");
-    
+
     var content = DEFAULT_CONTENT;
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
-    
+
     var b = document.getElementById(globalParent.id+"&header_holder");
-    
+
     if (!b)
         throw ("header div is not found!");
-    
+
     header.display(b, loadHandler, saveHandler);
+
+
+    // cookie
+    manager.saveContentIntoCookie();
+    manager.getContentFromCookie();
 }
 
 //----------------------------------------------
 function updateDOM() {
     var globalParent = document.getElementById(GLOBAL_PARENT_ID);
     var localParent = document.getElementById(globalParent.id+"&body_holder");
-    
+
     if (!localParent)
         throw ("footer div is not found!");
-    
+
     for (i=0; i<localParent.childNodes.length; i++) {
         if (localParent.childNodes[i] == manager.root) {
             localParent.removeChild(manager.root);
