@@ -221,6 +221,10 @@ var DataManager = function() {
         // encode cookie (Safari issue)
         // log
         console.log(JSON.stringify(this.getJSON()));
+        // --- test -----
+        var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "hello world.txt");
+
         document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(this.getJSON())) + "; "
                         + "expires=" + d.toUTCString() + "; "
                         + "Path=/; Domain=.sadikovi.github.io";
