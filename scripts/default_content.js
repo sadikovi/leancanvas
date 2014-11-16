@@ -38,7 +38,7 @@ var DEFAULT_CONTENT = {
                         {
                             "id": "canvas_unique_value_proposition",
                             "name": "Unique value proposition",
-                            "placeholder": "Single, clear, compelling message that states you are different and worth buying...",
+                            "placeholder": "Single, clear, compelling message that states why you are different and worth buying...",
                             "notes": []
                         }
                     ]
