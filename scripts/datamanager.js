@@ -204,7 +204,7 @@ var DataManager = function() {
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         
-        console.log(parts);
+        console.log(parts[parts.length-1]);
         
         if (parts.length == 2)
             return parts[parts.length-1];

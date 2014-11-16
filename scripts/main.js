@@ -173,5 +173,4 @@ function noteEditHandler(trigger, editNode) {
 function onAutosaved() {
     var message = "@" + getCurrentDateTime() + " #Saved...";
     NotificationCenter.showNotification(NotificationType.SUCCESS, message);
-    console.log(message);
 }
