@@ -108,6 +108,7 @@ var DataManager = function() {
 
         var cont = {};
         try {
+            console.log("Content: " + content);
             if ((typeof content) === "string") {
                 cont = JSON.parse(content);
             } else {
