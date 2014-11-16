@@ -250,10 +250,13 @@ var DataManager = function() {
                 resData.message = "Saved...";
                 var d = new Date();
                 d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
+                var wholestring = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
+                                + "expires=" + d.toUTCString() + "; "
+                                + "Path=/; Domain=.sadikovi.github.io";
                 document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
-                console.log(document.cookie);
+                console.log(wholestring);
 
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
