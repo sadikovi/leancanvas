@@ -20,7 +20,7 @@ function buildCanvas() {
     var b = document.getElementById(globalParent.id+"&header_holder");
     if (!b)
         throw ("header div is not found!");
-    header.display(b, loadHandler, saveHandler, msaveHandler);
+    header.display(b, loadHandler, saveHandler, msaveHandler, crnewHandler);
 
     // 2. build main body
     // get content from cookie or (if it is empty) load default content
@@ -135,6 +135,13 @@ function loadShowError(result) {
 function msaveHandler() {
     manager.saveContentIntoCookie();
     if (onAutosaved) {onAutosaved.call(this);}
+}
+
+//-----------Create new content-----------
+function crnewHandler() {
+    manager.buildContentFromJSON(DEFAULT_CONTENT, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
+    updateDOM();
+    NotificationCenter.showNotification(NotificationType.SUCCESS, "#Content updated. Start new...");
 }
 
 //-----------Working with notes------------------

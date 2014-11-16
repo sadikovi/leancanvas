@@ -6,7 +6,7 @@ var header = function() {
     var messenger;
 
     return {
-        display: function(elem, onLoadSubmit, onSaveSubmit, onMSaveSubmit) {
+        display: function(elem, onLoadSubmit, onSaveSubmit, onMSaveSubmit, onCrnewSubmit) {
             if (!elem)
                 throw ("Parent is not specified");
             parent = elem;
@@ -14,6 +14,10 @@ var header = function() {
             var tr = createElement("tr", null, "", null, table);
             changer = createElement("td", null, "header_table_title", null, tr);
             controls = createElement("td", null, "header_table_controls", null, tr);
+
+            // for new canvas
+            var crnew = newButton(Source.IMG_CONTENT_NEW, "New", "New", header.createNew, "New");
+            controls.appendChild(crnew);
 
             // for manual save
             var msave = newButton(Source.IMG_CONTENT_SAVE, "Save", "Save", header.save, "Save");
@@ -32,7 +36,9 @@ var header = function() {
                 saveSubmitter = onSaveSubmit;
             if (onMSaveSubmit)
                 msaveSubmitter = onMSaveSubmit;
-
+            if (onCrnewSubmit)
+                crnewSubmitter = onCrnewSubmit;
+            
             spinner = new LoadingIndicator(parent.id+"&loadingindicator", changer);
         },
         toggleLoad: function() {
@@ -95,6 +101,10 @@ var header = function() {
         save: function() {
             if (msaveSubmitter)
                 msaveSubmitter.call(this);
+        },
+        createNew: function() {
+            if (crnewSubmitter)
+                crnewSubmitter.call(this);
         }
     }
 }();
