@@ -203,6 +203,7 @@ var DataManager = function() {
             return null;
 
         c = "; " + c;
+        console.log("loaded cookie: " + c);
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         if (parts.length == 2) {
             // decode cookie (Safari issue)
