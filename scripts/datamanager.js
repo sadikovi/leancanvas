@@ -257,6 +257,8 @@ var DataManager = function() {
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
                 console.log(wholestring);
+                console.log(fileurl);
+                console.log(result);
 
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
