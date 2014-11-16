@@ -1,4 +1,5 @@
 // sources for all the images and other things that have to be linked inside scripts
+
 var Source = {
     IMG_ADD_NOTE :      "/resources/images/note_add.png",
     IMG_SPINNER :       "/resources/images/spinner.gif",

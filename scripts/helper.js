@@ -30,12 +30,12 @@ function removeEvent(elem, evnt, handler) {
 function createElement(tagname, id, aClass, text, parent) {
     var element = document.createElement(tagname);
     element.className = aClass;
-    
+
     if (id != null && id != "")
         element.id = id;
     if (text != null && text != "")
         element.innerHTML = text;
-    
+
     if (parent)
         parent.appendChild(element);
     return element;
@@ -48,10 +48,11 @@ function newImage(src, title, alt) {
     img.src = src;
     img.title = title;
     img.alt = alt;
-    
+
     return img;
 }
 
+// create new space
 function newSpace(p) {
     var element = createElement("span", null, "space", null);
     var size = 1*((!p)?5:p);
@@ -59,26 +60,49 @@ function newSpace(p) {
     return element;
 }
 
+// create new button
 function newButton(src, title, alt, callback, text) {
     var img = newImage(src, title, alt);
     img.style.verticalAlign = "middle";
     var textNode = createElement("span", null, null, text, null);
     textNode.style.verticalAlign = "middle";
-    
+
     var span = createElement("span", null, "simplebutton", null, null);
     span.style.cssText = "cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none;";
-    
-    
+
+
     span.appendChild(newSpace());
     span.appendChild(img);
     if (text)
         span.appendChild(newSpace(1));
     span.appendChild(textNode);
-    
+
     if (callback)
         addEvent(span, "click", callback);
-    
+
     return span;
+}
+
+// add class to element
+function addClass(elem, classname) {
+    if (!elem)
+        return;
+
+    elem.className += " " + classname;
+}
+
+// remove class from element
+function removeClass(elem, classname) {
+    if (!elem)
+        return;
+
+    var a = elem.className.split(" ");
+    for (var i=0; i<a.length; i++) {
+        if (a[i] == classname) {
+            a.splice(i, 1);
+            return;
+        }
+    }
 }
 
 // escape special characters in html
@@ -91,7 +115,7 @@ HtmlEscape.escape = function(text) {
         '"': '&quot;',
         "'": '&#039;'
     };
-    
+
     return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
@@ -106,15 +130,15 @@ function replaceJSONSpecialChars(text) {
     r = replaceAll(r, "\'", "\\"+"\'");
     return r;
 }
-                                                                           
+
 // generate random sequence for id
 function generateId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    
+
     for( var i=0; i < 7; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    
+
     return text;
 }
 
@@ -127,7 +151,7 @@ function getCurrentDateTime() {
     var hour = now.getHours();
     var minute = now.getMinutes();
     var second = now.getSeconds();
-    
+
     if(month.toString().length == 1)
         var month = '0'+month;
     if(day.toString().length == 1)
@@ -138,7 +162,7 @@ function getCurrentDateTime() {
         var minute = '0'+minute;
     if(second.toString().length == 1)
         var second = '0'+second;
-    
+
     var dateTime = day+"/"+month+"/"+year+" "+hour+":"+minute+":"+second;
     return dateTime;
 }
@@ -152,10 +176,3 @@ function parseGet(val) {
     }
     return result;
 }
-
-
-
-
-
-
-

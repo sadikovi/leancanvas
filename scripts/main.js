@@ -4,7 +4,7 @@ var manager = new DataManager();
 var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 
 // autosave feature
-var isAutosaveOn = false;
+var isAutosaveOn = true;
 
 
 // called  only once at the begging of the loading the page
@@ -28,6 +28,16 @@ function buildCanvas() {
 
     // page is loaded
     // now it is good time to start a timer to update [aka "autosave content"] cookie
+    // but before that check if cookies are enabled
+    if (!navigator.cookieEnabled) {
+        // display notification that cookies disabled and turn off autosave
+        isAutosaveOn = false;
+        NotificationCenter.showNotification(NotificationType.WARNING, "Cookies are disabled. Autosave is off");
+    } else {
+        isAutosaveOn = true;
+        NotificationCenter.showNotification(NotificationType.INFO, "Autosave is on");
+    }
+
     manager.toggleAutosaveContent(isAutosaveOn, onAutosaved);
 }
 
@@ -154,5 +164,7 @@ function noteEditHandler(trigger, editNode) {
 
 //--------------Autosave------------------
 function onAutosaved() {
-    console.log("@" + getCurrentDateTime() + " #Saved...");
+    var message = "@" + getCurrentDateTime() + " #Saved...";
+    NotificationCenter.showNotification(NotificationType.SUCCESS, message);
+    console.log(message);
 }
