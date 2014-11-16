@@ -10,7 +10,7 @@ var DataManager = function() {
     this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
     // timer for autosave
     this.autosaveTimer = null;
-    this.autosaveTime = 1000; // 1 second autosave interval
+    this.autosaveTime = 15000; // 15 seconds autosave interval
 
     // [Public]
     // adds content to existing array
