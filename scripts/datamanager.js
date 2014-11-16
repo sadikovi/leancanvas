@@ -198,6 +198,8 @@ var DataManager = function() {
     // [Public]
     // returns content from cookie, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
+        var resData = {type : "", message: "", data: null};
+        
         var c = document.cookie;
         if (!c || c.length == 0)
             return null;
@@ -208,7 +210,6 @@ var DataManager = function() {
             // decode cookie (Safari issue)
             //return decodeURIComponent(parts[parts.length-1]);
             var fileurl = decodeURIComponent(parts[parts.length-1]);
-            var resData = {type : "", message: "", data: null};
             this.loadGistFromGithub(fileurl,
                 /* success */
                 function(result) {
