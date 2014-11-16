@@ -25,7 +25,8 @@ var Loader = function() {
             xmlhttp.setRequestHeader('Content-Type', contentType);
             xmlhttp.send(params);
         } catch (er) {
-            error.call(this, "{\"message\" : \"" + er.message + "\", \"documentation_url\" : \"https://www.google.com\"}");
+            console.log(er.message);
+            error.call(this, "{ \"message\" : \"" + er.message + "\", \"documentation_url\" : \"https://www.google.com\" }");
             this.xmlhttp = xmlhttp = null;
         }
 
