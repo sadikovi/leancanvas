@@ -263,6 +263,7 @@ var DataManager = function() {
             },
             /* error */
             function(result) {
+                console.log(result);
                 fileurl = result.html_url;
                 resData.type = "error";
                 resData.message = result.message;
