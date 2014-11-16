@@ -237,12 +237,10 @@ var DataManager = function() {
                     te.saveContentIntoCookie();
                     if (onAutosaved) {onAutosaved.call(this);}
                 }, this.autosaveTime);
-            console.log("timer is on");
         } else {
             // turn off and remove all events
             if (this.autosaveTimer)
                 clearInterval(this.autosaveTimer);
-            console.log("timer is off");
         }
     }
 };
