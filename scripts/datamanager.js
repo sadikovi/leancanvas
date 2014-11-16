@@ -253,6 +253,7 @@ var DataManager = function() {
                 document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
+                console.log(document.cookie);
 
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
