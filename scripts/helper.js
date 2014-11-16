@@ -95,14 +95,12 @@ function addClass(elem, classname) {
 function removeClass(elem, classname) {
     if (!elem)
         return;
-
+    var newclassname = "";
     var a = elem.className.split(" ");
-    for (var i=0; i<a.length; i++) {
-        if (a[i] == classname) {
-            a.splice(i, 1);
-            return;
-        }
-    }
+    for (var i=0; i<a.length; i++)
+        if (a[i] != classname)
+            newclassname += " " + a[i];
+    elem.className = newclassname;
 }
 
 // escape special characters in html
