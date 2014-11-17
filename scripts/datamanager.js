@@ -60,6 +60,8 @@ var DataManager = function() {
             "content": JSON.stringify(this.getJSON(), null, 4)
         };
 
+        console.log(this.getJSON());
+
         this.loader = new Loader();
         this.loader.send(
                     "POST",
