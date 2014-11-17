@@ -200,16 +200,14 @@ var DataManager = function() {
     // [Public]
     // returns loaded content from stored in cookie url, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
-        console.log("Call of the function");
         var resData = {type : "", message: "", data: null};
 
         var c = document.cookie;
         if (!c || c.length == 0)
-            return null;
+            c = "";
 
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
-        console.log(parts);
         if (parts.length == 2) {
             var fileurl = decodeURIComponent(parts[parts.length-1]);
             console.log(fileurl);
@@ -219,7 +217,8 @@ var DataManager = function() {
                     resData.type = "success";
                     resData.message = "Loaded...";
                     resData.data = result;
-                    if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
+                    if (tempLoadHandler)
+                        tempLoadHandler.call(this, resData);
                 },
                 /* error */
                 function(result) {
@@ -227,14 +226,16 @@ var DataManager = function() {
                     resData.type = "error";
                     resData.message = jresult.message;
                     resData.data = null;
-                    if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
+                    if (tempLoadHandler)
+                        tempLoadHandler.call(this, resData);
                 }
             );
         } else {
             resData.type = "warning";
             resData.message = "Cookies are empty. No data is stored.";
             resData.data = null;
-            if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
+            if (tempLoadHandler)
+                tempLoadHandler.call(this, resData);
         }
     }
 
