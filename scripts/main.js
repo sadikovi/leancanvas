@@ -6,7 +6,7 @@ var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 var GLOBAL_NOTIFY_ID = "notify_wrapper";
 
 // autosave feature
-var isAutosaveOn = true;
+var isAutosaveOn = false;
 
 
 // called  only once at the begging of the loading the page
