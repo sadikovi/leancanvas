@@ -6,7 +6,7 @@ var GLOBAL_PARENT_ID = "wrapper_canvas_main";
 var GLOBAL_NOTIFY_ID = "notify_wrapper";
 
 // autosave feature
-var isAutosaveOn = false;
+var isAutosaveOn = true;
 
 
 // called  only once at the begging of the loading the page
@@ -30,7 +30,6 @@ function buildCanvas() {
     manager.getContentFromCookie(
         function(resData) {
             var tres = resData.data || DEFAULT_CONTENT;
-            console.log(tres);
             manager.buildContentFromJSON(tres, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
             updateDOM();
             processResult(resData);
@@ -117,7 +116,7 @@ function loadHandler(text, spinner) {
 }
 
 function loadShowResult(result) {
-    manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
+    manager.buildContentFromJSON(result, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 }
 
