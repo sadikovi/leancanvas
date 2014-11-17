@@ -27,10 +27,10 @@ function buildCanvas() {
 
     // 3. build main body
     // get content from cookie or (if it is empty) load default content
-    var content = manager.getContentFromCookie(
+    manager.getContentFromCookie(
         function mLoadHandler(resData) {
             var tres = resData.data || DEFAULT_CONTENT;
-            manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
+            manager.buildContentFromJSON(tres, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
             updateDOM();
             processResult(resData);
         }
