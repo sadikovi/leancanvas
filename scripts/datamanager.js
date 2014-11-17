@@ -216,7 +216,11 @@ var DataManager = function() {
                 function(result) {
                     resData.type = "success";
                     resData.message = "Loaded...";
-                    resData.data = result;
+                    var files = JSON.parse(result).files;
+                    var content = null;
+                    if (files && files[Object.keys(files)[0]].content)
+                        content = files[Object.keys(files)[0]].content;
+                    resData.data = content;
                     if (tempLoadHandler)
                         tempLoadHandler.call(this, resData);
                 },
