@@ -208,6 +208,7 @@ var DataManager = function() {
         var parts = c.split("; " + this.COOKIE_NAME + "=");
         if (parts.length == 2) {
             var fileurl = decodeURIComponent(parts[parts.length-1]);
+            console.log(fileurl);
             this.loadGistFromGithub(fileurl,
                 /* success */
                 function(result) {
