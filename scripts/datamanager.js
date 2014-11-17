@@ -222,8 +222,9 @@ var DataManager = function() {
                 },
                 /* error */
                 function(result) {
+                    var jresult = JSON.parse(result);
                     resData.type = "error";
-                    resData.message = "Something went wrong";
+                    resData.message = jresult.message;
                     resData.data = result;
                     if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
                 }
@@ -250,7 +251,7 @@ var DataManager = function() {
         this.saveGistOnGithub(
             /* success */
             function(result) {
-                jresult = JSON.parse(result);
+                var jresult = JSON.parse(result);
                 fileurl = jresult.html_url;
                 resData.type = "success";
                 resData.message = "Saved...";
@@ -266,7 +267,7 @@ var DataManager = function() {
             },
             /* error */
             function(result) {
-                jresult = JSON.parse(result);
+                var jresult = JSON.parse(result);
                 fileurl = jresult.html_url;
                 resData.type = "error";
                 resData.message = jresult.message;
