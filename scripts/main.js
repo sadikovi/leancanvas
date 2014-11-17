@@ -79,12 +79,10 @@ function saveHandler(spinner) {
     spinner.startLoading("Saving...");
     manager.saveGistOnGithub(
         function(result) {
-            var result = JSON.parse(result);
             spinner.stopLoading();
             saveShowLink.call(this, result);
         },
         function(result) {
-            var result = JSON.parse(result);
             spinner.stopLoading();
             saveShowError.call(this, result);
         }
@@ -108,12 +106,10 @@ function loadHandler(text, spinner) {
     spinner.startLoading("Loading gist file...");
     manager.loadGistFromGithub(text,
         function(result) {
-            var result = JSON.parse(result);
             spinner.stopLoading();
             loadShowResult.call(this, result);
         },
         function(result) {
-            var result = JSON.parse(result);
             spinner.stopLoading();
             loadShowError.call(this, result);
         }
@@ -121,11 +117,6 @@ function loadHandler(text, spinner) {
 }
 
 function loadShowResult(result) {
-    var files = result.files;
-    var content = null;
-    if (files && files[Object.keys(files)[0]].content)
-        content = files[Object.keys(files)[0]].content;
-
     manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
     updateDOM();
 }

@@ -5,12 +5,8 @@ var DataManager = function() {
     this.loader = {};
     this.root = createElement("div", null, "canvas", null, null);
 
-    // constants for saving and loading content from cookies
-    this.COOKIE_NAME = "GITHUB_SADIKOVI_LEAN_CANVAS_TEMP_CONURL";
-    this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
     // timer for autosave
     this.autosaveTimer = null;
-    this.autosaveTime = 10*60*1000; // autosave interval is every 5 minutes
 
     // [Public]
     // adds content to existing array
@@ -60,8 +56,6 @@ var DataManager = function() {
             "content": JSON.stringify(this.getJSON(), null, 4)
         };
 
-        console.log(this.getJSON());
-
         this.loader = new Loader();
         this.loader.send(
                     "POST",
@@ -70,9 +64,11 @@ var DataManager = function() {
                     "application/x-www-form-urlencoded",
                     JSON.stringify(data),
                     function(result) {
+                        result = JSON.parse(result);
                         success.call(this, result);
                     },
                     function(result) {
+                        result = JSON.parse(result);
                         error.call(this, result);
                     }
         );
@@ -92,9 +88,15 @@ var DataManager = function() {
             "application/x-www-form-urlencoded",
             null,
             function(result) {
-                success.call(this, result);
+                var files = JSON.parse(result).files;
+                var content = null;
+                if (files && files[Object.keys(files)[0]].content)
+                    content = files[Object.keys(files)[0]].content;
+
+                success.call(this, content);
             },
             function(result) {
+                result = JSON.parse(result);
                 error.call(this, result);
             }
         );
@@ -201,13 +203,15 @@ var DataManager = function() {
     // returns loaded content from stored in cookie url, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
         var resData = {type : "", message: "", data: null};
+        if (!tempLoadHandler)
+            throw ("Load handler is required to proceed");
 
         var c = document.cookie;
         if (!c || c.length == 0)
             c = "";
 
         c = "; " + c;
-        var parts = c.split("; " + this.COOKIE_NAME + "=");
+        var parts = c.split("; " + Constants.COOKIE_NAME + "=");
         if (parts.length == 2) {
             var fileurl = decodeURIComponent(parts[parts.length-1]);
             console.log(fileurl);
@@ -215,20 +219,15 @@ var DataManager = function() {
                 /* success */
                 function(result) {
                     resData.type = "success";
-                    resData.message = "Loaded...";
-                    var files = JSON.parse(result).files;
-                    var content = null;
-                    if (files && files[Object.keys(files)[0]].content)
-                        content = files[Object.keys(files)[0]].content;
-                    resData.data = content;
+                    resData.message = "@"+getCurrentDateTime() + " #Loaded...";
+                    resData.data = result;
                     if (tempLoadHandler)
                         tempLoadHandler.call(this, resData);
                 },
                 /* error */
                 function(result) {
-                    var jresult = JSON.parse(result);
                     resData.type = "error";
-                    resData.message = jresult.message;
+                    resData.message = result.message;
                     resData.data = null;
                     if (tempLoadHandler)
                         tempLoadHandler.call(this, resData);
@@ -249,17 +248,14 @@ var DataManager = function() {
         // 1. create gist and get url back
         // 2. save url as cookie
         var resData = {type : "", message: ""};
-        var cookieName = this.COOKIE_NAME;
-        var expireSec = this.COOKIE_EXPIRE_SEC;
         this.saveGistOnGithub(
             /* success */
             function(result) {
-                var jresult = JSON.parse(result);
                 resData.type = "success";
-                resData.message = "Saved...";
+                resData.message = "@" + getCurrentDateTime() + " #Saved...";
                 var d = new Date();
-                d.setTime(d.getTime() + (expireSec*1000));
-                document.cookie = cookieName + "=" + encodeURIComponent(jresult.html_url) + "; "
+                d.setTime(d.getTime() + (Constants.AUTOSAVE_INTERVAL*1000));
+                document.cookie = Constants.COOKIE_NAME + "=" + encodeURIComponent(result.html_url) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
                 if (tempSaveHandler)
@@ -267,9 +263,8 @@ var DataManager = function() {
             },
             /* error */
             function(result) {
-                var jresult = JSON.parse(result);
                 resData.type = "error";
-                resData.message = jresult.message;
+                resData.message = result.message;
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
             }
@@ -288,7 +283,7 @@ var DataManager = function() {
             this.autosaveTimer = setInterval(
                 function() {
                     te.saveContentIntoCookie(onAutosavedHandler);
-                }, this.autosaveTime);
+                }, Constants.AUTOSAVE_INTERVAL);
         } else {
             // turn off and remove all events
             if (this.autosaveTimer)
