@@ -10,7 +10,7 @@ var DataManager = function() {
     this.COOKIE_EXPIRE_SEC = 365*24*60*60; // cookie is stored for one year
     // timer for autosave
     this.autosaveTimer = null;
-    this.autosaveTime = 20000; // 20 seconds autosave interval
+    this.autosaveTime = 10*60*1000; // autosave interval is every 5 minutes
 
     // [Public]
     // adds content to existing array
@@ -198,7 +198,7 @@ var DataManager = function() {
     }
 
     // [Public]
-    // returns content from cookie, if it is not found returns null
+    // returns loaded content from stored in cookie url, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
         var resData = {type : "", message: "", data: null};
 
@@ -240,7 +240,7 @@ var DataManager = function() {
     }
 
     // [Public]
-    // saves current content into cookie
+    // saves current content upon Github and saves url into cookie
     this.saveContentIntoCookie = function(tempSaveHandler) {
         // 1. create gist and get url back
         // 2. save url as cookie
@@ -260,8 +260,6 @@ var DataManager = function() {
                 document.cookie = cookieName + "=" + encodeURIComponent(fileurl) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
-                console.log(document.cookie);
-                console.log(fileurl);
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
             },

@@ -141,6 +141,7 @@ function processResult(resData) {
     }
 }
 
+// handler for manual saving upon Github
 function msaveHandler() {
     manager.saveContentIntoCookie(
         /* callback */
@@ -150,6 +151,7 @@ function msaveHandler() {
     );
 }
 
+// handler for loading data, calls processing result for resData
 function mLoadHandler(resData) {
     processResult(resData);
 }
