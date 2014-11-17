@@ -208,6 +208,7 @@ var DataManager = function() {
 
         c = "; " + c;
         var parts = c.split("; " + this.COOKIE_NAME + "=");
+        console.log(parts);
         if (parts.length == 2) {
             var fileurl = decodeURIComponent(parts[parts.length-1]);
             console.log(fileurl);
@@ -218,7 +219,6 @@ var DataManager = function() {
                     resData.message = "Loaded...";
                     resData.data = result;
                     if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
-                    return result;
                 },
                 /* error */
                 function(result) {
