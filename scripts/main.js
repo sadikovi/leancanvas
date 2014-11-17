@@ -30,6 +30,7 @@ function buildCanvas() {
     manager.getContentFromCookie(
         function(resData) {
             var tres = resData.data || DEFAULT_CONTENT;
+            console.log(tres);
             manager.buildContentFromJSON(tres, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
             updateDOM();
             processResult(resData);
