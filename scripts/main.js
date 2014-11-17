@@ -153,6 +153,7 @@ function msaveHandler() {
 
 // handler for loading data, calls processing result for resData
 function mLoadHandler(resData) {
+    console.log(resData);
     processResult(resData);
 }
 
