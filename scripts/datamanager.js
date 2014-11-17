@@ -242,6 +242,8 @@ var DataManager = function() {
         // 2. save url as cookie
         var fileurl = "";
         var resData = {type : "", message: ""};
+        var cookieName = this.COOKIE_NAME;
+        var expireSec = this.COOKIE_EXPIRE_SEC;
         this.saveGistOnGithub(
             /* success */
             function(result) {
@@ -250,17 +252,10 @@ var DataManager = function() {
                 resData.type = "success";
                 resData.message = "Saved...";
                 var d = new Date();
-                d.setTime(d.getTime() + (this.COOKIE_EXPIRE_SEC*1000));
-                var wholestring = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
+                d.setTime(d.getTime() + (expireSec*1000));
+                document.cookie = cookieName + "=" + encodeURIComponent(fileurl) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
-                document.cookie = this.COOKIE_NAME + "=" + encodeURIComponent(fileurl) + "; "
-                                + "expires=" + d.toUTCString() + "; "
-                                + "Path=/; Domain=.sadikovi.github.io";
-                console.log(wholestring);
-                console.log(fileurl);
-                console.log(jresult);
-
                 if (tempSaveHandler)
                     tempSaveHandler.call(this, resData);
             },
@@ -278,7 +273,7 @@ var DataManager = function() {
 
     // [Public]
     // toggles autosave feature
-    this.toggleAutosaveContent = function(isOn, onAutosaved) {
+    this.toggleAutosaveContent = function(isOn, onAutosavedHandler) {
         if (isOn) {
             // turn on and start updating
             if (this.autosaveTimer)
