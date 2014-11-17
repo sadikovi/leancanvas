@@ -225,7 +225,7 @@ var DataManager = function() {
                     var jresult = JSON.parse(result);
                     resData.type = "error";
                     resData.message = jresult.message;
-                    resData.data = result;
+                    resData.data = null;
                     if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
                 }
             );
@@ -235,8 +235,6 @@ var DataManager = function() {
             resData.data = null;
             if (tempLoadHandler) {tempLoadHandler.call(this, resData);}
         }
-
-        return null;
     }
 
     // [Public]

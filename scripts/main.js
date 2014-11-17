@@ -27,9 +27,14 @@ function buildCanvas() {
 
     // 3. build main body
     // get content from cookie or (if it is empty) load default content
-    var content = manager.getContentFromCookie(mLoadHandler) || DEFAULT_CONTENT;
-    manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
-    updateDOM();
+    var content = manager.getContentFromCookie(
+        function mLoadHandler(resData) {
+            var tres = resData.data || DEFAULT_CONTENT;
+            manager.buildContentFromJSON(content, loadHandler, saveHandler, addNoteHandler, noteEditHandler, noteRemoveHandler);
+            updateDOM();
+            processResult(resData);
+        }
+    );
 
     // 4. enable/disable autosave
     // page is loaded
@@ -149,12 +154,6 @@ function msaveHandler() {
             processResult(resData);
         }
     );
-}
-
-// handler for loading data, calls processing result for resData
-function mLoadHandler(resData) {
-    console.log(resData);
-    processResult(resData);
 }
 
 //-----------Create new content-----------
