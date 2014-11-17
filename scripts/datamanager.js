@@ -244,7 +244,6 @@ var DataManager = function() {
     this.saveContentIntoCookie = function(tempSaveHandler) {
         // 1. create gist and get url back
         // 2. save url as cookie
-        var fileurl = "";
         var resData = {type : "", message: ""};
         var cookieName = this.COOKIE_NAME;
         var expireSec = this.COOKIE_EXPIRE_SEC;
@@ -252,12 +251,11 @@ var DataManager = function() {
             /* success */
             function(result) {
                 var jresult = JSON.parse(result);
-                fileurl = jresult.html_url;
                 resData.type = "success";
                 resData.message = "Saved...";
                 var d = new Date();
                 d.setTime(d.getTime() + (expireSec*1000));
-                document.cookie = cookieName + "=" + encodeURIComponent(fileurl) + "; "
+                document.cookie = cookieName + "=" + encodeURIComponent(jresult.html_url) + "; "
                                 + "expires=" + d.toUTCString() + "; "
                                 + "Path=/; Domain=.sadikovi.github.io";
                 if (tempSaveHandler)
@@ -266,7 +264,6 @@ var DataManager = function() {
             /* error */
             function(result) {
                 var jresult = JSON.parse(result);
-                fileurl = jresult.html_url;
                 resData.type = "error";
                 resData.message = jresult.message;
                 if (tempSaveHandler)
