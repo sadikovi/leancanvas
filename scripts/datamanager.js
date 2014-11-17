@@ -200,6 +200,7 @@ var DataManager = function() {
     // [Public]
     // returns loaded content from stored in cookie url, if it is not found returns null
     this.getContentFromCookie = function(tempLoadHandler) {
+        console.log("Call of the function");
         var resData = {type : "", message: "", data: null};
 
         var c = document.cookie;
