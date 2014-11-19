@@ -27,7 +27,7 @@ var Note = function(noteId, text, directory, content) {
     }
 
     this.generateDOM = function() {
-        var note = Util.createElement("div", this.id, "note hAlignLeft hMargined_normal vMargined_normal", null, null);
+        var note = Util.createElement("div", this.id, "note blue hAlignLeft hMargined_normal vMargined_normal", null, null);
 
         // build note menu
         var noteMenu = Util.createElement("div", null, "hAlignRight", null, note);

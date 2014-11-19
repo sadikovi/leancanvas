@@ -3,9 +3,7 @@
  *
  */
 
- .note {
-     background-color: #E6F1F6;
-     border: 1px solid #B7C7CF;
+.note {
      border-radius: 3px;
      display: block;
      font-size: 14px;
@@ -13,6 +11,45 @@
 }
 
 .note:hover {
+
+}
+
+.note.blue {
+    background-color: #E6F1F6;
+    border: 1px solid #B7C7CF;
+}
+
+.note.blue:hover {
     border-color: #51A7E8;
     box-shadow: 0 0 5px rgba(81,167,232,0.5);
+}
+
+.note.orange {
+    background-color: #ffe3c8;
+    border: 1px solid #dca874;
+}
+
+.note.orange:hover {
+    border-color: #e89251;
+    box-shadow: 0 0 5px rgba(232,146,81,0.5);
+}
+
+.note.red {
+    background-color: #E6F1F6;
+    border: 1px solid #B7C7CF;
+}
+
+.note.red:hover {
+    border-color: #e8515c;
+    box-shadow: 0 0 5px rgb(232,81,92,0.5);
+}
+
+.note.green {
+    background-color: #f1f6e6;
+    border: 1px solid #c7cfb7;
+}
+
+.note.green:hover {
+    border-color: #a7e851;
+    box-shadow: 0 0 5px rgba(167,232,81,0.5);
 }
