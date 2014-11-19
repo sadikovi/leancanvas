@@ -35,21 +35,21 @@
 }
 
 .note.red {
-    background-color: #E6F1F6;
-    border: 1px solid #B7C7CF;
+    background-color: #f8d8d8;
+    border: 1px solid #da9797;
 }
 
 .note.red:hover {
     border-color: #e8515c;
-    box-shadow: 0 0 5px rgb(232,81,92,0.5);
+    box-shadow: 0 0 5px rgba(232,81,92,0.5);
 }
 
 .note.green {
     background-color: #f1f6e6;
-    border: 1px solid #c7cfb7;
+    border: 1px solid #74dca8;
 }
 
 .note.green:hover {
-    border-color: #a7e851;
-    box-shadow: 0 0 5px rgba(167,232,81,0.5);
+    border-color: #9acb6a;
+    box-shadow: 0 0 5px rgba(154,203,106,0.5);
 }
