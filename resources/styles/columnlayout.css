@@ -6,3 +6,7 @@
  .column {
      min-height: 100px;
  }
+
+ .column-content {
+     vertical-align: top;
+ }

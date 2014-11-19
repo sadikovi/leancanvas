@@ -55,4 +55,5 @@
     min-height: 130px;
     resize: none;
     font-size: 13px;
+    font-family: inherit;
 }

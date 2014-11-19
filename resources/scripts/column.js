@@ -45,7 +45,7 @@ var Column = function(id, parent) {
 
         for (var j=0; j<this.children.length; j++) {
             var tr = Util.createElement("tr", null, "", null, main);
-            var td = Util.createElement("td", null, "hAlignCenter", null, tr);
+            var td = Util.createElement("td", null, "column-content hAlignCenter", null, tr);
 
             var n = this.children[j];
             td.appendChild(n.generateDOM());
