@@ -4,47 +4,241 @@
         <title>Lean Canvas</title>
         <meta charset='utf8'></meta>
         <link rel="shortcut icon" href="/resources/images/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="/resources/styles.css"></link>
-        <link rel="stylesheet" type="text/css" href="/resources/row_title_styles.css"></link>
-        <link rel="stylesheet" type="text/css" href="/resources/row_content_styles.css"></link>
-        <link rel="stylesheet" type="text/css" href="/resources/noteeditor.css"></link>
-        <link rel="stylesheet" type="text/css" href="/resources/notification.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/general.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/pagelayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/buttonlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/notifylayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/notelayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/directorylayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/columnlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/domainlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/noteeditorlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/modalviewlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/alertlayout.css"></link>
 
-        <script src="/scripts/sources.js"></script>
-        <script src="/scripts/constants.js"></script>
-        <script src="/scripts/helper.js"></script>
-        <script src="/scripts/default_content.js"></script>
-        <script src="/scripts/content.js"></script>
-        <script src="/scripts/column.js"></script>
-        <script src="/scripts/directory.js"></script>
-        <script src="/scripts/topbar.js"></script>
-        <script src="/scripts/note.js"></script>
-        <script src="/scripts/noteeditor.js"></script>
-        <script src="/scripts/loader.js"></script>
-        <script src="/scripts/loadingindicator.js"></script>
-        <script src="/scripts/datamanager.js"></script>
-        <script src="/scripts/header.js"></script>
-        <script src="/scripts/notification.js"></script>
-        <script src="/scripts/main.js"></script>
+        <script src="/resources/scripts/util.js"></script>
+        <script src="/resources/scripts/sources.js"></script>
+        <script src="/resources/scripts/contentmanager.js"></script>
+        <script src="/resources/scripts/header.js"></script>
+        <script src="/resources/scripts/footer.js"></script>
+        <script src="/resources/scripts/notification.js"></script>
+        <script src="/resources/scripts/noteeditor.js"></script>
+        <script src="/resources/scripts/loader.js"></script>
+        <script src="/resources/scripts/datamanager.js"></script>
+        <script src="/resources/scripts/modalview.js"></script>
+
+        <script src="/resources/scripts/defaultlayout.js"></script>
+        <script src="/resources/scripts/contentlayout.js"></script>
+        <script src="/resources/scripts/note.js"></script>
+        <script src="/resources/scripts/directory.js"></script>
+        <script src="/resources/scripts/column.js"></script>
+        <script src="/resources/scripts/domain.js"></script>
     </head>
     <body>
-        <div id="wrapper_canvas_main" class="wrapper">
-            <div class="header">
-                <div class="subheader size" id="wrapper_canvas_main&header_holder">
+        <div class="wrapper" id="wrapper">
+            <div class="page_header">
+                <div class="page_width centered" id="header">
                 </div>
             </div>
-            <div id="notify_wrapper">
+            <div class="page_notify hAlignCenter" id="notify_wrapper">
             </div>
-            <div id="wrapper_canvas_main&body_holder">
+            <div class="page_body" id="body_wrapper">
             </div>
-            <div id="wrapper_canvas_main&footer_holder" class="footer size">
-                <div class="footer_content">
-                    @2014 #Lean canvas by <a href="https://github.com/sadikovi/" target="blank" tabindex="-1">@sadikovi</a>
+            <div class="page_footer hAlignCenter">
+                <div class="footer_content centered page_width" id="footer">
                 </div>
             </div>
         </div>
         <script>
-            buildCanvas();
+
+            //update canvas and load default content
+            function globalNewHandler() {
+                ContentManager.buildPageLayout(DEFAULT_LAYOUT.data);
+                updateDOM();
+                NotificationCenter.show(NotificationType.SUCCESS, "Enjoy freedom of the blank canvas...");
+            }
+
+            // save on github handler
+            function globalSaveGistHandler() {
+                var json = JSON.parse(ContentManager.generateJSON());
+                // run notification
+                var t = NotificationCenter.create(NotificationType.INFO, "Saving on Github...", true);
+                NotificationCenter.showN(t, -1);
+
+                DataManager.saveGistOnGithub(
+                    json,
+                    /* success */
+                    function(result) {
+                        var url = "<a href=\"" + result.html_url + "\" target=\"blank\">" + result.html_url + "</a>";
+                        var msg = "@Saved file: " + url + ". Dont forget to copy link somewhere!";
+
+                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
+                        NotificationCenter.showN(t, 7000, false);
+                    },
+                    /* error */
+                    function(result) {
+                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
+                        var msg = "@Error: "+result.message+ ", see link: " + url;
+
+                        NotificationCenter.change(t, NotificationType.ERROR, msg);
+                        NotificationCenter.showN(t, 5000, false);
+                    }
+                );
+            }
+
+            // load on github handler
+            function globalLoadGistHandler() {
+                var input = document.getElementById("modal_view_load_gist_input");
+                var link = (input)?input.value:"";
+                // run notification
+                var t = NotificationCenter.create(NotificationType.INFO, "Loading Gist from Github...", true);
+                NotificationCenter.showN(t, -1);
+
+                DataManager.loadGistFromGithub(
+                    link,
+                    /* success */
+                    function(result) {
+                        var msg = "@Gist is loaded. Dont forget to save, if you need it!";
+
+                        ContentManager.buildPageLayout(result.data);
+                        updateDOM();
+
+                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
+                        NotificationCenter.showN(t, 7000, false);
+                    },
+                    /* error */
+                    function(result) {
+                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
+                        var msg = "@Error: "+result.message+ ", see link: " + url;
+
+                        NotificationCenter.change(t, NotificationType.ERROR, msg);
+                        NotificationCenter.showN(t, 5000, false);
+                    }
+                );
+            }
+
+            // save handler: saves on github and saves url in cookies
+            function globalSaveHandler() {
+                var json = JSON.parse(ContentManager.generateJSON());
+
+                // run notification
+                var t = NotificationCenter.create(NotificationType.INFO, "Saving...", true);
+                NotificationCenter.showN(t, -1);
+
+                DataManager.saveContentIntoCookie(
+                    json,
+                    /* success */
+                    function(result) {
+                        var msg = Util.getCurrentDateTime() + " @Saved";
+                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
+                        NotificationCenter.showN(t, null, false);
+                    },
+                    /* error */
+                    function(result) {
+                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
+                        var msg = "@Error: "+result.message+ ", see link: " + url;
+
+                        NotificationCenter.change(t, NotificationType.ERROR, msg);
+                        NotificationCenter.showN(t, 5000, false);
+                    }
+                );
+            }
+
+            // load handler: takes url from cookies and loads content from github
+            function globalLoadHandler() {
+                // run notification
+                var t = NotificationCenter.create(NotificationType.INFO, "Loading...", true);
+                NotificationCenter.showN(t, -1);
+
+                DataManager.getContentFromCookie(
+                    /* success */
+                    function(result) {
+                        var msg = "@Loaded...";
+
+                        ContentManager.buildPageLayout(result.data);
+                        updateDOM();
+
+                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
+                        NotificationCenter.showN(t, null, false);
+                    },
+                    /* error */
+                    function(result) {
+                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
+                        var msg = "@Error: "+result.message+ ", see link: " + url;
+
+                        NotificationCenter.change(t, NotificationType.ERROR, msg);
+                        NotificationCenter.showN(t, 5000, false);
+                    }
+                );
+            }
+
+            // note handler: add new note
+            function addNoteHandler() {
+                var dir = this.this;
+                NoteEditor.show("", "New note for \"" + dir.name + "\"", {}, function(data, value) {
+                    // create new note and assign to directory
+                    var a = new Note(Util.generateId(), value, dir, CONTENT_LAYOUT.note());
+                    dir.append(a);
+                    updateDOM();
+                    NotificationCenter.show(NotificationType.SUCCESS, "Note has been added");
+                });
+            }
+
+            // note handler: edit the note
+            function editNoteHandler() {
+                var note = this.this;
+                var dir = note.parent;
+                NoteEditor.show(note.text, "New note for \"" + dir.name + "\"", {}, function(data, value) {
+                    // modify text value of a note
+                    note.modify(value);
+                    updateDOM();
+                    NotificationCenter.show(NotificationType.SUCCESS, "Note has been edited");
+                });
+            }
+
+            // note handler: delete the note
+            function deleteNoteHandler() {
+                var note = this.this;
+                var dir = note.parent;
+                dir.remove(note.id);
+                updateDOM();
+                NotificationCenter.show(NotificationType.SUCCESS, "Note has been deleted");
+            }
+
+            // update DOM
+            function updateDOM() {
+                document.getElementById("body_wrapper").innerHTML = "";
+                document.getElementById("body_wrapper").appendChild(ContentManager.generateDOM());
+            }
+
+            // load all the data
+            // check for bad browser version
+            if (Util.isBadIE()) {
+                document.getElementById("body_wrapper").innerHTML = "";
+                Util.createElement(
+                    "div",
+                    null,
+                    "alert tip-red page-body-size-normal centered",
+                    "Browser version (IE8 or older IE browsers) is not supported. Please choose other browser instead.",
+                    document.getElementById("body_wrapper")
+                );
+            } else {
+                // load header...
+                Header.display(document.getElementById("header"), CONTENT_LAYOUT.header());
+                // ... load footer
+                Footer.display(document.getElementById("footer"), CONTENT_LAYOUT.footer());
+
+                // build default layout
+                ContentManager.buildPageLayout(DEFAULT_LAYOUT.data);
+                // and update everything
+                updateDOM();
+
+                // initialize notification center
+                NotificationCenter.init("notify_wrapper");
+
+                /* load data from cookies every time page is refreshed */
+                globalLoadHandler();
+            }
         </script>
     </body>
 </html>

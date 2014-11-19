@@ -1,0 +1,13 @@
+/*
+ * domain layout
+ *
+ */
+
+ .domain {
+    vertical-align: top;
+    height: 100%;
+ }
+
+.domain.content {
+    
+}

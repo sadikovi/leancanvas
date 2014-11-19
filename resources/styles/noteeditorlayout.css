@@ -1,0 +1,58 @@
+/*
+ * noteeditor styles
+ *
+ */
+
+.noteeditor {
+    width: 500px;
+    height: 300px;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    position:fixed;
+    z-index: 500;
+    top:50%;
+    left:50%;
+    margin:-150px 0 0 -250px;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.noteeditor_background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(51,51,51,0.7);
+    z-index: 400;
+}
+
+.noteeditor_heading {
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #BDC4C9;
+    background-color: #F2F2F2;
+}
+
+.noteeditor_content {
+    width: 94%;
+    padding: 5px;
+}
+
+.noteeditor_content.help {
+    border-radius: 3px;
+    padding: 8px 8px;
+    font-size: 12px;
+    display: inline-block;
+    background-color: #F4FAFF;
+    border: 1px solid #51A7E8;
+    color: #51A7E8;
+    font-weight: normal;
+}
+
+.noteeditor_content.text {
+    min-height: 130px;
+    resize: none;
+    font-size: 13px;
+}
