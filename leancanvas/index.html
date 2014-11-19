@@ -153,7 +153,7 @@
                 DataManager.getContentFromCookie(
                     /* success */
                     function(result) {
-                        var msg = "@Loaded...";
+                        var msg = Util.getCurrentDateTime() + "@Loaded...";
 
                         ContentManager.buildPageLayout(result.data);
                         updateDOM();
