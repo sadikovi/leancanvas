@@ -46,10 +46,10 @@
 
 .note.green {
     background-color: #f1f6e6;
-    border: 1px solid #74dca8;
+    border: 1px solid #b2dfa3;
 }
 
 .note.green:hover {
-    border-color: #9acb6a;
-    box-shadow: 0 0 5px rgba(154,203,106,0.5);
+    border-color: #82cb6a;
+    box-shadow: 0 0 5px rgba(130,203,106,0.5);
 }
