@@ -19,7 +19,7 @@ var Note = function(noteId, text, directory, content) {
     }
 
     this.getText = function() {
-        return Util.htmlspecialchars(this.text);
+        return this.text;
     }
 
     this.append = function(obj) {
@@ -43,7 +43,7 @@ var Note = function(noteId, text, directory, content) {
 
         // build note text
         var noteText = Util.createElement("div", null, "hMargined_normal", null, note);
-        var tspan = Util.createElement("p", null, "", Util.htmlspecialchars_decode(this.getText(), null), noteText);
+        var tspan = Util.createElement("p", null, "", Util.htmlspecialchars(this.getText(), null, null, false), noteText);
 
         return note;
     }
