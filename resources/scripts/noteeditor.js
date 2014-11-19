@@ -1,7 +1,7 @@
 // only one editor for the whole app
 var NoteEditor = function() {
     var neid = "note_editor";
-    var elem, back, editView, headView, data, subm;
+    var elem, back, editView, tags, headView, data, subm;
     var helpMessage =
         "Shortcuts: <br/>" +
         "[Tab] - focus on editor view<br/>" +
@@ -9,7 +9,7 @@ var NoteEditor = function() {
         "[Ctrl+Enter] - submit";
 
     return {
-        show: function(text, heading, callData, onSubmit) {
+        show: function(text, tag, heading, callData, onSubmit) {
             if (!elem) {
                 elem = Util.createElement("div", neid, "noteeditor", null, document.body);
                 var table = Util.createElement("table", neid+"&content", "noteeditor_heading", null, elem);
@@ -32,10 +32,12 @@ var NoteEditor = function() {
                 );
 
                 var cn = Util.createElement("div", null, "noteeditor_content centered hAlignCenter", null, elem);
+                tags = TagManager.showTagPanel(cn, tag);
                 Util.createElement("div", null, "noteeditor_content help hMargined_normal vMargined_normal hAlignLeft", helpMessage, cn);
                 editView = Util.createTextarea(null, "gTextarea noteeditor_content text hMargined_normal", "Type something...", cn);
             }
 
+            TagManager.selectTag(tags, tag);
             editView.value = text;
             headView.innerHTML = heading;
             data = callData;
@@ -69,7 +71,7 @@ var NoteEditor = function() {
         },
         submit: function() {
             if (subm)
-                subm.call(this, data, editView.value);
+                subm.call(this, data, editView.value, TagManager.getSelectedTag(tags));
         },
         // global ok event (press Ctrl+Enter)
         globalOkEventListener: function(e) {

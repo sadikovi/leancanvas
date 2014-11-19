@@ -4,7 +4,7 @@
  *
  */
 
-var Note = function(noteId, text, directory, content) {
+var Note = function(noteId, text, tag, directory, content) {
     if (!noteId || !directory)
         throw ("Note arguments are not initialised properly");
 
@@ -12,14 +12,20 @@ var Note = function(noteId, text, directory, content) {
     this.text = text;
     this.parent = directory;
     this.content = content;
+    this.tag = tag;
     this.children = [];
 
-    this.modify = function(text) {
+    this.modify = function(text, tag) {
         this.text = text;
+        this.tag = tag;
     }
 
     this.getText = function() {
         return this.text;
+    }
+
+    this.getTag = function() {
+        return this.tag;
     }
 
     this.append = function(obj) {
@@ -27,7 +33,8 @@ var Note = function(noteId, text, directory, content) {
     }
 
     this.generateDOM = function() {
-        var note = Util.createElement("div", this.id, "note blue hAlignLeft hMargined_normal vMargined_normal", null, null);
+        var tagclass = TagManager.classForTag(this.tag);
+        var note = Util.createElement("div", this.id, "note " + tagclass +" hAlignLeft hMargined_normal vMargined_normal", null, null);
 
         // build note menu
         var noteMenu = Util.createElement("div", null, "hAlignRight", null, note);
@@ -49,7 +56,7 @@ var Note = function(noteId, text, directory, content) {
     }
 
     this.generateJSON = function() {
-        var res = "{ \"type\" : \"note\", \"id\" : \"" + this.id
+        var res = "{ \"type\" : \"note\", \"id\" : \"" + this.id + "\", \"tag\" : \"" + this.tag
         + "\", \"text\" : \"" + Util.replaceJSONSpecialChars(this.getText()) + "\", \"children\" : [] }";
 
         return res;

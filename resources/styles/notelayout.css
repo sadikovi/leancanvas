@@ -14,42 +14,42 @@
 
 }
 
-.note.blue {
+.note-blue {
     background-color: #E6F1F6;
     border: 1px solid #B7C7CF;
 }
 
-.note.blue:hover {
+.note-blue:hover {
     border-color: #51A7E8;
     box-shadow: 0 0 5px rgba(81,167,232,0.5);
 }
 
-.note.orange {
+.note-orange {
     background-color: #ffe3c8;
     border: 1px solid #dca874;
 }
 
-.note.orange:hover {
-    border-color: #e89251;
-    box-shadow: 0 0 5px rgba(232,146,81,0.5);
+.note-orange:hover {
+    border-color: #e5843a;
+    box-shadow: 0 0 5px rgba(229,132,58,0.5);
 }
 
-.note.red {
+.note-red {
     background-color: #f8d8d8;
     border: 1px solid #da9797;
 }
 
-.note.red:hover {
+.note-red:hover {
     border-color: #e8515c;
     box-shadow: 0 0 5px rgba(232,81,92,0.5);
 }
 
-.note.green {
+.note-green {
     background-color: #f1f6e6;
     border: 1px solid #b2dfa3;
 }
 
-.note.green:hover {
+.note-green:hover {
     border-color: #82cb6a;
     box-shadow: 0 0 5px rgba(130,203,106,0.5);
 }

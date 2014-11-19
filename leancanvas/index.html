@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="/resources/styles/noteeditorlayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/modalviewlayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/alertlayout.css"></link>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/taglayout.css"></link>
 
         <script src="/resources/scripts/util.js"></script>
         <script src="/resources/scripts/sources.js"></script>
@@ -26,6 +27,7 @@
         <script src="/resources/scripts/loader.js"></script>
         <script src="/resources/scripts/datamanager.js"></script>
         <script src="/resources/scripts/modalview.js"></script>
+        <script src="/resources/scripts/tagmanager.js"></script>
 
         <script src="/resources/scripts/defaultlayout.js"></script>
         <script src="/resources/scripts/contentlayout.js"></script>
@@ -175,9 +177,9 @@
             // note handler: add new note
             function addNoteHandler() {
                 var dir = this.this;
-                NoteEditor.show("", "New note for \"" + dir.name + "\"", {}, function(data, value) {
+                NoteEditor.show("", null, "New note for \"" + dir.name + "\"", {}, function(data, value, tag) {
                     // create new note and assign to directory
-                    var a = new Note(Util.generateId(), value, dir, CONTENT_LAYOUT.note());
+                    var a = new Note(Util.generateId(), value, tag, dir, CONTENT_LAYOUT.note());
                     dir.append(a);
                     updateDOM();
                     NotificationCenter.show(NotificationType.SUCCESS, "Note has been added");
@@ -188,9 +190,9 @@
             function editNoteHandler() {
                 var note = this.this;
                 var dir = note.parent;
-                NoteEditor.show(note.text, "New note for \"" + dir.name + "\"", {}, function(data, value) {
+                NoteEditor.show(note.text, note.tag, "New note for \"" + dir.name + "\"", {}, function(data, value, tag) {
                     // modify text value of a note
-                    note.modify(value);
+                    note.modify(value, tag);
                     updateDOM();
                     NotificationCenter.show(NotificationType.SUCCESS, "Note has been edited");
                 });

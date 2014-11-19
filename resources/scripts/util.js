@@ -67,7 +67,7 @@ var Util = function() {
             for (var i=0; i<a.length; i++)
                 if (a[i] != classname)
                     newclassname += " " + a[i];
-            elem.className = newclassname;
+            elem.className = newclassname.replace(/^\s+|\s+$/gm,'');
         },
         hasClass: function(elem, classname) {
             if (!elem) {return;}

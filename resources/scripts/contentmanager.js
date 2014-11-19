@@ -57,7 +57,7 @@ var ContentManager = function() {
             } else if (c.type == "image") {
                 return Util.createImage(c.id, c.class, c.src, c.title, parent);
             } else if (c.type == "note") {
-                var t = new Note(c.id, c.text, parent, CONTENT_LAYOUT.note());
+                var t = new Note(c.id, c.text, c.tag, parent, CONTENT_LAYOUT.note());
                 parent.append(t);
                 return t;
             } else if (c.type == "directory") {

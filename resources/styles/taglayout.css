@@ -1,0 +1,46 @@
+/*
+ * tags layout
+ *
+ */
+
+.tag-container {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.tag {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.tag-blue {
+    background-color: #E6F1F6;
+    border: 1px solid #B7C7CF;
+}
+
+.tag-orange {
+    background-color: #ffe3c8;
+    border: 1px solid #dca874;
+}
+
+.tag-red {
+    background-color: #f8d8d8;
+    border: 1px solid #da9797;
+}
+
+.tag-green {
+    background-color: #f1f6e6;
+    border: 1px solid #b2dfa3;
+}
+
+.tag-container.selected {
+    border: 1px solid #7c7c7c;
+    background-color: #f5f5f5;
+}
