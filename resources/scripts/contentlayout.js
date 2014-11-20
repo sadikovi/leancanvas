@@ -10,7 +10,7 @@ var CONTENT_LAYOUT = function() {
             var hcontent = {
                 title : [
                     { type: "image", id: "main_icon_logo", class: "logo hMargined_normal", src: Source.MAIN_ICON, title: null },
-                    { type: "text", id: null, class: null, text: "Lean Canvas" }
+                    { type: "text", id: null, class: "logo", text: "Lean Canvas" }
                 ],
                 buttons: [
                     { type: "button", id: null, isMini: false, class: "simple hMargined small", text: "New", handler: globalNewHandler, img: null },
