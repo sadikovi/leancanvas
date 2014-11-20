@@ -33,7 +33,7 @@ var Loader = function() {
                 msg = err;
             }
 
-            error.call(this, '{ "message" : "'+msg+'", "documentation_url" : "https://www.google.com" }');
+            error.call(this, '{ "message" : "'+Util.replaceJSONSpecialChars(msg)+'", "documentation_url" : "https://www.google.com" }');
             this.xmlhttp = xmlhttp = null;
         }
     }
