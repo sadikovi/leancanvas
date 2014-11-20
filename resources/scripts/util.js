@@ -179,7 +179,6 @@ var Util = function() {
             r = Util.replaceAll(r, "\n", "\\n");
             r = Util.replaceAll(r, "\"", "\\"+"\"");
             r = Util.replaceAll(r, "\'", "\\"+"\'");
-            console.log(r);
             return r;
         },
 
