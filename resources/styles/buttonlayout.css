@@ -117,7 +117,7 @@
 .button_img {
     width: 15px;
     height: 15px;
-    vertical-align: sub;
+    vertical-align: middle;
 }
 
 .button.selected, .button.selected:hover {
