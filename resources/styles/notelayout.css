@@ -53,3 +53,13 @@
     border-color: #82cb6a;
     box-shadow: 0 0 5px rgba(130,203,106,0.5);
 }
+
+.note-magenta {
+    background-color: #fceef6;
+    border: 1px solid #cfb7c7;
+}
+
+.note-magenta:hover {
+    border-color: #ee7ebe;
+    box-shadow: 0 0 5px rgba(238,126,190, 0.5);
+}

@@ -56,12 +56,8 @@ var Note = function(noteId, text, tag, directory, content) {
     }
 
     this.generateJSON = function() {
-        console.log("raw text: " + this.getText());
-        console.log("json text: " + Util.replaceJSONSpecialChars(this.getText()));
         var res = "{ \"type\" : \"note\", \"id\" : \"" + this.id + "\", \"tag\" : \"" + this.tag
         + "\", \"text\" : \"" + Util.replaceJSONSpecialChars(this.getText()) + "\", \"children\" : [] }";
-
-        console.log("full json: " + res);
         return res;
     }
 }

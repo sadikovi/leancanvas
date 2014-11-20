@@ -178,7 +178,8 @@ var Util = function() {
             var r = Util.replaceAll(text, "\r", "\\r");
             r = Util.replaceAll(r, "\n", "\\n");
             r = Util.replaceAll(r, "\"", "\\"+"\"");
-            r = Util.replaceAll(r, "\'", "\\"+"\'");
+            /* do not need to escape single quotes */
+            /*r = Util.replaceAll(r, "\'", "\\"+"\'");*/
             return r;
         },
 

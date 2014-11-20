@@ -40,6 +40,11 @@
     border: 1px solid #b2dfa3;
 }
 
+.tag-magenta {
+    background-color: #fceef6;
+    border: 1px solid #cfb7c7;
+}
+
 .tag-container.selected {
     border: 1px solid #7c7c7c;
     background-color: #f5f5f5;
