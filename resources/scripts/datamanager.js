@@ -10,6 +10,27 @@ var DataManager = function() {
         COOKIE_NAME_ACCESS_TOKEN: function() {
             return "sadikovi_lean_canvas_access_token";
         },
+
+        /* util parse function
+         * if parse succeeds then succeed function is called
+         * otherwise fail function is called
+         */
+        parseJSON: function(result, succeed, fail) {
+            try {
+                result = JSON.parse(result);
+                if (succeed)
+                    succeed.call(this, result);
+            } catch (err) {
+                var res = {
+                    message: ((err.message)?err.message:err),
+                    documentation_url: "https://www.google.com/"
+                };
+
+                if (fail)
+                    fail.call(this, res);
+            }
+        },
+
         // [Public]
         // saves data on github (as gist)
         saveGistOnGithub: function (json, success, error) {
@@ -33,49 +54,13 @@ var DataManager = function() {
                 "https://api.github.com/gists",
                 "application/x-www-form-urlencoded",
                 JSON.stringify(data),
+                /* success */
                 function(result) {
-                    try {
-                        result = JSON.parse(result);
-                        if (success)
-                            success.call(this, result);
-                    } catch (err) {
-                        var msg = "Unknown error";
-                        if (err.message)
-                            msg = err.message;
-                        else
-                            msg = err;
-
-                        var res = {
-                            message: msg,
-                            documentation_url: "https://www.google.com/"
-                        };
-
-                        if (error) {
-                            error.call(this, res);
-                        }
-                    }
+                    DataManager.parseJSON(result, success, error);
                 },
+                /* error */
                 function(result) {
-                    try {
-                        result = JSON.parse(result);
-                        if (error)
-                            error.call(this, result);
-                    } catch (err) {
-                        var msg = "Unknown error";
-                        if (err.message)
-                            msg = err.message;
-                        else
-                            msg = err;
-
-                        var res = {
-                            message: msg,
-                            documentation_url: "https://www.google.com/"
-                        };
-
-                        if (error) {
-                            error.call(this, res);
-                        }
-                    }
+                    DataManager.parseJSON(result, error, error);
                 }
             );
         },
@@ -101,22 +86,15 @@ var DataManager = function() {
                             content = files[Object.keys(files)[0]].content;
                             var res = JSON.parse(content);
 
-                            if (typeof res !== 'object') {
+                            if (typeof res !== 'object')
                                 throw ("Content is not an object");
-                            }
 
                             if (success)
                                 success.call(this, res);
                         }
                     } catch (err) {
-                        var msg = "Unknown error";
-                        if (err.message)
-                            msg = err.message;
-                        else
-                            msg = err;
-
                         var res = {
-                            message: msg,
+                            message: ((err.message)?err.message:err),
                             documentation_url: "https://www.google.com/"
                         };
 
@@ -127,26 +105,7 @@ var DataManager = function() {
                 },
                 /* error */
                 function(result) {
-                    try {
-                        result = JSON.parse(result);
-                        if (error)
-                            error.call(this, result);
-                    } catch (err) {
-                        var msg = "Unknown error";
-                        if (err.message)
-                            msg = err.message;
-                        else
-                            msg = err;
-
-                        var res = {
-                            message: msg,
-                            documentation_url: "https://www.google.com/"
-                        };
-
-                        if (error) {
-                            error.call(this, res);
-                        }
-                    }
+                    DataManager.parseJSON(result, error, error);
                 }
             );
         },

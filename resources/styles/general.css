@@ -157,6 +157,8 @@ a:active {
 
 .logo {
     vertical-align: middle;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 img.logo {
