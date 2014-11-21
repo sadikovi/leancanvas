@@ -17,13 +17,16 @@ table.gTable {
 }
 
 input[type="text"].gTextInput.focus,
-input[type="text"].gTextInput:focus {
+input[type="text"].gTextInput:focus,
+input[type="password"].gTextInput.focus,
+input[type="password"].gTextInput:focus  {
     border-color: #51A7E8;
     box-shadow: 0 0 5px rgba(81,167,232,0.5);
     background-color: #FFFFFF;
 }
 
-input[type="text"].gTextInput {
+input[type="text"].gTextInput,
+input[type="password"].gTextInput {
     background-color: #FAFAFA;
     padding: 7px 8px;
     border: 1px solid #CCCCCC;

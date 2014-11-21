@@ -338,11 +338,16 @@ var Util = function() {
             a.setAttribute("tabindex", "-1");
             return a;
         },
-        createTextfield: function(id, aClass, placeholder, parent) {
+        createTextfield: function(id, aClass, placeholder, parent, isPassword) {
             var t = Util.createElement("input", id, "gTextInput" + " " + ((aClass)?aClass:""), null, parent);
             t.type = "text";
             if (placeholder)
                 t.placeholder = placeholder;
+
+            if (isPassword == true) {
+                t.type = "password";
+            }
+
             return t;
         },
         createTextarea: function(id, aClass, placeholder, parent) {

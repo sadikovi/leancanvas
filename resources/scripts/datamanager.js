@@ -7,6 +7,9 @@ var DataManager = function() {
         COOKIE_NAME: function() {
             return "sadikovi_lean_canvas_url_cookie";
         },
+        COOKIE_NAME_ACCESS_TOKEN: function() {
+            return "sadikovi_lean_canvas_access_token";
+        },
         // [Public]
         // saves data on github (as gist)
         saveGistOnGithub: function (json, success, error) {
