@@ -165,3 +165,13 @@ img.logo {
     width: 20px;
     height: 20px;
 }
+
+/* no select */
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

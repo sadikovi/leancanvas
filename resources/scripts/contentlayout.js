@@ -49,29 +49,12 @@ var CONTENT_LAYOUT = function() {
             return hcontent;
         },
 
-        /* content for header terms */
-        header_terms: function() {
-            var hcontent = {
-                title : [
-                    { type: "image", id: "main_icon_logo", class: "logo hMargined_normal", src: Source.MAIN_ICON, title: null },
-                    { type: "text", id: null, class: null, text: "Lean Canvas" }
-                ],
-                buttons: [
-                    {type: "button", id: null, isMini: false, class: "simple hMargined_small", text: "Back to Lean Canvas",
-                        handler: function() {window.location.replace("http://sadikovi.github.io/leancanvas/");} , img: null }
-                ]
-            };
-
-            return hcontent;
-        },
-
         /* content for footer */
         footer: function() {
             var fcontent = {
                 left: [
                     { type: "text", id: null, class: "hMargined_large", text: "@2014 Lean Canvas" },
-                    { type: "link", id: null, class: "hMargined_large", text: "About", url: "http://sadikovi.github.io/leancanvas/about/", target: "blank" },
-                    { type: "link", id: null, class: "hMargined_small", text: "Terms", url: "http://sadikovi.github.io/leancanvas/terms/", target: "blank" }
+                    { type: "link", id: null, class: "hMargined_large", text: "About", url: "http://sadikovi.github.io/leancanvas/about/", target: "blank" }
                 ],
                 right: [
                     { type: "link", id: null, class: "hMargined_large", text: "@sadikovi", url: "https://github.com/sadikovi/", target: "blank" }
@@ -95,10 +78,15 @@ var CONTENT_LAYOUT = function() {
         /* global note content */
         note: function() {
             var ncontent = {
-                buttons: [
-                    {type: "button", id: null, isMini: false, class: "simple font_small", text: "&nbsp;", handler: editNoteHandler, img: Source.IMG_NOTE_EDIT },
-                    {type: "button", id: null, isMini: false, class: "simple font_small", text: "&nbsp;", handler: deleteNoteHandler, img: Source.IMG_NOTE_DELETE }
-                 ]
+                buttons: {
+                    left: [
+                        {type: "button", id: null, isMini: false, class: "simple font_small isDraggable", text: "&nbsp;", handler: null, img: Source.IMG_NOTE_MOVE }
+                    ],
+                    right: [
+                        {type: "button", id: null, isMini: false, class: "simple font_small", text: "&nbsp;", handler: editNoteHandler, img: Source.IMG_NOTE_EDIT },
+                        {type: "button", id: null, isMini: false, class: "simple font_small", text: "&nbsp;", handler: deleteNoteHandler, img: Source.IMG_NOTE_DELETE }
+                    ]
+                }
             };
 
             return ncontent;

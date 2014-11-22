@@ -14,25 +14,48 @@ var Directory = function(id, name, parent, content) {
     this.parent = parent;
     this.content = content;
     this.placeholder = ""; // shown when there is no notes
+    this.stack = []; // number of td elements that can contain object
 
     this.setPlaceholder = function(text) {
         this.placeholder = text;
     }
 
+    // append note to the end of the array
     this.append = function(note) {
         if (!note || !note.id)
             throw ("note is undefined");
         this.children[this.children.length] = note;
     }
 
+    // add to array at certain position
+    this.appendAtPos = function(note, pos) {
+        if (!note || !note.id)
+            throw ("note is undefined");
+        this.children.splice(((pos<0)?0:pos), 0, note);
+    }
+
+    // move note to certain position within array
+    this.shift = function(note, pos) {
+        if (!note || !note.id || !this.exists(note.id))
+            throw ("note is undefined");
+        var p = this.getNotePosition(note.id);
+        if (p == pos)
+            return;
+        this.children.splice(((p<0)?0:p), 1);
+        this.children.splice(((pos<0)?0:pos), 0, note);
+    }
+
+    // remove note from array using id
     this.remove = function(id) {
-        for (i=0; i<this.children.length; i++)
+        for (var i=0; i<this.children.length; i++) {
             if (this.children[i].id === id) {
                 this.children.splice(i, 1);
                 return;
             }
+        }
     }
 
+    // check whether note exists or not
     this.exists = function(id) {
         if (id && this.getNote(id) != null)
             return true;
@@ -40,12 +63,21 @@ var Directory = function(id, name, parent, content) {
             return false;
     }
 
-    this.getNote = function(id) {
-        for (i=0; i<this.children.length; i++)
+    // returns note position in array
+    this.getNotePosition = function(id) {
+        for (var i=0; i<this.children.length; i++)
             if (this.children[i].id === id)
-                return this.children[i];
+                return i;
 
-        return null;
+        return -100;
+    }
+
+    // returns note by id
+    this.getNote = function(id) {
+        var pos = this.getNotePosition(id);
+        if (pos == -1)
+            return null;
+        return this.children[pos];
     }
 
     this.generateDOM = function() {
@@ -80,11 +112,23 @@ var Directory = function(id, name, parent, content) {
 
                 var n = this.children[k].generateDOM();
                 td.appendChild(n);
+
+                // for drag and drop
+                td.obj = this.children[k];
+                td.parentObj = this;
+                this.stack.push(td);
+                Dragflix.addDropTarget(td);
             }
         } else {
             var tr = Util.createElement("tr", null, "", null, ctb);
             var td = Util.createElement("td", null, "", null, tr);
             var p = Util.createElement("p", null, "placeholder hAlignLeft hMargined_large", this.placeholder, td);
+
+            // for drag and drop
+            td.obj = null;
+            td.parentObj = this;
+            this.stack.push(td);
+            Dragflix.addDropTarget(td);
         }
 
         return d;

@@ -36,7 +36,7 @@ var DataManager = function() {
         saveGistOnGithub: function (json, success, error) {
             var id = Util.generateId();
             var filename = "leancanvas-" + id + "-save.json";
-            var description = "Public: Lean canvas " + id + " save file to keep up";
+            var description = "Lean canvas " + id + " file to keep up";
             var data = {
                 "files": {},
                 "description": description,

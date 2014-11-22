@@ -58,6 +58,11 @@ var Util = function() {
         /* add class to element and remove class from element */
         addClass: function(elem, classname) {
             if (!elem) {return;}
+            var a = elem.className.split(" ");
+            for (var i=0; i<a.length; i++)
+                if (a[i] == classname)
+                    return;
+
             elem.className += " " + classname;
         },
         removeClass: function(elem, classname) {
@@ -184,14 +189,17 @@ var Util = function() {
         },
 
         /* generate random id value */
-        generateId: function(l) {
-            var length = (l) ? l : 7;
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for(var i=0; i < length; i++ )
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            return text;
-        },
+        generateId: (function() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+                }
+                return function() {
+                    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+                };
+        })(),
 
         /* return current date and time in format: dd/mm/yyyy hh:mi:ss */
         getCurrentDateTime: function() {
