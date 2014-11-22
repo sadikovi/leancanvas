@@ -116,8 +116,6 @@ var Dragflix = function() {
         mouseMove: function(e) {
             e = e || window.event;
             var mousePos = DragUtil.mouseCoords(e);
-            e.preventDefault();
-            e.stopPropagation();
 
             if (drag) {
                 drag.style.top = (mousePos.y - offset.y)+"px";
@@ -137,6 +135,10 @@ var Dragflix = function() {
                     }
                 );
             }
+
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
         },
 
         mouseUp: function(e) {
@@ -171,6 +173,8 @@ var Dragflix = function() {
 
             e.preventDefault();
             e.stopPropagation();
+
+            return false;
         },
 
         // makes item draggable
@@ -187,6 +191,10 @@ var Dragflix = function() {
                     }
                     offset = DragUtil.getMouseOffset(drag, e);
                 }
+
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             });
         },
 
