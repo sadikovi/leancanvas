@@ -56,7 +56,7 @@ Dragflix.setDrop(
 Dragflix.setMoveOver(
     /* onTargetAbove */
     function(target) {
-        if (target == null) {
+        if (target.obj == null) {
             Util.addClass(target, "target-empty");
         } else {
             Util.addClass(target, "target-above");
