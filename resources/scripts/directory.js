@@ -39,10 +39,24 @@ var Directory = function(id, name, parent, content) {
         if (!note || !note.id || !this.exists(note.id))
             throw ("note is undefined");
         var p = this.getNotePosition(note.id);
+        p = (p<0)?0:p;
+        pos = (pos<0)?0:pos;
         if (p == pos)
             return;
-        this.children.splice(((p<0)?0:p), 1);
-        this.children.splice(((pos<0)?0:pos), 0, note);
+
+        if (p > pos) {
+            var temp = this.children[p];
+            for (var i=p; i>pos; i--) {
+                this.children[i] = this.children[i-1];
+            }
+            this.children[pos] = temp;
+        } else {
+            var temp = this.children[p];
+            for (var i=p; i<pos-1; i++) {
+                this.children[i] = this.children[i+1];
+            }
+            this.children[pos-1] = temp;
+        }
     }
 
     // remove note from array using id
@@ -123,13 +137,17 @@ var Directory = function(id, name, parent, content) {
             var tr = Util.createElement("tr", null, "", null, ctb);
             var td = Util.createElement("td", null, "", null, tr);
             var p = Util.createElement("p", null, "placeholder hAlignLeft hMargined_large", this.placeholder, td);
-
-            // for drag and drop
-            td.obj = null;
-            td.parentObj = this;
-            this.stack.push(td);
-            Dragflix.addDropTarget(td);
         }
+
+        // always add note dummy at the end
+        // for drag and drop
+        var dummyTr = Util.createElement("tr", null, "", null, ctb);
+        var dummyTd = Util.createElement("td", null, "", null, dummyTr);
+        Util.createElement("div", null, "note-dummy", null, dummyTd);
+        dummyTd.obj = null;
+        dummyTd.parentObj = this;
+        this.stack.push(dummyTd);
+        Dragflix.addDropTarget(dummyTd);
 
         return d;
     }

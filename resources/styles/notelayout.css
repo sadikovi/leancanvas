@@ -10,6 +10,17 @@
      color: #333333;
 }
 
+.note.inactive {
+    background-color: #F2F2F2;
+    border: 1px solid #BDC4C9;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.note-dummy {
+    height: 10px;
+}
+
 .note:hover {
 
 }

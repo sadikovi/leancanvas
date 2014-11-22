@@ -1,16 +1,10 @@
-function clearDrop(item, target) {
-    item.style.width = "";
-    item.style.height = "";
-    item.style.top = "";
-    item.style.left = "";
-
-    Util.removeClass(item, "draggable");
+function clearDrop(target) {
+    DragUtil.hideDraggable();
     Util.removeClass(target, "target-above");
-    Util.removeClass(target, "target-below");
     Util.removeClass(document.body, "noselect");
 }
 
-function changeDirectory(note, dir, targetDir, targetNote, isAbove) {
+function changeDirectory(note, dir, targetDir, targetNote) {
     if (!note || !dir || !targetDir) {
         return;
     }
@@ -22,18 +16,12 @@ function changeDirectory(note, dir, targetDir, targetNote, isAbove) {
     } else {
         if (targetDir == dir) {
             pos = targetDir.getNotePosition(targetNote.id);
-            if (isAbove)
-                targetDir.shift(note, pos);
-            else
-                targetDir.shift(note, pos+1);
+            targetDir.shift(note, pos);
         } else {
             dir.remove(note.id);
             note.setParent(targetDir);
             pos = targetDir.getNotePosition(targetNote.id);
-            if (isAbove)
-                targetDir.appendAtPos(note, pos);
-            else
-                targetDir.appendAtPos(note, pos+1);
+            targetDir.appendAtPos(note, pos);
         }
     }
 }
@@ -46,55 +34,31 @@ Dragflix.setActionEnded(
 
 Dragflix.setDrag(
     /* onDrag */
-    function(item) {
-        item.style.width = (item.clientWidth) + "px";
-        item.style.height = (item.clientHeight) + "px";
-        Util.addClass(item, "draggable");
+    function(drag) {
+        Util.addClass(drag, "draggable");
         Util.addClass(document.body, "noselect");
     }
 );
 
 Dragflix.setDrop(
     /* onDropAboveTarget */
-    function(item, target) {
-        clearDrop(item, target);
-        changeDirectory(item.obj, item.parentObj, target.parentObj, target.obj, true);
-    },
-    /* onDropBelowTarget */
-    function(item, target) {
-        clearDrop(item, target);
-        changeDirectory(item.obj, item.parentObj, target.parentObj, target.obj, false);
+    function(drag, target) {
+        clearDrop(target);
+        changeDirectory(drag.original.obj, drag.original.parentObj, target.parentObj, target.obj);
     },
     /* onDropMissed */
-    function(item, target) {
-        clearDrop(item, target);
+    function(drag, target) {
+        clearDrop(target);
     }
 );
 
 Dragflix.setMoveOver(
     /* onTargetAbove */
     function(target) {
-        if (target.obj) {
-            Util.removeClass(target, "target-below");
-            Util.addClass(target, "target-above");
-        } else {
-            Util.removeClass(target, "target-above");
-            Util.addClass(target, "target-above");
-        }
-    },
-    /* onTargetBelow */
-    function(target) {
-        if (target.obj) {
-            Util.removeClass(target, "target-above");
-            Util.addClass(target, "target-below");
-        } else {
-            Util.removeClass(target, "target-above");
-            Util.addClass(target, "target-above");
-        }
+        Util.addClass(target, "target-above");
     },
     /* onTargetLeave */
     function(target) {
         Util.removeClass(target, "target-above");
-        Util.removeClass(target, "target-below");
     }
 );
