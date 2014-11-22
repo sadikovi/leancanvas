@@ -1,6 +1,5 @@
 function clearDrop(target) {
     DragUtil.hideDraggable();
-    Util.removeClass(target, "target-above");
     Util.removeClass(target, "target-empty");
     Util.removeClass(document.body, "noselect");
 }
@@ -56,16 +55,10 @@ Dragflix.setDrop(
 Dragflix.setMoveOver(
     /* onTargetAbove */
     function(target) {
-        if (target.obj == null) {
-            Util.addClass(target, "target-empty");
-        } else {
-            Util.addClass(target, "target-above");
-        }
-
+        Util.addClass(target, "target-empty");
     },
     /* onTargetLeave */
     function(target) {
-        Util.removeClass(target, "target-above");
         Util.removeClass(target, "target-empty");
     }
 );
