@@ -51,8 +51,6 @@ Dragflix.setDrag(
         item.style.height = (item.clientHeight) + "px";
         Util.addClass(item, "draggable");
         Util.addClass(document.body, "noselect");
-
-        Dragflix.removeDropTarget(item);
     }
 );
 

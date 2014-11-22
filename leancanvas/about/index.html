@@ -58,6 +58,7 @@
                             Note has several controls to work with it:
                             <div id="note_controls_edit" class="alert tip-blue vMargined_large"></div>
                             <div id="note_controls_delete" class="alert tip-blue vMargined_large"></div>
+                            <div id="note_controls_move" class="alert tip-blue vMargined_large"></div>
                             Top bar includes: <b>New</b> to load new clear canvas, everything that was created before will be deleted.
                             <b>Save</b> to save current canvas to Github as Gist and save url into cookies.
                             <div class="alert tip-red vMargined_large">
@@ -93,6 +94,10 @@
                 var p = document.getElementById("note_controls_delete");
                 var edit = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_DELETE, "", p);
                 var descEdit = Util.createElement("span", null, null, " - Delete selected note", p);
+
+                var p = document.getElementById("note_controls_move");
+                var edit = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_MOVE, "", p);
+                var descEdit = Util.createElement("span", null, null, " - Drag selected note", p);
             }
 
             if (Util.isBadIE()) {
