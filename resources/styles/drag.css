@@ -2,6 +2,11 @@
     border-top: 7px solid #51A7E8;
 }
 
+.target-empty {
+    border: 1px dashed #43afcf;
+    background: #E6F1F6;
+}
+
 .draggable {
     width: 200px;
     height: 40px;

@@ -133,21 +133,25 @@ var Directory = function(id, name, parent, content) {
                 this.stack.push(td);
                 Dragflix.addDropTarget(td);
             }
+
+            // always add note dummy at the end
+            // for drag and drop
+            var dummyTr = Util.createElement("tr", null, "", null, ctb);
+            var dummyTd = Util.createElement("td", null, "", null, dummyTr);
+            Util.createElement("div", null, "note-dummy", null, dummyTd);
+            dummyTd.obj = null;
+            dummyTd.parentObj = this;
+            this.stack.push(dummyTd);
+            Dragflix.addDropTarget(dummyTd);
         } else {
             var tr = Util.createElement("tr", null, "", null, ctb);
             var td = Util.createElement("td", null, "", null, tr);
             var p = Util.createElement("p", null, "placeholder hAlignLeft hMargined_large", this.placeholder, td);
-        }
 
-        // always add note dummy at the end
-        // for drag and drop
-        var dummyTr = Util.createElement("tr", null, "", null, ctb);
-        var dummyTd = Util.createElement("td", null, "", null, dummyTr);
-        Util.createElement("div", null, "note-dummy", null, dummyTd);
-        dummyTd.obj = null;
-        dummyTd.parentObj = this;
-        this.stack.push(dummyTd);
-        Dragflix.addDropTarget(dummyTd);
+            dc.obj = null;
+            dc.parentObj = this;
+            Dragflix.addDropTarget(dc);
+        }
 
         return d;
     }
