@@ -1,3 +1,7 @@
+.target-above {
+    border-top: 7px solid #E6F1F6;
+}
+
 .target-empty {
     border: 1px dashed #43afcf !important;
     background: #E6F1F6 !important;
