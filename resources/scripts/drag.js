@@ -92,8 +92,8 @@ var Dragflix = function() {
             for (var i=0; i<dropTargets.length; i++) {
                 var target = dropTargets[i];
                 var targPos = DragUtil.getPosition(target);
-                var targWidth = parseInt(target.getBoundingClientRect().width);
-                var targHeight = parseInt(target.getBoundingClientRect().height);
+                var targWidth = parseInt(target.offsetWidth);
+                var targHeight = parseInt(target.offsetHeight);
 
                 // check if mouse in upper or lower half of target
                 if (
