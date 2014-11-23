@@ -25,6 +25,20 @@
 
 }
 
+/* note menu element */
+.note-menu {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+}
+
+.note-menu:hover {
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+}
+
+
+/* different color schemes for notes */
+
 .note-blue {
     background-color: #E6F1F6;
     border: 1px solid #B7C7CF;

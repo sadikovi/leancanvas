@@ -41,7 +41,7 @@ var Note = function(noteId, text, tag, directory, content) {
         var note = Util.createElement("div", this.id, "note " + tagclass +" hAlignLeft hMargined_normal vMargined_normal", null, null);
 
         // build note menu
-        var noteMenu = Util.createElement("div", null, "", null, note);
+        var noteMenu = Util.createElement("div", null, "note-menu", null, note);
         var nmt = Util.createElement("table", null, "gTable", null, noteMenu);
         var nmtr = Util.createElement("tr", null, "", null, nmt);
         var nmtdl = Util.createElement("td", null, "hAlignLeft", null, nmtr);
