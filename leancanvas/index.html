@@ -7,7 +7,6 @@
         <link rel="stylesheet" type="text/css" href="/resources/styles/general.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/pagelayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/buttonlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="/resources/styles/notifylayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/notelayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/directorylayout.css"></link>
         <link rel="stylesheet" type="text/css" href="/resources/styles/columnlayout.css"></link>
@@ -22,7 +21,6 @@
         <script src="/resources/scripts/contentmanager.js"></script>
         <script src="/resources/scripts/header.js"></script>
         <script src="/resources/scripts/footer.js"></script>
-        <script src="/resources/scripts/notification.js"></script>
         <script src="/resources/scripts/noteeditor.js"></script>
         <script src="/resources/scripts/loader.js"></script>
         <script src="/resources/scripts/datamanager.js"></script>
@@ -39,6 +37,9 @@
         <link rel="stylesheet" type="text/css" href="/resources/styles/drag.css"></link>
         <script src="/resources/scripts/drag.js"></script>
         <script src="/resources/scripts/draghandler.js"></script>
+
+        <script src="/resources/scripts/notificationcenter.js"></script>
+        <link rel="stylesheet" type="text/css" href="/resources/styles/notificationcenter.css"></link>
     </head>
     <body>
         <div class="wrapper" id="wrapper">
@@ -60,15 +61,14 @@
             function globalNewHandler() {
                 ContentManager.buildPageLayout(DEFAULT_LAYOUT.data);
                 updateDOM();
-                NotificationCenter.show(NotificationType.SUCCESS, "Enjoy freedom of the blank canvas...");
+                NotificationCenter.show(NotificationType.Success, "Enjoy freedom of the blank canvas...", null, false, null, null, notifyWrapper);
             }
 
             // save on github handler
             function globalSaveGistHandler() {
                 var json = JSON.parse(ContentManager.generateJSON());
                 // run notification
-                var t = NotificationCenter.create(NotificationType.INFO, "Saving on Github...", true);
-                NotificationCenter.showN(t, -1);
+                var t = NotificationCenter.show(NotificationType.Info, "Saving on Github...", -1, true, null, null, notifyWrapper);
 
                 DataManager.saveGistOnGithub(
                     json,
@@ -76,17 +76,13 @@
                     function(result) {
                         var url = "<a href=\"" + result.html_url + "\" target=\"blank\">" + result.html_url + "</a>";
                         var msg = "@Saved file: " + url + ". Dont forget to copy link somewhere!";
-
-                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
-                        NotificationCenter.showN(t, 7000, false);
+                        NotificationCenter.change(t, NotificationType.Success, msg, 10000, false, function() {}, null);
                     },
                     /* error */
                     function(result) {
                         var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
                         var msg = "@Error: "+result.message+ ", see link: " + url;
-
-                        NotificationCenter.change(t, NotificationType.ERROR, msg);
-                        NotificationCenter.showN(t, 5000, false);
+                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
                     }
                 );
             }
@@ -96,28 +92,22 @@
                 var input = document.getElementById("modal_view_load_gist_input");
                 var link = (input)?input.value:"";
                 // run notification
-                var t = NotificationCenter.create(NotificationType.INFO, "Loading Gist from Github...", true);
-                NotificationCenter.showN(t, -1);
+                var t = NotificationCenter.show(NotificationType.Info, "Loading Gist from Github...", -1, true, null, null, notifyWrapper);
 
                 DataManager.loadGistFromGithub(
                     link,
                     /* success */
                     function(result) {
                         var msg = "@Gist is loaded. Dont forget to save, if you need it!";
-
                         ContentManager.buildPageLayout(result.data);
                         updateDOM();
-
-                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
-                        NotificationCenter.showN(t, 7000, false);
+                        NotificationCenter.change(t, NotificationType.Success, msg, 5000, false, function() {}, null);
                     },
                     /* error */
                     function(result) {
                         var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
                         var msg = "@Error: "+result.message+ ", see link: " + url;
-
-                        NotificationCenter.change(t, NotificationType.ERROR, msg);
-                        NotificationCenter.showN(t, 5000, false);
+                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
                     }
                 );
             }
@@ -127,24 +117,20 @@
                 var json = JSON.parse(ContentManager.generateJSON());
 
                 // run notification
-                var t = NotificationCenter.create(NotificationType.INFO, "Saving...", true);
-                NotificationCenter.showN(t, -1);
+                var t = NotificationCenter.show(NotificationType.Info, "Saving...", -1, true, null, null, notifyWrapper);
 
                 DataManager.saveContentIntoCookie(
                     json,
                     /* success */
                     function(result) {
                         var msg = Util.getCurrentDateTime() + " @Saved";
-                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
-                        NotificationCenter.showN(t, null, false);
+                        NotificationCenter.change(t, NotificationType.Success, msg, null, false, null, null);
                     },
                     /* error */
                     function(result) {
                         var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
                         var msg = "@Error: "+result.message+ ", see link: " + url;
-
-                        NotificationCenter.change(t, NotificationType.ERROR, msg);
-                        NotificationCenter.showN(t, 5000, false);
+                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
                     }
                 );
             }
@@ -152,9 +138,7 @@
             // load handler: takes url from cookies and loads content from github
             function globalLoadHandler() {
                 // run notification
-                var t = NotificationCenter.create(NotificationType.INFO, "Loading...", true);
-                NotificationCenter.showN(t, -1);
-
+                var t = NotificationCenter.show(NotificationType.Info, "Loading...", -1, true, null, null, notifyWrapper);
                 DataManager.getContentFromCookie(
                     /* success */
                     function(result) {
@@ -162,17 +146,13 @@
 
                         ContentManager.buildPageLayout(result.data);
                         updateDOM();
-
-                        NotificationCenter.change(t, NotificationType.SUCCESS, msg);
-                        NotificationCenter.showN(t, null, false);
+                        NotificationCenter.change(t, NotificationType.Success, msg, null, false, null, null);
                     },
                     /* error */
                     function(result) {
                         var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
                         var msg = "@Error: "+result.message+ ", see link: " + url;
-
-                        NotificationCenter.change(t, NotificationType.ERROR, msg);
-                        NotificationCenter.showN(t, 5000, false);
+                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
                     }
                 );
             }
@@ -185,7 +165,7 @@
                     var a = new Note(Util.generateId(), value, tag, dir, CONTENT_LAYOUT.note());
                     dir.append(a);
                     updateDOM();
-                    NotificationCenter.show(NotificationType.SUCCESS, "Note has been added");
+                    NotificationCenter.show(NotificationType.Success, "Note has been added", null, false, null, null, notifyWrapper);
                 });
             }
 
@@ -197,7 +177,7 @@
                     // modify text value of a note
                     note.modify(value, tag);
                     updateDOM();
-                    NotificationCenter.show(NotificationType.SUCCESS, "Note has been edited");
+                    NotificationCenter.show(NotificationType.Success, "Note has been edited", null, false, null, null, notifyWrapper);
                 });
             }
 
@@ -207,7 +187,7 @@
                 var dir = note.parent;
                 dir.remove(note.id);
                 updateDOM();
-                NotificationCenter.show(NotificationType.SUCCESS, "Note has been deleted");
+                NotificationCenter.show(NotificationType.Success, "Note has been deleted", null, false, null, null, notifyWrapper);
             }
 
             // update DOM
@@ -238,9 +218,8 @@
                 // and update everything
                 updateDOM();
 
-                // initialize notification center
-                NotificationCenter.init("notify_wrapper");
-
+                // set parent element for all notifications
+                var notifyWrapper = document.getElementById("notify_wrapper");
                 /* load data from cookies every time page is refreshed */
                 globalLoadHandler();
             }
