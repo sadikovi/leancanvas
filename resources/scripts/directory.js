@@ -35,6 +35,7 @@ var Directory = function(id, name, parent, content) {
     }
 
     // move note to certain position within array
+    // like carousel
     this.shift = function(note, pos) {
         if (!note || !note.id || !this.exists(note.id))
             throw ("note is undefined");

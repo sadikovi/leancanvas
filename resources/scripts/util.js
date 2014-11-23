@@ -299,7 +299,7 @@ var Util = function() {
             var a = Util.createElement("a", id, ((isMini==false)?"button":"minibutton")+" modal-view-parent "+aClass, null, parent);
             var s = Util.createElement("span", null, null, text, a);
             var is = Util.createElement("span", null, null, null, a);
-            Util.createImage(null, "button_img hMargined_small", Source.IMG_MB_DOWN, "text", is);
+            Util.createImage(null, "button_img hMargined_small", Source.IMG_MB_DOWN, "", is);
 
             a.isModalViewShown = false;
             a.modalView = null;

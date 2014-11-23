@@ -2,11 +2,11 @@ var TagManager = function() {
     // array of tags, matches note classes
     var t = {
         tags: [
-            { name: "blue",     class: "tag-blue",      note_class: "note-blue",   },
-            { name: "orange",   class: "tag-orange",    note_class: "note-orange", },
-            { name: "red",      class: "tag-red",       note_class: "note-red",    },
-            { name: "green",    class: "tag-green",     note_class: "note-green",  },
-            { name: "magenta",  class: "tag-magenta",   note_class: "note-magenta",  }
+            { name: "blue",     class: "tag-blue",      note_class: "note-blue"     },
+            { name: "orange",   class: "tag-orange",    note_class: "note-orange"   },
+            { name: "red",      class: "tag-red",       note_class: "note-red"      },
+            { name: "green",    class: "tag-green",     note_class: "note-green"    },
+            { name: "magenta",  class: "tag-magenta",   note_class: "note-magenta"  }
         ]
     };
 

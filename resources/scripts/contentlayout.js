@@ -21,7 +21,7 @@ var CONTENT_LAYOUT = function() {
                             data: [
                                 {data: [
                                         { type: "input", id: "modal_view_load_gist_input", class: "gInput modal-view-content-input hMargined_large vMargined_large", placeholder: "Paste Gist link" },
-                                        { type: "button", id: null, isMini: false, class: " gray hMargined_small hAlignRight", text: "Load", handler: globalLoadGistHandler, img: Source.IMG_GIT_UPLOAD_B }
+                                        { type: "button", id: null, isMini: false, class: " gray hMargined_small hAlignRight", text: "Load", handler: globalLoadGistHandler, img: null }
                                     ]
                                 }
                             ]
