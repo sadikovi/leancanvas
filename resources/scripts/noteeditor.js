@@ -33,7 +33,7 @@ var NoteEditor = function() {
 
                 var cn = Util.createElement("div", null, "noteeditor_content centered hAlignCenter", null, elem);
                 tags = TagManager.showTagPanel(cn, tag);
-                Util.createElement("div", null, "noteeditor_content help hMargined_normal vMargined_normal hAlignLeft", helpMessage, cn);
+                Util.createElement("div", null, "noteeditor_content alert tip-blue hMargined_normal vMargined_normal hAlignLeft", helpMessage, cn);
                 editView = Util.createTextarea(null, "gTextarea noteeditor_content text hMargined_normal", "Type something...", cn);
             }
 
