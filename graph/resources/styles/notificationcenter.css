@@ -1,0 +1,142 @@
+div.notification {
+    display: inline-block;
+    border-radius: 4px;
+    margin: 8px;
+    padding: 8px 16px 8px 16px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.notification .on {
+    display: inline-block;
+}
+
+.notification .off {
+    display: none;
+}
+
+/* styles for different types of notifications */
+div.notification-error {
+    background-color: #FEF1F1;
+    border: 1px solid #E2A8A8;
+    color: #D46D6D;
+}
+
+div.notification-warning {
+    background-color: #FFFAE4;
+    border: 1px solid #F4CD33;
+    color: #C39D02;
+}
+
+div.notification-success {
+    background-color: #e8f7ed;
+    border: 1px solid #30B661;
+    color: #1BA84E;
+}
+
+div.notification-info {
+    border: 1px solid #BDC4C9;
+    color: #AAAAAA;
+}
+
+/* styles for loading indicator to match notification type */
+.loading-indicator-error {
+    border: 3px solid #D46D6D;
+}
+
+.loading-indicator-warning {
+    border: 3px solid #C39D02;
+}
+
+.loading-indicator-success {
+    border: 3px solid #1BA84E;
+}
+
+.loading-indicator-info {
+    border: 3px solid #AAAAAA;
+}
+
+/*******************/
+/* internal styles */
+table.notification-content-table {
+    width: inherit;
+    height: inherit;
+    border-collapse: collapse;
+    border-spacing: 0px 0px;
+}
+
+td.notification-content-table-cell {
+    vertical-align: middle;
+}
+
+/* for the left part (loading indicator) */
+.notification-loading {
+    display: inline-block;
+    margin-right: 4px;
+}
+
+/* for the right part (controls) */
+.notification-control-panel {
+    display: inline-block;
+    margin-left: 4px;
+}
+
+a.notification-control {
+    color: #4183C4;
+    cursor: pointer;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-weight: bold;
+}
+a.notification-control:link,
+a.notification-control:focus,
+a.notification-control:visited,
+a.notification-control:active {
+    text-decoration: none;
+}
+
+a.notification-control:hover {
+    text-decoration: underline;
+}
+
+/* loading indicator */
+
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@-o-keyframes spin {
+    from { -o-transform: rotate(0deg); }
+    to { -o-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loading-indicator {
+    width: 16px;
+    height: 16px;
+}
+
+.loading-indicator .spinner {
+    width: 16px;
+    height: 16px;
+    -webkit-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+}
+
+.loading-indicator .mask {
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.loading-indicator .masked-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+}

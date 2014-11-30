@@ -1,0 +1,14 @@
+#tt {
+    position:absolute;
+    display:block;
+    font-size: 12px;
+}
+#ttcont {
+    display:block;
+    padding:2px 12px 3px 7px;
+    margin-left:5px;
+    background:#413E4A;
+    color:#fff;
+    border-radius: 3px;
+    box-shadow: 0 0 2px #959595;
+}

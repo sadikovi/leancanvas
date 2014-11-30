@@ -1,0 +1,103 @@
+.ga-graph-panel {
+    background-color: #333;
+}
+
+.ga-graph-body {
+    margin: 5px;
+    background-color: #333;
+    text-align: center;
+}
+
+.node {
+    cursor: pointer;
+    stroke: #333;
+    stroke-width: 1px;
+}
+
+.selected circle {
+    fill: #FE4365;
+}
+
+.node circle:hover {
+    cursor: pointer;
+}
+
+.target {
+    fill: #B7C7CF;
+}
+
+.source {
+    fill: #82cb6a;
+}
+
+.link {
+    stroke-opacity: .6;
+}
+
+.text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    fill: #b7b7b7;
+    stroke-width:0px;
+}
+
+.priority-high {
+    stroke: #CC333F;
+    background: #CC333F;
+}
+
+.priority-one {
+    stroke: #EB6841;
+    background: #EB6841;
+}
+
+.priority-two {
+    stroke: #EDC951;
+    background: #EDC951;
+}
+
+.priority-three {
+    stroke: #00A0B0;
+    background: #00A0B0;
+}
+
+.priority-four {
+    stroke: #94BA65;
+    background: #94BA65;
+}
+
+.priority-normal {
+    stroke: #999;
+    background: #999;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.chart-text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    fill: #000;
+    stroke-width:0px;
+}
+
+.tick text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    fill: #000;
+    stroke-width:0px;
+}
