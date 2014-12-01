@@ -4,15 +4,14 @@ var GraphBuilder = GraphBuilder || (function() {
     return {
         // simple linear search
         util_linear: function(a, id) {
-            if (!a || !a.length) {
-                return null;
-            }
-
-            for (var i=0; i<a.length; i++) {
-                if (a[i].id === id) {
-                    return a[i];
+            if (a && a.length) {
+                for (var i=0; i<a.length; i++) {
+                    if (a[i].id === id) {
+                        return a[i];
+                    }
                 }
             }
+
             return null;
         },
 

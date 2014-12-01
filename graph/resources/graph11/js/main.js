@@ -49,7 +49,7 @@
         })
         .on("mouseover", function(d) {
             if (d.type == "source") {
-                tooltip.show("<strong>" + d.name + "</strong>" + "<br/>" + d.desc + "<br/>Price: $" + d.value);
+                tooltip.show("#" + d.id + " <strong>" + d.name + "</strong>" + "<br/>" + d.desc + "<br/>Price: $" + d.value);
             } else {
                 tooltip.show("<strong>" + d.name + "</strong>" + "<br/>" + d.desc + "<br/>Max Price: $" + d.maxValue);
             }
@@ -76,7 +76,7 @@
         .attr("class", "text")
         .attr("dx", function(d) {return (d.node_radius/10) + "em"})
         .attr("dy", function(d) {return (-d.node_radius/10) + "em"})
-        .text(function(d) { return d.name; });
+        .text(function(d) { return "#" + d.id+ " " + d.name; });
     }
 
     buildNodesAndLinks = function(svg, force) {
