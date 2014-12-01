@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Graph analytics 1.1</title>
+
+    <!-- Bootstrap -->
+    <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Graph styles -->
+    <link href="resources/styles/tooltip.css" rel="stylesheet">
+    <link href="resources/_graph11/css/starter.css" rel="stylesheet">
+    <link href="resources/_graph11/css/graph.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img alt="Brand" height="20" src="resources/images/logo.png">
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="panel panel-primary ga-graph-panel">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    Graph <small class="ga-gray-text"> Turn on selector to add items for analysis</small>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="ga-indicator priority-high"></div>
+                    <span class="text-muted">less than 40% of the max. price</span>
+                    <div class="ga-indicator priority-one"></div>
+                    <span class="text-muted">less than 50% of the max. price</span>
+                    <div class="ga-indicator priority-two"></div>
+                    <span class="text-muted">less than 70% of the max. price</span><br/>
+                    <div class="ga-indicator priority-three"></div>
+                    <span class="text-muted">less than 80% of the max. price</span>
+                    <div class="ga-indicator priority-four"></div>
+                    <span class="text-muted">less than 90% of the max. price</span>
+                    <div class="ga-indicator priority-normal"></div>
+                    <span class="text-muted">more than 90% of the max. price</span>
+                </div>
+                <div id="ga-graph" class="ga-graph-body"></div>
+            </div>
+        </div>
+    </div>
+    <div class="ga-footer">
+        <div class="container ga-footer-body">
+            <small class="text-muted">@Graph analytics on <a class="ga-link" href="https://github.com/sadikovi/">Github</a></small>
+        </div>
+    </div>
+
+    <!-- Javascript plugins -->
+    <script src="resources/bootstrap/js/jquery.min.js"></script>
+    <script src="resources/bootstrap/js/bootstrap.min.js"></script>
+    <script src="resources/scripts/tooltip.js"></script>
+
+    <!-- graph scripts -->
+    <script src="resources/scripts/d3.min.js"></script>
+    <script src="resources/scripts/util.js"></script>
+    <script src="resources/_graph11/js/graphbuilder.js"></script>
+    <script src="resources/_graph11/js/data.js"></script>
+
+    <!-- executed scripts to build graph -->
+    <script src="resources/_graph11/js/main.js"></script>
+</body>
+</html>

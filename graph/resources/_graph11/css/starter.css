@@ -1,0 +1,122 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 70px;
+    margin-bottom: 100px;
+}
+
+button {
+    outline: none !important;
+}
+
+.ga-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 70px;
+}
+
+.ga-footer-body {
+    padding: 20px 15px;
+    border-top: 1px solid #e7e7e7;
+}
+
+/* unvisited link */
+a.ga-link:link {
+    color: #4183C4;
+    text-decoration: none;
+}
+
+/* visited link */
+a.ga-link:visited {
+    color: #4183C4;
+}
+
+/* mouse over link */
+a.ga-link:hover {
+    color: #4183C4;
+    text-decoration: underline;
+}
+
+/* focused link */
+a.ga-link:focus {
+    color: #4183C4;
+    outline: none;
+}
+
+/* selected link */
+a.ga-link:active {
+    color: #4183C4;
+}
+
+.ga-gray-text {
+    color: #ccc;
+}
+
+.ga-indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ga-indicator-msg {
+    margin-right: 5px;
+}
+
+.ga-indicator-off {
+    background-color: #ffe3c8;
+    border: 1px solid #dca874;
+}
+
+.ga-indicator-on {
+    background-color: #f1f6e6;
+    border: 1px solid #b2dfa3;
+}
+
+.ga-label {
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 7px;
+}
+
+.ga-label-text {
+    margin-right: 10px;
+}
+
+button.ga-close {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+}
+.ga-close {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+
+.ga-close:hover, .ga-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    filter: alpha(opacity=50);
+    opacity: .5;
+}
+
+.ga-notification-center {
+    text-align: center;
+}
+
+.ga-input-label {
+    margin: 0px 10px;
+}

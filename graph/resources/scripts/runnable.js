@@ -129,6 +129,8 @@
         edges.push({source: sourceNode, target: targetNode, group: e.group, threshold: e.threshold, price: e.price});
     });
 
+    console.log(edges);
+
     graph.links = edges;
     force.nodes(graph.nodes).links(graph.links).start();
 

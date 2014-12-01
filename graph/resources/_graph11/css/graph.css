@@ -1,0 +1,59 @@
+.node {
+    cursor: pointer;
+    stroke: #333;
+    stroke-width: 1px;
+}
+
+.node circle:hover {
+    cursor: pointer;
+}
+
+circle.source {
+    fill: #556270;
+}
+
+circle.target {
+    fill: #A7DBD8;
+}
+
+.link {
+    stroke: #333;
+    stroke-opacity: .6;
+}
+
+.text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    fill: #333;
+    stroke-width:0px;
+}
+
+.priority-high {
+    stroke: #CC333F;
+    background: #CC333F;
+}
+
+.priority-one {
+    stroke: #EB6841;
+    background: #EB6841;
+}
+
+.priority-two {
+    stroke: #EDC951;
+    background: #EDC951;
+}
+
+.priority-three {
+    stroke: #00A0B0;
+    background: #00A0B0;
+}
+
+.priority-four {
+    stroke: #94BA65;
+    background: #94BA65;
+}
+
+.priority-normal {
+    stroke: #999;
+    background: #999;
+}
