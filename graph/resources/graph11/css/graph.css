@@ -1,7 +1,5 @@
 .node {
     cursor: pointer;
-    stroke: #333;
-    stroke-width: 1px;
 }
 
 .node circle:hover {
@@ -13,7 +11,7 @@ circle.source {
 }
 
 circle.target {
-    fill: #A7DBD8;
+    fill: #777;
 }
 
 .link {
@@ -28,32 +26,30 @@ circle.target {
     stroke-width:0px;
 }
 
-.priority-high {
+.alert-green {
+    fill: #5cb85c;
+    stroke: #5cb85c;
+    background: #5cb85c;
+}
+
+circle.circle-alert {
+    fill: transparent;
+}
+
+.alert-yellow {
+    fill: #f3da60;
+    stroke: #f3da60;
+    background: #f3da60;
+}
+
+.alert-red {
+    fill: #c9302c;
+    stroke: #c9302c;
+    background: #c9302c;
+}
+
+.alert-undefined {
+    fill: #CC333F;
     stroke: #CC333F;
     background: #CC333F;
-}
-
-.priority-one {
-    stroke: #EB6841;
-    background: #EB6841;
-}
-
-.priority-two {
-    stroke: #EDC951;
-    background: #EDC951;
-}
-
-.priority-three {
-    stroke: #00A0B0;
-    background: #00A0B0;
-}
-
-.priority-four {
-    stroke: #94BA65;
-    background: #94BA65;
-}
-
-.priority-normal {
-    stroke: #999;
-    background: #999;
 }

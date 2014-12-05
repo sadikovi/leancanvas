@@ -63,20 +63,63 @@
         node.append("circle")
         .attr("r", function(d) {
             if (d.type == "source") {
-                d.node_radius = 7;
+                d.node_radius = 3;
             } else {
-                d.node_radius = ((20-d.level*5)>10)?(20-d.level*5):10;
+                d.node_radius = ((20-d.level*5)>10)?(20-d.level*5):10;;
             }
             return d.node_radius;
         }).attr("class", function(d) {
-            return (d.type=="source")?"source":"target";
+            return (d.type=="source")?d.priority:"target";
         });
 
-        node.append("text")
-        .attr("class", "text")
-        .attr("dx", function(d) {return (d.node_radius/10) + "em"})
-        .attr("dy", function(d) {return (-d.node_radius/10) + "em"})
-        .text(function(d) { return "#" + d.id+ " " + d.name; });
+        addPriorityPaths(node);
+    }
+
+    // adds priority paths to the target nodes
+    addPriorityPaths = function(node) {
+        if (!node) {
+            throw ("Node is undefined");
+        }
+
+        for (var i=1; i<=3; i++) {
+            // apply path
+            node.append("path")
+            .attr("d", function(d) {
+                if (!d.type || d.type != "source") {
+                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
+                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
+                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    var dString = "M "+path.ax+" "+path.ay+" A "+path.rx+" "+path.ry+" "+
+                    path.x_axis_rotation + " " + path.large_arc_flag + " " + path.sweep_flag +
+                    " " + path.x + " " + path.y;
+                    return dString;
+                } else {
+                    return "";
+                }
+            })
+            .attr("stroke", function(d) {
+                if (!d.type || d.type != "source") {
+                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
+                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
+                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    return path.stroke;
+                } else {
+                    return "";
+                }
+            })
+            .attr("stroke-width", function(d) {
+                if (!d.type || d.type != "source") {
+                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
+                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
+                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    return path.strokeWidth;
+                } else {
+                    return "";
+                }
+            })
+            .attr("fill", "transparent");
+        }
+        return false;
     }
 
     buildNodesAndLinks = function(svg, force) {
@@ -86,7 +129,7 @@
         var link = svg.selectAll(".link").data(force.links()).enter().append("line");
         addLinkAttributes(link);
         // prepare nodes
-        var node = svg.selectAll(".node").data(force.nodes()).enter().append("g")
+        var node = svg.selectAll(".node").data(force.nodes()).enter().append("g");
         addNodeAttributes(node);
 
         force.on("tick", function() {
@@ -104,8 +147,13 @@
     // start...
     // build graph
 
-    GraphBuilder.precalculateMaxValue(data.sources, data.targets);
-    var result = GraphBuilder.buildGraph(data.sources, data.targets, 0);
+    //console.log(data.default_value);
+    GraphBuilder.setRValue(data.default_value);
+    for (var i=0; i<data.targets.length; i++) {
+        GraphBuilder.precalculatePriorities(data.sources, data.targets[i]);
+    }
+
+    var result = GraphBuilder.buildGraph(data.targets[0], data.sources);
 
     // prepare dimensions
     var width = 1100, height = 800;

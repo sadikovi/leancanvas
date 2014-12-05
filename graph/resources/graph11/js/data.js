@@ -63,7 +63,7 @@ var data = {
                                 {id: 122, name: "Birkenhead", desc: "...", parent: 12, level: 3, leaf: true, isUni: true, isCollapsed: true, children: []},
                                 {id: 123, name: "Glenfield", desc: "...", parent: 12, level: 3, leaf: true, isUni: true, isCollapsed: true, children: []}
                             ]
-                        },
+                        }
                     ]
                 },
                 {id: 2, name: "Canterbury", desc: "...", parent: 0, level: 1, leaf: false, isUni: true, isCollapsed: true, children: [
@@ -87,4 +87,44 @@ var data = {
 };
 
 // default level of graph is 0
-var defaultLevel = 0;
+data.defaultLevel = 0;
+
+// default relative value
+data.default_value = 150;
+
+// contain array of all the nodes in the graph
+data.arrayOfNodes = data.arrayOfNodes || (function() {
+    if (!data.sources || !data.targets) {
+        throw ("Data: sources or targets array is not defined");
+    }
+
+    // have to copy array (! is not a good idea at all)
+    var result = [];
+    for (var i=0; i<data.sources.length; i++) {
+        result.push(data.sources[i]);
+    }
+
+    // transform targets
+    var recurReading = function(array, node) {
+        if (node == null) {
+            return false;
+        }
+
+        array.push(node);
+        if (node.leaf || node.children.length == 0) {
+            return false;
+        }
+
+        var children = node.children;
+        for (var i=0; i<children.length; i++) {
+            recurReading(array, children[i]);
+        }
+    }
+
+    // fill result with targets
+    for (var j=0; j<data.targets.length; j++) {
+        recurReading(result, data.targets[j]);
+    }
+
+    return result;
+})();
