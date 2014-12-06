@@ -120,3 +120,59 @@ button.ga-close {
 .ga-input-label {
     margin: 0px 10px;
 }
+
+.ga-group {
+    margin: 0px 30px;
+    position: relative;
+    display: inline;
+    border-collapse: separate;
+}
+
+/*** statistics ***/
+.ga-statistics {
+    display: inline-block;
+    padding: 7px;
+    margin: 1px 3px;
+    font-weight: 200;
+    min-width: 94px;
+    min-height: 94px;
+    max-width: 200px;
+    border: 1px solid #b2b2b2;
+    border-radius: 5px;
+}
+
+.ga-statistics-primary {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
+.ga-statistics-green {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #5cb85c;
+}
+
+.ga-statistics-yellow {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #f0ad4e;
+}
+
+.ga-statistics-red {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #d9534f;
+}
+
+.ga-statistics .ga-value {
+    font-size: 42px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.ga-statistics .ga-title {
+    font-size: 13px;
+    opacity: .6;
+    text-align: center;
+}

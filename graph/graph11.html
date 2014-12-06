@@ -8,15 +8,16 @@
 
     <!-- Bootstrap -->
     <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resources/graph11/css/dropdown_submenu.css" rel="stylesheet">
 
     <!-- Graph styles -->
-    <link href="resources/styles/tooltip.css" rel="stylesheet">
+    <link href="resources/graph11/css/tooltip.css" rel="stylesheet">
     <link href="resources/graph11/css/starter.css" rel="stylesheet">
     <link href="resources/graph11/css/graph.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
+        <div class="container" id="ga-navbar">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -29,32 +30,20 @@
                     <img alt="Brand" height="20" src="resources/images/logo.png">
                 </a>
             </div>
-            <div class="collapse navbar-collapse">
-            </div>
         </div>
     </nav>
+    <!-- search statistics -->
     <div class="container">
-        <div class="panel panel-primary ga-graph-panel">
-            <div class="panel-heading">
-                <h2 class="panel-title">
-                    Graph <small class="ga-gray-text"> Turn on selector to add items for analysis</small>
-                </h2>
-            </div>
+        <div class="panel panel-default ga-graph-panel">
             <div class="panel-body">
-                <div>
-                    <div class="ga-indicator priority-high"></div>
-                    <span class="text-muted">less than 40% of the max. price</span>
-                    <div class="ga-indicator priority-one"></div>
-                    <span class="text-muted">less than 50% of the max. price</span>
-                    <div class="ga-indicator priority-two"></div>
-                    <span class="text-muted">less than 70% of the max. price</span><br/>
-                    <div class="ga-indicator priority-three"></div>
-                    <span class="text-muted">less than 80% of the max. price</span>
-                    <div class="ga-indicator priority-four"></div>
-                    <span class="text-muted">less than 90% of the max. price</span>
-                    <div class="ga-indicator priority-normal"></div>
-                    <span class="text-muted">more than 90% of the max. price</span>
-                </div>
+                <div class="row" id="ga-statistics"></div>
+            </div>
+        </div>
+    </div>
+    <!-- graph -->
+    <div class="container">
+        <div class="panel panel-default ga-graph-panel">
+            <div class="panel-body">
                 <div id="ga-graph" class="ga-graph-body"></div>
             </div>
         </div>
@@ -75,6 +64,8 @@
     <script src="resources/scripts/util.js"></script>
     <script src="resources/graph11/js/graphbuilder.js"></script>
     <script src="resources/graph11/js/data.js"></script>
+    <script src="resources/graph11/js/statistics.js"></script>
+    <script src="resources/graph11/js/search.js"></script>
 
     <!-- executed scripts to build graph -->
     <script src="resources/graph11/js/main.js"></script>

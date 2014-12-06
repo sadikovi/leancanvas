@@ -11,9 +11,11 @@ var GraphBuilder = GraphBuilder || (function() {
         // set rValue
         setRValue: function(value) {
             if (!value || value < 0) {
-                throw (prefix + "setRValue - value is wrong");
+                console.log(prefix + "setRValue - value is wrong, value will be set to 0");
+                rValue = 0;
+            } else {
+                rValue = value;
             }
-            rValue = value;
         },
 
         // simple linear search
@@ -27,26 +29,6 @@ var GraphBuilder = GraphBuilder || (function() {
             }
 
             return null;
-        },
-
-        // helper function to get nodes for a particular level and parent
-        // if parent is null then we return all the children for that level
-        getChildrenForLevel: function(array, parent, level, arrayToCollect) {
-            var a = (parent)?parent.children:array;
-
-            level = (level && level >=0)?level:0;
-            var children = arrayToCollect || [];
-
-            for (var i=0; i<a.length; i++) {
-                var el = a[i];
-                if (el && el.level < level && el.leaf == false) {
-                    GraphBuilder.getChildrenForLevel(el.children, el, level, children);
-                } else if (el && el.level == level) {
-                    children.push(el);
-                }
-            }
-
-            return children;
         },
 
         // helper function to check whether node/its childre has got a particular id
@@ -259,15 +241,14 @@ var GraphBuilder = GraphBuilder || (function() {
                 } else {
                     return 5;
                 }
-            }
+            };
 
             var res = {};
-
-            if (a <= 0) {
+            if (a >= 0) {
                 res.priority = P_GREEN;
-            } else if (a > 0 && value*(1+ACC_RATE) <= rValue) {
+            } else if (a < 0 && rValue*(1+ACC_RATE) >= value) {
                 res.priority = P_YELLOW;
-            } else if (a > 0) {
+            } else if (a < 0) {
                 res.priority = P_RED;
             } else {
                 res.priority = P_UNDEFINED;
@@ -276,38 +257,6 @@ var GraphBuilder = GraphBuilder || (function() {
             res.threshold = groupPriority(value, rValue);
 
             return res;
-        },
-
-        // function to find max value
-        findMaxValue: function(group) {
-            var max = group[0].value;
-            for (var i=1; i<group.length; i++) {
-                if (max < group[i].value) {
-                    max = group[i].value;
-                }
-            }
-
-            return max;
-        },
-        // function to find average value
-        findAvgValue: function(group) {
-            var sum = 0;
-            for (var i=0; i<group.length; i++) {
-                sum += group[i].value;
-            }
-
-            return (sum/group.length);
-        },
-        // function to find min value
-        findMinValue: function(group) {
-            var min = group[0].value;
-            for (var i=1; i<group.length; i++) {
-                if (min > group[i].value) {
-                    min = group[i].value;
-                }
-            }
-
-            return min;
         },
 
         // global precalculation of priorities
@@ -380,15 +329,18 @@ var GraphBuilder = GraphBuilder || (function() {
             var strokeWidth = 4;
             var delta = 5;
             var rad = r + index*delta;
-
+            // build path applying angle of 360 degrees
             var path = GraphBuilder.constructPath(x, y, rad, angle*Math.PI*2);
 
             if (index <= 1) {
-                path.stroke = "green";
+                // path.stroke = "";
+                path.class = P_GREEN;
             } else if (index == 2) {
-                path.stroke = "orange";
+                // path.stroke = "";
+                path.class = P_YELLOW;
             } else if (index == 3) {
-                path.stroke = "red";
+                // path.stroke = "";
+                path.class = P_RED;
             } else {
                 path.stroke = "transparent";
             }

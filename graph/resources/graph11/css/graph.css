@@ -2,16 +2,12 @@
     cursor: pointer;
 }
 
-.node circle:hover {
-    cursor: pointer;
-}
-
 circle.source {
     fill: #556270;
 }
 
 circle.target {
-    fill: #777;
+    fill: #b2b2b2;
 }
 
 .link {
@@ -19,37 +15,59 @@ circle.target {
     stroke-opacity: .6;
 }
 
-.text {
+text {
     font: 10px sans-serif;
     pointer-events: none;
     fill: #333;
     stroke-width:0px;
 }
 
+/*** alerts ***/
 .alert-green {
-    fill: #5cb85c;
-    stroke: #5cb85c;
-    background: #5cb85c;
+    fill: #5eb95e;
+    stroke: #5eb95e;
+    background: #5eb95e;
 }
 
-circle.circle-alert {
+path.alert-green {
     fill: transparent;
 }
 
 .alert-yellow {
-    fill: #f3da60;
-    stroke: #f3da60;
-    background: #f3da60;
+    fill: #fad232;
+    stroke: #fad232;
+    background: #fad232;
+}
+
+path.alert-yellow {
+    fill: transparent;
 }
 
 .alert-red {
-    fill: #c9302c;
-    stroke: #c9302c;
-    background: #c9302c;
+    fill: #dd514c;
+    stroke: #dd514c;
+    background: #dd514c;
+    border-color: #
+}
+
+path.alert-red {
+    fill: transparent;
 }
 
 .alert-undefined {
     fill: #CC333F;
     stroke: #CC333F;
     background: #CC333F;
+}
+
+path.alert-undefined {
+    fill: transparent;
+}
+
+/*** alert description */
+div.tag {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
 }
