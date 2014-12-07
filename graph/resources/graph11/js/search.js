@@ -1,3 +1,4 @@
+// build search bar and track changes with elements
 var Search = Search || (function() {
     var groups = {};
 
@@ -51,7 +52,6 @@ var Search = Search || (function() {
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
                     a.innerHTML = group+" ("+this.value+")";
-                    console.log(Search.getCore());
                 });
             }
 
@@ -76,7 +76,6 @@ var Search = Search || (function() {
 
             Util.addEventListener(u, "keyup", function(e) {
                 Search.setSelectedValue(group, this.value);
-                console.log(Search.getCore());
             });
 
             return u;
@@ -107,12 +106,12 @@ var Search = Search || (function() {
             for (var i=0; i<values.length; i++) {
                 var li = Util.createElement("li", null, "menu-item", null, ul);
                 var lia = Util.createElement("a", null, "", values[i].name, li);
+                lia.setAttribute("href", "javascript:void(0);");
                 lia.value = values[i].id;
                 lia.desc = values[i].name
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
                     global.innerHTML = group + " ("+this.desc+")";
-                    console.log(Search.getCore());
                 });
                 if (values[i][recurParam] && values[i][recurParam].length > 0) {
                     Util.addClass(li, "dropdown dropdown-submenu");
@@ -149,12 +148,11 @@ var SearchBar = SearchBar || (function() {
             Util.createElement("span", null, "", "&nbsp;&nbsp;", form);
             var sub = Util.createElement("button", null, "btn btn-default pull-right", "Search", form);
             Util.addEventListener(sub, "click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 if (callback) {
                     callback.call(this);
                 }
-
-                e.preventDefault();
-                e.stopPropagation();
             });
 
             return a;
@@ -162,25 +160,9 @@ var SearchBar = SearchBar || (function() {
     }
 })();
 
-var elements = [
+var searchBarElements = [
     {group: "Bedrooms", type: "dropdown", values: ["Any", "1", "2", "3", "4", "5", "6+"]},
     {group: "Bathrooms", type: "dropdown", values: ["Any", "1", "2", "3+"]},
-    {group: "Regions", type: "dropdown_submenu", values: [
-            {
-                id: "#1",
-                name: "All",
-                children: [
-                    {id: "#11", name: "Region 1"},
-                    {id: "#12", name: "Region 2", children: [
-                        {id: "#121", name: "Town 1"},
-                        {id: "#122", name: "Town 2"}
-                    ]}
-                ]
-            }
-        ], recurParam: "children"
-    },
-    {group: "Price", type: "input", value: null, placeholder: "Price/week"}
+    {group: "Regions", type: "dropdown_submenu", values: data.targets, recurParam: "children"},
+    {group: "Price", type: "input", value: data.default_value, placeholder: "Price/week"}
 ];
-
-var bar = document.getElementById("ga-navbar");
-bar.appendChild(SearchBar.buildSearchBar(elements, function(){console.log("Run search!");}));

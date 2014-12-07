@@ -1,4 +1,4 @@
-(function() {
+function buildGraph(graph_target, graph_sources, price) {
     messageForTargetNode = function(d) {
         // message for target when it is hovered
         var msg = "<strong>"+d.name+"</strong>";
@@ -172,28 +172,29 @@
     }
 
     // start...
-    GraphBuilder.setRValue(data.default_value);
+    var parentStat = document.getElementById("ga-statistics");
+    parentStat.innerHTML = "";
+    var parentGraph = document.getElementById("ga-graph");
+    parentGraph.innerHTML = "";
 
+    GraphBuilder.setRValue(price);
     // precalculate priorities for the nodes
-    for (var i=0; i<data.targets.length; i++) {
-        GraphBuilder.precalculatePriorities(data.sources, data.targets[i]);
-    }
+    GraphBuilder.precalculatePriorities(graph_sources, graph_target);
+
 
     // build graph
-    var graph_target = data.targets[0];
-    var graph_sources = data.sources;
-
-    if (graph_target && graph_sources) {
+    if (graph_target && graph_sources && graph_sources.length > 0) {
         var result = GraphBuilder.buildGraph(graph_target, graph_sources);
         /**************************/
         /*** Collect statistics ***/
-        Statistics.setStatistics("group1", "Offers overall", "ga-statistics-default");
-        Statistics.setStatistics("group2", "Minimum price", "ga-statistics-primary", "price");
-        Statistics.setStatistics("group2", "Average price", "ga-statistics-primary", "price");
-        Statistics.setStatistics("group2", "Maximum price", "ga-statistics-primary", "price");
-        Statistics.setStatistics("group3", "Acceptable", "ga-statistics-green");
-        Statistics.setStatistics("group3", "Considerable", "ga-statistics-yellow");
-        Statistics.setStatistics("group3", "Expensive", "ga-statistics-red");
+        Statistics.reset();
+        Statistics.setStatistics("group1", "Offers overall", StatisticsType.Default);
+        Statistics.setStatistics("group2", "Minimum price", StatisticsType.Primary, "price");
+        Statistics.setStatistics("group2", "Average price", StatisticsType.Primary, "price");
+        Statistics.setStatistics("group2", "Maximum price", StatisticsType.Primary, "price");
+        Statistics.setStatistics("group3", "Acceptable", StatisticsType.Green);
+        Statistics.setStatistics("group3", "Considerable", StatisticsType.Yellow);
+        Statistics.setStatistics("group3", "Expensive", StatisticsType.Red);
 
         if (result.nodes.length > 0) {
             var cnt = 0;
@@ -221,9 +222,6 @@
             Statistics.addStatistics("group2", "Average price", Math.floor(t_avg_sum/cnt));
             Statistics.addStatistics("group2", "Maximum price", t_max);
         }
-
-        var parentStat = document.getElementById("ga-statistics");
-        parentStat.innerHTML = "";
         parentStat.appendChild(Statistics.htmlCore());
         /**************************/
 
@@ -239,4 +237,67 @@
 
         buildNodesAndLinks(svg, force);
     }
-})();
+}
+
+var bar = document.getElementById("ga-navbar");
+bar.appendChild(SearchBar.buildSearchBar(searchBarElements, function(e) {
+    searchCallback.call(this);
+}));
+searchCallback();
+
+function searchCallback() {
+    var searchParameters = Search.getCore();
+    var price = (!parseInt(searchParameters["Price"]))?data.default_value:parseInt(searchParameters["Price"]);
+    var recurTarget = function(temp, id) {
+        if (temp == null || temp.id == id) {
+            return temp;
+        } else if (!temp.children || temp.children.length == 0) {
+            return null;
+        } else {
+            var res = null;
+            for (var i=0; i<temp.children.length; i++) {
+                res = res || recurTarget(temp.children[i], id);
+            }
+
+            return res;
+        }
+    }
+
+    var graph_target = recurTarget(data.targets[0], searchParameters["Regions"]);
+    var graph_sources = [];
+
+    beds = parseInt(searchParameters["Bedrooms"]);
+    baths = parseInt(searchParameters["Bathrooms"]);
+    for (var i=0; i<data.sources.length; i++) {
+        var bedsMatch = false;
+        var bathsMatch = false;
+
+        if (searchParameters["Bedrooms"] == "Any") {
+            bedsMatch = true;
+        } else if (searchParameters["Bedrooms"].indexOf("+") > 0) {
+            if (data.sources[i].properties.bedrooms >= beds) {
+                bedsMatch = true;
+            }
+        } else {
+            if (data.sources[i].properties.bedrooms == beds) {
+                bedsMatch = true;
+            }
+        }
+
+        if (searchParameters["Bathrooms"] == "Any") {
+            bathsMatch = true;
+        } else if (searchParameters["Bathrooms"].indexOf("+") > 0) {
+            if (data.sources[i].properties.bathrooms >= baths) {
+                bathsMatch = true;
+            }
+        } else {
+            if (data.sources[i].properties.bathrooms == baths) {
+                bathsMatch = true;
+            }
+        }
+        if (bathsMatch && bedsMatch) {
+            graph_sources.push(data.sources[i]);
+        }
+    }
+    buildGraph(graph_target, graph_sources, price);
+}
