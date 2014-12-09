@@ -98,6 +98,17 @@ function buildGraph(graph_target, graph_sources, price) {
             return (d.type=="source")?d.priority:"target";
         });
 
+        // append bigger circle to hover the source
+        node.append("circle")
+        .attr("r", function(d) {
+            return (d.node_radius)?d.node_radius*3:0;
+        }).attr("class", function(d) {
+            var className = (d.type=="source")?d.priority:"target";
+            return ((d.type=="source")?"source-callout": "target-callout")+" "+className;
+        }).attr("fill", function(d) {
+
+        });
+
         addPriorityPaths(node);
     }
 

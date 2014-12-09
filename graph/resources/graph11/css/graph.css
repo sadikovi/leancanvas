@@ -71,3 +71,17 @@ div.tag {
     border-radius: 50%;
     display: inline-block;
 }
+
+/* callout style */
+.source-callout {
+    display: block;
+    opacity: 0.1;
+}
+
+.source-callout:hover {
+    opacity: 1;
+}
+
+.target-callout {
+    display: none;
+}
