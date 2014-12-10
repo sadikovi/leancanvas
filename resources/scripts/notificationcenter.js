@@ -122,7 +122,7 @@ var NotificationCenter = function() {
         create: function(type, message, timeout, showLoad, okHandler, cancelHandler, parent) {
             var notification = {};
             var typeObj = NotificationCenter.getTypeObject(type);
-
+            
             // build the html of the notification
             notification.parent = parent;
             notification.element = Util.createElement("div", null, "notification " + typeObj.nclass, null, parent);

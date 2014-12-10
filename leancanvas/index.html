@@ -151,8 +151,9 @@
                     /* error */
                     function(result) {
                         var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-                        var msg = "@Error: "+result.message+ ", see link: " + url;
-                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
+                        var msg = ((result.type && result.type=="warning")?"@Warning: ":"@Error: ")+result.message+ ", see link: " + url;
+                        var notifType = (result.type && result.type=="warning")?NotificationType.Warning:NotificationType.Error;
+                        NotificationCenter.change(t, notifType, msg, 5000, false, null, null);
                     }
                 );
             }

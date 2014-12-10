@@ -144,8 +144,9 @@ var DataManager = function() {
                 );
             } else {
                 var res = {
-                    message: "Cookies are empty or undefined. No data is loaded.",
-                    documentation_url: "https://www.google.com/"
+                    message: "Cookies are empty or undefined. No data is loaded",
+                    documentation_url: "https://www.google.com/",
+                    type: "warning"
                 };
 
                 if (error)
