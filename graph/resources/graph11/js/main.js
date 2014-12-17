@@ -84,6 +84,11 @@ function buildGraph(graph_target, graph_sources, price) {
         .on("mouseout", function(d) {
             tooltip.hide();
         })
+        .on("click", function(d) {
+            if (d.type == "source" && d.properties["link"]) {
+                window.open(d.properties.link, "_blank");
+            }
+        })
         .call(force.drag)
 
         node.append("circle")
@@ -156,6 +161,7 @@ function buildGraph(graph_target, graph_sources, price) {
                 }
             });
         }
+
         return false;
     }
 

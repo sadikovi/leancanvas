@@ -27,7 +27,6 @@ var GraphBuilder = GraphBuilder || (function() {
                     }
                 }
             }
-
             return null;
         },
 
@@ -41,11 +40,9 @@ var GraphBuilder = GraphBuilder || (function() {
                     for (var i=0; i<node.children.length; i++) {
                         yep = yep || GraphBuilder.checkIdRecursively(node.children[i], id);
                     }
-
                     return yep;
                 }
             }
-
             return false;
         },
 
@@ -301,9 +298,9 @@ var GraphBuilder = GraphBuilder || (function() {
             //rx ry x-axis-rotation large-arc-flag sweep-flag x y
 
             // beginning of the arc
-            path.ax = x -r;
+            path.ax = x-r;
             path.ay = y;
-
+            
             // radius of the circles
             path.rx = r;
             path.ry = r;
@@ -333,13 +330,10 @@ var GraphBuilder = GraphBuilder || (function() {
             var path = GraphBuilder.constructPath(x, y, rad, angle*Math.PI*2);
 
             if (index <= 1) {
-                // path.stroke = "";
                 path.class = P_GREEN;
             } else if (index == 2) {
-                // path.stroke = "";
                 path.class = P_YELLOW;
             } else if (index == 3) {
-                // path.stroke = "";
                 path.class = P_RED;
             } else {
                 path.stroke = "transparent";
