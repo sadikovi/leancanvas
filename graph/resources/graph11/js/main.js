@@ -9,11 +9,19 @@ function buildGraph(graph_target, graph_sources, price) {
     }
 
     messageForSourceNode = function(d) {
-        var msg = "<div>#" + d.id + " <strong>" + d.name + "</strong>" + "</div>"
-        + "<p>"+d.desc+"<p/>"
-        +"<div>Price: $" + d.value + "</div>"
-        +"<div>Bedrooms: " + d.properties.bedrooms + "</div>"
-        +"<div>Bathrooms: " + d.properties.bathrooms + "</div>";
+        var msg = "<table><tr>";
+
+        msg += "<td class=\"tooltip-col\">";
+        msg += "<img class=\"thumbnail-image\" src=\""+d.properties.thumbnail+"\"</img>";
+        msg += "</td>";
+
+        msg += "<td class=\"tooltip-col\">";
+        msg += "<div class=\"tooltip-name\">"+"#"+d.id+" "+d.name+"</div>"
+                +"<p>"+d.desc+"</p>"+"<div>Price: $"+d.properties.price+"</div>"
+                +"<div>Bedrooms: "+d.properties.bedrooms+"</div>"+"<div>Bathrooms: "+d.properties.bathrooms+"</div>"
+        msg += "</td>";
+
+        msg += "</tr></table>";
         return msg;
     }
 
@@ -243,7 +251,7 @@ function buildGraph(graph_target, graph_sources, price) {
         /**************************/
 
         // prepare dimensions
-        var width = 1100, height = 400;
+        var width = 1100, height = 550;
         var color = d3.scale.category20();
         var force = d3.layout.force().gravity(0.1).charge(-2000).linkDistance(10).size([width, height])
         .friction(0.5)

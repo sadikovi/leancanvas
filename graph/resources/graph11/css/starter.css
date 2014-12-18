@@ -176,3 +176,18 @@ button.ga-close {
     opacity: .6;
     text-align: center;
 }
+
+.thumbnail-image {
+    width: 100px;
+    height: 80px;
+}
+
+.tooltip-name {
+    /*white-space: nowrap;*/
+    font-weight: bold;
+}
+
+.tooltip-col {
+    vertical-align: top;
+    padding: 2px 4px;
+}
