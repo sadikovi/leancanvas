@@ -66,18 +66,13 @@ function buildGraph(graph_target, graph_sources, price) {
             if (d.isUni) {
                 if (d.isCollapsed) {
                     result = GraphBuilder.drilldown(d, result.nodes, result.edges);
-                    force.nodes(result.nodes);
-                    force.links(result.edges);
-                    buildNodesAndLinks(svg, force);
-                    force.start();
                 } else {
                     result = GraphBuilder.rollup(d, result.nodes, result.edges);
-                    force.nodes(result.nodes);
-                    force.links(result.edges);
-                    buildNodesAndLinks(svg, force);
-                    force.start();
                 }
-
+                force.nodes(result.nodes);
+                force.links(result.edges);
+                buildNodesAndLinks(svg, force);
+                force.start();
                 // hide tooltip
                 tooltip.hide();
             }
@@ -118,11 +113,16 @@ function buildGraph(graph_target, graph_sources, price) {
         }).attr("class", function(d) {
             var className = (d.type=="source")?d.priority:"target";
             return ((d.type=="source")?"source-callout": "target-callout")+" "+className;
-        }).attr("fill", function(d) {
-
         });
-
+        // add priority paths for node
         addPriorityPaths(node);
+    }
+
+    // get path for index priority and node
+    getPathForIndexPriority = function(i, d) {
+        var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
+        var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
+        return GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
     }
 
     // adds priority paths to the target nodes
@@ -137,9 +137,7 @@ function buildGraph(graph_target, graph_sources, price) {
             node.append("path")
             .attr("d", function(d) {
                 if (!d.type || d.type != "source") {
-                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
-                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
-                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    var path = getPathForIndexPriority(i, d);
                     var dString = "M "+path.ax+" "+path.ay+" A "+path.rx+" "+path.ry+" "+
                     path.x_axis_rotation + " " + path.large_arc_flag + " " + path.sweep_flag +
                     " " + path.x + " " + path.y;
@@ -150,9 +148,7 @@ function buildGraph(graph_target, graph_sources, price) {
             })
             .attr("class", function(d) {
                 if (!d.type || d.type != "source") {
-                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
-                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
-                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    var path = getPathForIndexPriority(i, d);
                     return path.class;
                 } else {
                     return "";
@@ -160,9 +156,7 @@ function buildGraph(graph_target, graph_sources, price) {
             })
             .attr("stroke-width", function(d) {
                 if (!d.type || d.type != "source") {
-                    var priority = (i==1)?d.priorityGroups.green:((i==2)?d.priorityGroups.yellow:d.priorityGroups.red);
-                    var sum = (d.priorityGroups.green + d.priorityGroups.yellow + d.priorityGroups.red);
-                    var path = GraphBuilder.getPriorityPath(0, 0, d.node_radius, priority, sum, i);
+                    var path = getPathForIndexPriority(i, d);
                     return path.strokeWidth;
                 } else {
                     return "";

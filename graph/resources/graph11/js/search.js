@@ -51,7 +51,9 @@ var Search = Search || (function() {
                 lia.value = values[i];
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
+                    /*** TODO Change that!!! ***/
                     a.innerHTML = group+" ("+this.value+")";
+                    Util.createElement("span", null, "caret", null, a);
                 });
             }
 
@@ -112,6 +114,7 @@ var Search = Search || (function() {
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
                     global.innerHTML = group + " ("+this.desc+")";
+                    Util.createElement("span", null, "caret", null, global);
                 });
                 if (values[i][recurParam] && values[i][recurParam].length > 0) {
                     Util.addClass(li, "dropdown dropdown-submenu");
