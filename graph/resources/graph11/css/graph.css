@@ -84,3 +84,10 @@ div.tag {
 .target-callout {
     display: none;
 }
+
+/* select and deselect */
+.selected {
+    stroke: #428bca;
+    fill: #5bc0de!important;
+    stroke-width: 1px;
+}

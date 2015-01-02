@@ -1,6 +1,8 @@
 var GraphBuilder = GraphBuilder || (function() {
     var prefix = "GraphBuilder: ";
     var rValue = 0;
+    var selected = null;
+    var stack = [];  // stack of the graph targets
 
     var P_GREEN = "alert-green";
     var P_YELLOW = "alert-yellow";
@@ -30,7 +32,7 @@ var GraphBuilder = GraphBuilder || (function() {
             return null;
         },
 
-        // helper function to check whether node/its childre has got a particular id
+        // helper function to check whether node/its child has got a particular id
         checkIdRecursively: function(node, id) {
             if (node && id > 0) {
                 if (node.id == id) {
@@ -300,7 +302,7 @@ var GraphBuilder = GraphBuilder || (function() {
             // beginning of the arc
             path.ax = x-r;
             path.ay = y;
-            
+
             // radius of the circles
             path.rx = r;
             path.ry = r;
@@ -342,6 +344,95 @@ var GraphBuilder = GraphBuilder || (function() {
             path.strokeWidth = strokeWidth;
 
             return path;
+        },
+
+        // select and deselect node
+        select: function(target) {
+            GraphBuilder.deselect();
+            if (target) {
+                selected = target;
+                if (!Util.hasClass(selected.circleElem, "selected")) {
+                    Util.addClass(selected.circleElem, "selected");
+                }
+            }
+        },
+
+        deselect: function() {
+            if (selected) {
+                if (Util.hasClass(selected.circleElem, "selected")) {
+                    Util.removeClass(selected.circleElem, "selected");
+                }
+                selected = null;
+            }
+        },
+
+        getSelected: function() {
+            return selected;
+        },
+
+        /* stack functions */
+
+        push: function(a) {
+            if (!a) {
+                throw (prefix+"Stack - " + "elem is undefined");
+            } else {
+                stack.push(a);
+            }
+        },
+
+        pop: function() {
+            if (stack.length == 0) {
+                throw (prefix+"Stack - " + "stack is empty");
+            } else {
+                return stack.pop();
+            }
+        },
+
+        peek: function() {
+            if (stack.length == 0) {
+                throw (prefix+"Stack - " + "stack is empty");
+            } else {
+                return stack[stack.length-1];
+            }
+        },
+
+        isStackReady: function() {
+            return (stack.length <= 1);
+        },
+
+        initStack: function() {
+            stack = [];
+        },
+        
+        getStack: function() {
+            return stack;
+        },
+
+        zoomIn: function(target, sources) {
+            GraphBuilder.push(target);
+            return GraphBuilder.buildGraph(target, sources);
+        },
+
+        zoomOut: function(sources, step) {
+            if (!GraphBuilder.isStackReady()) {
+                if (step >= 0) {
+                    GraphBuilder.getStack().splice(step+1, GraphBuilder.getStack().length);
+                } else {
+                    GraphBuilder.pop();
+                }
+                var p = GraphBuilder.peek();
+                return GraphBuilder.buildGraph(p, sources);
+            } else {
+                console.log(prefix+"Stack - " + "cannot zoom out with an empty stack");
+            }
+        },
+
+        canZoomIn: function(target) {
+            return (target && target != GraphBuilder.peek());
+        },
+
+        canZoomOut: function(target) {
+            return (!GraphBuilder.isStackReady() && target && target.parent !== null);
         }
     }
 })();

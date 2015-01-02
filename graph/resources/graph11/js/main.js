@@ -32,6 +32,58 @@ function buildGraph(graph_target, graph_sources, price) {
         return msg;
     }
 
+    // drill down functin
+    drilldown = function(d) {
+        result = GraphBuilder.drilldown(d, result.nodes, result.edges);
+        updateDisplay();
+    }
+    // roll up function
+    rollup = function(d) {
+        result = GraphBuilder.rollup(d, result.nodes, result.edges);
+        updateDisplay();
+    }
+    // zoom in function
+    zoomin = function(d) {
+        result = GraphBuilder.zoomIn(d, data.sources);
+        updateDisplay();
+        updateBreadcrumbs();
+    }
+    // zoom out function
+    zoomout = function(d, step) {
+        result = GraphBuilder.zoomOut(data.sources, step);
+        updateDisplay();
+        updateBreadcrumbs();
+    }
+    // update display
+    updateDisplay = function() {
+        force.nodes(result.nodes);
+        force.links(result.edges);
+        buildNodesAndLinks(svg, force);
+        force.start();
+        // hide tooltip
+        tooltip.hide();
+    }
+    // update breadcrumbs
+    updateBreadcrumbs = function() {
+        breadcrumbs.innerHTML = "";
+        var t = GraphBuilder.getStack();
+        var a = Util.createElement("ol", null, "breadcrumb", null, breadcrumbs);
+        for (var i=0; i<t.length; i++) {
+            if (i == t.length-1) {
+                var b = Util.createElement("li", null, "active", t[i].name, a);
+            } else {
+                var b = Util.createElement("li", null, "", null, a);
+                var c = Util.createElement("a", null, "", t[i].name, b);
+                c.href = "javascript:void(null);";
+                c.step = i;
+                Util.addEventListener(c, "click", function(e) {
+                    zoomout.call(this, null, this.step);
+                    e.stopPropagation();
+                })
+            }
+        }
+    }
+
     // add link attributes
     addLinkAttributes = function(link) {
         link
@@ -65,16 +117,10 @@ function buildGraph(graph_target, graph_sources, price) {
         .on("dblclick", function(d) {
             if (d.isUni) {
                 if (d.isCollapsed) {
-                    result = GraphBuilder.drilldown(d, result.nodes, result.edges);
+                    drilldown(d);
                 } else {
-                    result = GraphBuilder.rollup(d, result.nodes, result.edges);
+                    rollup(d);
                 }
-                force.nodes(result.nodes);
-                force.links(result.edges);
-                buildNodesAndLinks(svg, force);
-                force.start();
-                // hide tooltip
-                tooltip.hide();
             }
         })
         .on("mouseover", function(d) {
@@ -90,16 +136,36 @@ function buildGraph(graph_target, graph_sources, price) {
         .on("click", function(d) {
             if (d.type == "source" && d.properties["link"]) {
                 window.open(d.properties.link, "_blank");
+            } else if (d.type != "source") {
+                GraphBuilder.select(d);
+                // display number of actions
+                var actions = [];
+                if (d.isCollapsed) {
+                    actions.push({name:"Drill down", action: function(){drilldown.call(this, d);}});
+                } else {
+                    actions.push({name:"Roll up", action: function(){rollup.call(this, d);}});
+                }
+                if (GraphBuilder.canZoomIn(d)) {
+                    actions.push({name:"Zoom in", action: function(){zoomin.call(this, d);}});
+                }
+                if (GraphBuilder.canZoomOut(d)) {
+                    actions.push({name:"Zoom out", action: function(){zoomout.call(this, d);}});
+                }
+                Actions.showActions(GraphBuilder.getSelected(), actions, actionsParent);
+                d3.event.stopPropagation();
             }
         })
         .call(force.drag)
 
         node.append("circle")
-        .attr("r", function(d) {
+        .attr("id", function(d) {
+            d.circleElem = this;
+            return d.id + "-maincircle";
+        }).attr("r", function(d) {
             if (d.type == "source") {
                 d.node_radius = 3;
             } else {
-                d.node_radius = ((20-d.level*5)>10)?(20-d.level*5):10;;
+                d.node_radius = ((20-d.level*5)>10)?(20-d.level*5):10;
             }
             return d.node_radius;
         }).attr("class", function(d) {
@@ -170,6 +236,7 @@ function buildGraph(graph_target, graph_sources, price) {
     // build nodes for svg canvas
     buildNodesAndLinks = function(svg, force) {
         svg.selectAll("*").remove();
+        Actions.hideActions(actionsParent);
 
         // prepare links
         var link = svg.selectAll(".link").data(force.links()).enter().append("line");
@@ -195,15 +262,21 @@ function buildGraph(graph_target, graph_sources, price) {
     parentStat.innerHTML = "";
     var parentGraph = document.getElementById("ga-graph");
     parentGraph.innerHTML = "";
+    var actionsParent = document.getElementById("ga-actions");
+    actionsParent.innerHTML = "";
+    var breadcrumbs = document.getElementById("ga-zoom");
+    breadcrumbs.innerHTML = "";
+    GraphBuilder.initStack();
 
     GraphBuilder.setRValue(price);
     // precalculate priorities for the nodes
     GraphBuilder.precalculatePriorities(graph_sources, graph_target);
 
-
     // build graph
     if (graph_target && graph_sources && graph_sources.length > 0) {
-        var result = GraphBuilder.buildGraph(graph_target, graph_sources);
+        //var result = GraphBuilder.buildGraph(graph_target, graph_sources);
+        var result = GraphBuilder.zoomIn(graph_target, graph_sources);
+        updateBreadcrumbs();
         /**************************/
         /*** Collect statistics ***/
         Statistics.reset();
@@ -245,13 +318,16 @@ function buildGraph(graph_target, graph_sources, price) {
         /**************************/
 
         // prepare dimensions
-        var width = 1100, height = 550;
+        var width = 1100, height = 500;
         var color = d3.scale.category20();
         var force = d3.layout.force().gravity(0.1).charge(-2000).linkDistance(10).size([width, height])
         .friction(0.5)
         .distance(10)
 
-        var svg = d3.select("#ga-graph").append("svg").attr("width", width).attr("height", height);
+        var svg = d3.select("#ga-graph").append("svg").attr("width", width).attr("height", height).on("click", function() {
+            GraphBuilder.deselect();
+            Actions.hideActions(actionsParent);
+        });
         force.nodes(result.nodes).links(result.edges).start();
 
         buildNodesAndLinks(svg, force);

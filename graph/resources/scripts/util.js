@@ -58,29 +58,44 @@ var Util = function() {
         /* add class to element and remove class from element */
         addClass: function(elem, classname) {
             if (!elem) {return;}
-            var a = elem.className.split(" ");
-            for (var i=0; i<a.length; i++)
-                if (a[i] == classname)
-                    return;
+            if (elem.className && !elem.className.baseVal) {
+                var a = elem.className.split(" ");
+                for (var i=0; i<a.length; i++)
+                    if (a[i] == classname)
+                        return;
 
-            elem.className += " " + classname;
+                elem.className += " " + classname;
+            } else {
+                elem.setAttribute("class", elem.getAttribute("class") + " " + classname);
+            }
         },
         removeClass: function(elem, classname) {
             if (!elem) {return;}
             var newclassname = "";
-            var a = elem.className.split(" ");
-            for (var i=0; i<a.length; i++)
-                if (a[i] != classname)
-                    newclassname += " " + a[i];
-            elem.className = newclassname.replace(/^\s+|\s+$/gm,'');
+            var isSvg = elem.className && elem.className.baseVal;
+            var a = ((!isSvg)?elem.className:elem.getAttribute("class")).split(" ");
+
+            for (var i=0; i<a.length; i++) {
+                if (a[i] != classname) { newclassname += " " + a[i]; }
+            }
+
+            if (!isSvg) {
+                elem.className = newclassname.replace(/^\s+|\s+$/gm,'');
+            } else {
+                elem.setAttribute("class", newclassname.replace(/^\s+|\s+$/gm,''));
+            }
         },
         hasClass: function(elem, classname) {
             if (!elem) {return;}
-            var a = elem.className.split(" ");
-            for (var i=0; i<a.length; i++)
-                if (a[i] == classname)
-                    return true;
-            return false;
+            if (elem.className && !elem.className.baseVal) {
+                var a = elem.className.split(" ");
+                for (var i=0; i<a.length; i++)
+                    if (a[i] == classname)
+                        return true;
+                return false;
+            } else {
+                return new RegExp('(\\s|^)' + classname + '(\\s|$)').test(elem.getAttribute("class"));
+            }
         },
         /* PHP special chars decode function */
         htmlspecialchars_decode: function(string, quote_style) {
