@@ -24,9 +24,12 @@ var Breadcrumbs = (function() {
         },
 
         clear: function() {
-            if (core && core.parent) {
+            if (core && core.parent && core.parent.hasChildNodes(core)) {
+                console.log(core);
+                console.log(core.parent);
                 core.parent.removeChild(core);
             }
+
             return false;
         }
     }
