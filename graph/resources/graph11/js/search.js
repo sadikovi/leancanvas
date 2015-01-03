@@ -52,7 +52,7 @@ var Search = Search || (function() {
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
                     /*** TODO Change that!!! ***/
-                    a.innerHTML = group+" ("+this.value+")";
+                    a.innerHTML = group+" ("+this.value+") ";
                     Util.createElement("span", null, "caret", null, a);
                 });
             }
@@ -113,7 +113,7 @@ var Search = Search || (function() {
                 lia.desc = values[i].name
                 Util.addEventListener(lia, "click", function(e) {
                     Search.setSelectedValue(group, this.value);
-                    global.innerHTML = group + " ("+this.desc+")";
+                    global.innerHTML = group + " ("+this.desc+") ";
                     Util.createElement("span", null, "caret", null, global);
                 });
                 if (values[i][recurParam] && values[i][recurParam].length > 0) {
