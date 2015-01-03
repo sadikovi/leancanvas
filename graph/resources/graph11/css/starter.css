@@ -141,6 +141,12 @@ button.ga-close {
     border-radius: 5px;
 }
 
+.ga-statistics-controls {
+    font-size:80%;
+    text-align: right;
+    padding: 0 3px;
+}
+
 .ga-statistics-primary {
     color: #fff;
     background-color: #428bca;
@@ -203,7 +209,6 @@ button.ga-close {
     margin: 0px 10px;
 }
 
-.ga-zoom {
-    border-bottom: 1px solid #e7e7e7;
+.ga-breadcrumbs {
     min-height: 40px;
 }

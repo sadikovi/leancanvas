@@ -7,7 +7,7 @@ circle.source {
 }
 
 circle.target {
-    fill: #b2b2b2;
+    fill: #4D7198;
 }
 
 .link {
@@ -87,7 +87,8 @@ div.tag {
 
 /* select and deselect */
 .selected {
-    stroke: #428bca;
-    fill: #5bc0de!important;
+    stroke: #3b83c0;
+    fill: #fff!important;
+    opacity: 1!important;
     stroke-width: 1px;
 }

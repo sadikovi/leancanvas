@@ -1,6 +1,5 @@
 function buildGraph(graph_target, graph_sources, price) {
     messageForTargetNode = function(d) {
-        // message for target when it is hovered
         var msg = "<strong>"+d.name+"</strong>";
         msg += "<div><span><div class=\"tag alert-green\"></div> "+d.priorityGroups.green
         +"</span>&nbsp;&nbsp;<span><div class=\"tag alert-yellow\"></div> "+d.priorityGroups.yellow
@@ -32,6 +31,10 @@ function buildGraph(graph_target, graph_sources, price) {
         return msg;
     }
 
+    // open link in new tab
+    openlink = function(link) {
+        window.open(link, "_blank");
+    }
     // drill down functin
     drilldown = function(d) {
         result = GraphBuilder.drilldown(d, result.nodes, result.edges);
@@ -44,13 +47,13 @@ function buildGraph(graph_target, graph_sources, price) {
     }
     // zoom in function
     zoomin = function(d) {
-        result = GraphBuilder.zoomIn(d, data.sources);
+        result = GraphBuilder.zoomIn(d, graph_sources);
         updateDisplay();
         updateBreadcrumbs();
     }
     // zoom out function
     zoomout = function(d, step) {
-        result = GraphBuilder.zoomOut(data.sources, step);
+        result = GraphBuilder.zoomOut(graph_sources, step);
         updateDisplay();
         updateBreadcrumbs();
     }
@@ -65,23 +68,10 @@ function buildGraph(graph_target, graph_sources, price) {
     }
     // update breadcrumbs
     updateBreadcrumbs = function() {
-        breadcrumbs.innerHTML = "";
-        var t = GraphBuilder.getStack();
-        var a = Util.createElement("ol", null, "breadcrumb", null, breadcrumbs);
-        for (var i=0; i<t.length; i++) {
-            if (i == t.length-1) {
-                var b = Util.createElement("li", null, "active", t[i].name, a);
-            } else {
-                var b = Util.createElement("li", null, "", null, a);
-                var c = Util.createElement("a", null, "", t[i].name, b);
-                c.href = "javascript:void(null);";
-                c.step = i;
-                Util.addEventListener(c, "click", function(e) {
-                    zoomout.call(this, null, this.step);
-                    e.stopPropagation();
-                })
-            }
-        }
+        Breadcrumbs.updateBreadcrumbs(breadcrumbs, GraphBuilder.getStack(), function(d, step) {
+            zoomout.call(this, null, step);
+            e.stopPropagation();
+        });
     }
 
     // add link attributes
@@ -115,7 +105,9 @@ function buildGraph(graph_target, graph_sources, price) {
         node.attr("class", "node")
         .attr("id", function(d) {return d.id+"graph-node";})
         .on("dblclick", function(d) {
-            if (d.isUni) {
+            if (d.type == "source" && d.properties["link"]) {
+                openlink(d.properties.link);
+            } else if (d.isUni) {
                 if (d.isCollapsed) {
                     drilldown(d);
                 } else {
@@ -134,12 +126,12 @@ function buildGraph(graph_target, graph_sources, price) {
             tooltip.hide();
         })
         .on("click", function(d) {
+            GraphBuilder.select(d);
+            var actions = [];
+            // add actions to display
             if (d.type == "source" && d.properties["link"]) {
-                window.open(d.properties.link, "_blank");
+                actions.push({name:"Open link", action: function(){openlink.call(this, d.properties.link);}});
             } else if (d.type != "source") {
-                GraphBuilder.select(d);
-                // display number of actions
-                var actions = [];
                 if (d.isCollapsed) {
                     actions.push({name:"Drill down", action: function(){drilldown.call(this, d);}});
                 } else {
@@ -151,20 +143,19 @@ function buildGraph(graph_target, graph_sources, price) {
                 if (GraphBuilder.canZoomOut(d)) {
                     actions.push({name:"Zoom out", action: function(){zoomout.call(this, d);}});
                 }
-                Actions.showActions(GraphBuilder.getSelected(), actions, actionsParent);
-                d3.event.stopPropagation();
             }
+            Actions.showActions(GraphBuilder.getSelected(), actions, actionsParent);
+            d3.event.stopPropagation();
         })
         .call(force.drag)
 
         node.append("circle")
-        .attr("id", function(d) {
-            d.circleElem = this;
-            return d.id + "-maincircle";
-        }).attr("r", function(d) {
+        .attr("r", function(d) {
+            d.selectable = this;
             if (d.type == "source") {
                 d.node_radius = 3;
             } else {
+                d.selectable = this;
                 d.node_radius = ((20-d.level*5)>10)?(20-d.level*5):10;
             }
             return d.node_radius;
@@ -175,6 +166,9 @@ function buildGraph(graph_target, graph_sources, price) {
         // append bigger circle to hover the source
         node.append("circle")
         .attr("r", function(d) {
+            if (d.type == "source") {
+                d.selectable = this;
+            }
             return (d.node_radius)?d.node_radius*3:0;
         }).attr("class", function(d) {
             var className = (d.type=="source")?d.priority:"target";
@@ -196,7 +190,6 @@ function buildGraph(graph_target, graph_sources, price) {
         if (!node) {
             throw ("Node is undefined");
         }
-
         // we apply only 3 indexes, according to 3 priorities
         for (var i=1; i<=3; i++) {
             // apply path
@@ -264,7 +257,7 @@ function buildGraph(graph_target, graph_sources, price) {
     parentGraph.innerHTML = "";
     var actionsParent = document.getElementById("ga-actions");
     actionsParent.innerHTML = "";
-    var breadcrumbs = document.getElementById("ga-zoom");
+    var breadcrumbs = document.getElementById("ga-breadcrumbs");
     breadcrumbs.innerHTML = "";
     GraphBuilder.initStack();
 
@@ -315,6 +308,26 @@ function buildGraph(graph_target, graph_sources, price) {
             Statistics.addStatistics("group2", "Maximum price", t_max);
         }
         parentStat.appendChild(Statistics.htmlCore());
+        var ht = document.getElementById("toggle-statistics");
+        toggleStats = function(ht, toggle) {
+            ht.innerHTML = "";
+            var on = toggle && (!Util.hasClass(parentStat, "hidden") || Util.hasClass(parentStat, "show"));
+            var a = null;
+            if (on) {
+                Util.addClass(parentStat, "hidden");
+                Util.removeClass(parentStat, "show");
+                a = Util.createElement("span", null, "", "Show statistics", ht);
+            } else {
+                Util.addClass(parentStat, "show");
+                Util.removeClass(parentStat, "hidden");
+                a = Util.createElement("span", null, "", "Hide statistics", ht);
+
+            }
+            Util.addEventListener(a, "click", function(e) {
+                toggleStats.call(this, ht, true);
+            });
+        }
+        toggleStats(ht, false);
         /**************************/
 
         // prepare dimensions

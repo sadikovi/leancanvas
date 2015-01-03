@@ -1,48 +1,25 @@
 var GraphBuilder = GraphBuilder || (function() {
-    var prefix = "GraphBuilder: ";
-    var rValue = 0;
-    var selected = null;
+    var prefix = "GraphBuilder: ", rValue = 0, selected = null;
     var stack = [];  // stack of the graph targets
-
-    var P_GREEN = "alert-green";
-    var P_YELLOW = "alert-yellow";
-    var P_RED = "alert-red";
-    var P_UNDEFINED = "alert-undefined";
+    var P_GREEN = "alert-green", P_YELLOW = "alert-yellow", P_RED = "alert-red", P_UNDEFINED = "alert-undefined";
 
     return {
         // set rValue
         setRValue: function(value) {
-            if (!value || value < 0) {
-                console.log(prefix + "setRValue - value is wrong, value will be set to 0");
-                rValue = 0;
-            } else {
-                rValue = value;
-            }
-        },
-
-        // simple linear search
-        util_linear: function(a, id) {
-            if (a && a.length) {
-                for (var i=0; i<a.length; i++) {
-                    if (a[i].id === id) {
-                        return a[i];
-                    }
-                }
-            }
-            return null;
+            rValue = (!value || value<0)?0:value;
         },
 
         // helper function to check whether node/its child has got a particular id
-        checkIdRecursively: function(node, id) {
-            if (node && id > 0) {
+        nodeHasChildWithId: function(node, id) {
+            if (node && id !== null) {
                 if (node.id == id) {
                     return true;
                 } else if (node.leaf == false) {
-                    var yep = false;
+                    var h = false;
                     for (var i=0; i<node.children.length; i++) {
-                        yep = yep || GraphBuilder.checkIdRecursively(node.children[i], id);
+                        h = h || GraphBuilder.nodeHasChildWithId(node.children[i], id);
                     }
-                    return yep;
+                    return h;
                 }
             }
             return false;
@@ -55,15 +32,12 @@ var GraphBuilder = GraphBuilder || (function() {
                 throw (prefix + "buildGraph - parameters are undefined");
             }
 
-            // prepare array of nodes
-            var nodes = [];
-            // ... and edges
-            var edges = [];
-
+            // 0. prepare array of nodes and edges
+            var nodes = [], edges = [];
             // 1. confirm target and add all the related sources to the "nodes"
             nodes.push(target);
             for (var i=0; i<sources.length; i++) {
-                if (GraphBuilder.checkIdRecursively(target, sources[i].target)) {
+                if (GraphBuilder.nodeHasChildWithId(target, sources[i].target)) {
                     nodes.push(sources[i]);
                     // build edges and calculate priority
                     var edge = {"source": sources[i], "target": target};
@@ -94,8 +68,7 @@ var GraphBuilder = GraphBuilder || (function() {
                 // make node to be expanded
                 node.isCollapsed = false;
 
-                var connectedBefore = [];
-                var newEdges = [];
+                var connectedBefore = [], newEdges = [];
                 for (var i=0; i<edges.length; i++) {
                     if ((edges[i].target.id != node.parent && edges[i].source.id != node.parent)
                         && (edges[i].target == node || edges[i].source == node)) {
@@ -120,13 +93,12 @@ var GraphBuilder = GraphBuilder || (function() {
                     nodes.push(nodesToAdd[i]);
                 }
                 // now build links with connectedBefore
-
                 for (var i=0; i<connectedBefore.length; i++) {
                     var node = connectedBefore[i];
                     for (var j=0; j<nodesToAdd.length; j++) {
                         var cnode = nodesToAdd[j];
                         // find out whether cnode has got children with node.target's id
-                        var ifHas = GraphBuilder.checkIdRecursively(cnode, node.target);
+                        var ifHas = GraphBuilder.nodeHasChildWithId(cnode, node.target);
                         if (ifHas) {
                             // create link and add target as node
                             var edge = {"source": node, "target": cnode};
@@ -219,6 +191,48 @@ var GraphBuilder = GraphBuilder || (function() {
 
             // return result of modified nodes and edges
             return {nodes: nodes, edges: edges};
+        },
+
+        zoomIn: function(target, sources) {
+            GraphBuilder.push(target);
+            GraphBuilder.collapseNode(target);
+            return GraphBuilder.buildGraph(target, sources);
+        },
+
+        zoomOut: function(sources, step) {
+            if (!GraphBuilder.isStackReady()) {
+                if (step >= 0) {
+                    GraphBuilder.getStack().splice(step+1, GraphBuilder.getStack().length);
+                } else {
+                    GraphBuilder.pop();
+                }
+                var p = GraphBuilder.peek();
+                // collapse all the children that are not collapsed
+                GraphBuilder.collapseNode(p);
+                return GraphBuilder.buildGraph(p, sources);
+            } else {
+                console.log(prefix+"Stack - " + "cannot zoom out with an empty stack");
+            }
+        },
+
+        canZoomIn: function(target) {
+            return (target && target != GraphBuilder.peek());
+        },
+
+        canZoomOut: function(target) {
+            return (!GraphBuilder.isStackReady() && target && target.parent !== null);
+        },
+
+        collapseNode: function(node) {
+            // if node is collapsed, then all its children have to be collapsed
+            if (node && !node.isCollapsed) {
+                node.isCollapsed = true;
+                if (!node.leaf && node.children) {
+                    for (var i=0; i<node.children.length; i++) {
+                        GraphBuilder.collapseNode(node.children[i]);
+                    }
+                }
+            }
         },
 
         // function to calculate edge threshold and group
@@ -351,16 +365,16 @@ var GraphBuilder = GraphBuilder || (function() {
             GraphBuilder.deselect();
             if (target) {
                 selected = target;
-                if (!Util.hasClass(selected.circleElem, "selected")) {
-                    Util.addClass(selected.circleElem, "selected");
+                if (!Util.hasClass(selected.selectable, "selected")) {
+                    Util.addClass(selected.selectable, "selected");
                 }
             }
         },
 
         deselect: function() {
             if (selected) {
-                if (Util.hasClass(selected.circleElem, "selected")) {
-                    Util.removeClass(selected.circleElem, "selected");
+                if (Util.hasClass(selected.selectable, "selected")) {
+                    Util.removeClass(selected.selectable, "selected");
                 }
                 selected = null;
             }
@@ -373,27 +387,18 @@ var GraphBuilder = GraphBuilder || (function() {
         /* stack functions */
 
         push: function(a) {
-            if (!a) {
-                throw (prefix+"Stack - " + "elem is undefined");
-            } else {
-                stack.push(a);
-            }
+            if (!a) { throw (prefix+"Stack - " + "elem is undefined"); }
+            stack.push(a);
         },
 
         pop: function() {
-            if (stack.length == 0) {
-                throw (prefix+"Stack - " + "stack is empty");
-            } else {
-                return stack.pop();
-            }
+            if (stack.length == 0) { throw (prefix+"Stack - " + "stack is empty"); }
+            return stack.pop();
         },
 
         peek: function() {
-            if (stack.length == 0) {
-                throw (prefix+"Stack - " + "stack is empty");
-            } else {
-                return stack[stack.length-1];
-            }
+            if (stack.length == 0) { throw (prefix+"Stack - " + "stack is empty"); }
+            return stack[stack.length-1];
         },
 
         isStackReady: function() {
@@ -403,36 +408,9 @@ var GraphBuilder = GraphBuilder || (function() {
         initStack: function() {
             stack = [];
         },
-        
+
         getStack: function() {
             return stack;
-        },
-
-        zoomIn: function(target, sources) {
-            GraphBuilder.push(target);
-            return GraphBuilder.buildGraph(target, sources);
-        },
-
-        zoomOut: function(sources, step) {
-            if (!GraphBuilder.isStackReady()) {
-                if (step >= 0) {
-                    GraphBuilder.getStack().splice(step+1, GraphBuilder.getStack().length);
-                } else {
-                    GraphBuilder.pop();
-                }
-                var p = GraphBuilder.peek();
-                return GraphBuilder.buildGraph(p, sources);
-            } else {
-                console.log(prefix+"Stack - " + "cannot zoom out with an empty stack");
-            }
-        },
-
-        canZoomIn: function(target) {
-            return (target && target != GraphBuilder.peek());
-        },
-
-        canZoomOut: function(target) {
-            return (!GraphBuilder.isStackReady() && target && target.parent !== null);
         }
     }
 })();
