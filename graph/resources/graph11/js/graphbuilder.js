@@ -6,7 +6,7 @@ var GraphBuilder = GraphBuilder || (function() {
     return {
         // set rValue
         setRValue: function(value) {
-            rValue = (!value || value<0)?0:value;
+            rValue = (value === null || value<0)?0:value;
         },
 
         // helper function to check whether node/its child has got a particular id
@@ -274,7 +274,7 @@ var GraphBuilder = GraphBuilder || (function() {
 
         // global precalculation of priorities
         precalculatePriorities: function(sources, target) {
-            if (!sources || !target || !rValue) {
+            if (!sources || !target || rValue === null) {
                 throw (prefix + "precalculateMaxValue - parameters are undefined");
             }
 

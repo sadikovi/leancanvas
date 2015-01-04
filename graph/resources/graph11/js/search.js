@@ -26,6 +26,26 @@ var Search = Search || (function() {
             return groups;
         },
 
+        buildCheckbox: function(group, value, checked) {
+            var l = Util.createElement("li", null, "", null, null);
+            var a = Util.createElement("a", null, "", value+" ", l);
+            a.setAttribute("href", "javascript:void(null);");
+            var u = Util.createElement("input", null, "", null, a);
+            u.setAttribute("name", "smartsearch");
+            u.setAttribute("type", "checkbox");
+            u.setAttribute("value", value);
+
+            Search.initializeSelected(group, checked);
+            if (checked) {
+                u.setAttribute("checked", checked);
+            }
+            Util.addEventListener(u, "click", function(e) {
+                Search.setSelectedValue(group, u.checked);
+            });
+            console.log(Search.getSelectedValue(group));
+            return l;
+        },
+
         buildDropdown: function(group, values, default_value) {
             if (!group || !values || !values.length) {
                 throw ("Search - parameters are undefined");
@@ -37,7 +57,7 @@ var Search = Search || (function() {
             var list = Util.createElement("li", null, "dropdown", null, null);
             var a = Util.createElement("a", null, "dropdown-toggle", group+" "+"("+default_value+")"+" ", list);
             Util.createElement("span", null, "caret", null, a);
-            a.setAttribute("href", "javascript:void();");
+            a.setAttribute("href", "javascript:void(null);");
             a.setAttribute("data-toggle", "dropdown");
             a.setAttribute("role", "button");
             a.setAttribute("aria-expanded", "false");
@@ -145,6 +165,9 @@ var SearchBar = SearchBar || (function() {
                 } else if (elements[i].type == "input") {
                     var d = Search.buildInput(elements[i].group, elements[i].placeholder, elements[i].value);
                     form.appendChild(d);
+                } else if (elements[i].type == "checkbox") {
+                    var e = Search.buildCheckbox(elements[i].group, elements[i].value, elements[i].isChecked);
+                    ul.appendChild(e);
                 }
             }
 
@@ -164,8 +187,9 @@ var SearchBar = SearchBar || (function() {
 })();
 
 var searchBarElements = [
+    {group: "Regions", type: "dropdown_submenu", values: data.targets, recurParam: "children"},
     {group: "Bedrooms", type: "dropdown", values: ["Any", "1", "2", "3", "4", "5", "6+"]},
     {group: "Bathrooms", type: "dropdown", values: ["Any", "1", "2", "3+"]},
-    {group: "Regions", type: "dropdown_submenu", values: data.targets, recurParam: "children"},
-    {group: "Price", type: "input", value: data.default_value, placeholder: "Price/week"}
+    {group: "Price", type: "input", value: data.default_value, placeholder: "Price/week"},
+    {group: "Adaptivesearch", type: "checkbox", value: "Adaptive search", isChecked: false}
 ];

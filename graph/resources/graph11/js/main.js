@@ -70,7 +70,6 @@ function buildGraph(graph_target, graph_sources, price) {
     updateBreadcrumbs = function() {
         Breadcrumbs.updateBreadcrumbs(breadcrumbs, GraphBuilder.getStack(), function(d, step) {
             zoomout.call(this, null, step);
-            e.stopPropagation();
         });
     }
 
@@ -288,14 +287,14 @@ function buildGraph(graph_target, graph_sources, price) {
             var t_avg_sum = 0;
             for (var i=0; i<result.nodes.length; i++) {
                 if (result.nodes[i].type == "source") {
-                    if (!t_max || t_max < result.nodes[i].value) {
-                        t_max = result.nodes[i].value;
+                    if (!t_max || t_max < result.nodes[i].properties.price) {
+                        t_max = result.nodes[i].properties.price;
                     }
-                    if (!t_min || t_min > result.nodes[i].value) {
-                        t_min = result.nodes[i].value;
+                    if (!t_min || t_min > result.nodes[i].properties.price) {
+                        t_min = result.nodes[i].properties.price;
                     }
                     cnt++;
-                    t_avg_sum += result.nodes[i].value;
+                    t_avg_sum += result.nodes[i].properties.price;
                 } else {
                     Statistics.addStatistics("group3", "Acceptable", result.nodes[i].priorityGroups.green);
                     Statistics.addStatistics("group3", "Considerable", result.nodes[i].priorityGroups.yellow);
@@ -355,7 +354,8 @@ searchCallback();
 
 function searchCallback() {
     var searchParameters = Search.getCore();
-    var price = (!parseInt(searchParameters["Price"]))?data.default_value:parseInt(searchParameters["Price"]);
+    var isAdaptiveSearch = Search.getSelectedValue("Adaptivesearch");
+
     var recurTarget = function(temp, id) {
         if (temp == null || temp.id == id) {
             return temp;
@@ -372,40 +372,60 @@ function searchCallback() {
     }
 
     var graph_target = recurTarget(data.targets[0], searchParameters["Regions"]);
-    var graph_sources = [];
 
-    beds = parseInt(searchParameters["Bedrooms"]);
-    baths = parseInt(searchParameters["Bathrooms"]);
-    for (var i=0; i<data.sources.length; i++) {
-        var bedsMatch = false;
-        var bathsMatch = false;
+    if (isAdaptiveSearch) {
+        var a = (!parseInt(searchParameters["Price"]))?data.default_value:parseInt(searchParameters["Price"]);
+        var b = beds = parseInt(searchParameters["Bedrooms"]);
+        var c = baths = parseInt(searchParameters["Bathrooms"]);
 
-        if (searchParameters["Bedrooms"] == "Any") {
-            bedsMatch = true;
-        } else if (searchParameters["Bedrooms"].indexOf("+") > 0) {
-            if (data.sources[i].properties.bedrooms >= beds) {
+        AdaptiveSearch.initDefaultValuesOnly(a, ((b>0)?b:1), ((c>0)?c:1));
+
+        for (var i=0; i<data.sources.length; i++) {
+            var source = data.sources[i];
+            source.value = AdaptiveSearch.estimateValue(source.properties.price, source.properties.bedrooms, source.properties.bathrooms);
+        }
+
+        buildGraph(graph_target, data.sources, AdaptiveSearch.getMidPoint());
+    } else {
+        var price = (!parseInt(searchParameters["Price"]))?data.default_value:parseInt(searchParameters["Price"]);
+        // there was graph_target before I added adaptive search
+        var graph_sources = [];
+
+        beds = parseInt(searchParameters["Bedrooms"]);
+        baths = parseInt(searchParameters["Bathrooms"]);
+        for (var i=0; i<data.sources.length; i++) {
+            // reset value as a price
+            data.sources[i].value = data.sources[i].properties.price;
+            var bedsMatch = false;
+            var bathsMatch = false;
+
+            if (searchParameters["Bedrooms"] == "Any") {
                 bedsMatch = true;
+            } else if (searchParameters["Bedrooms"].indexOf("+") > 0) {
+                if (data.sources[i].properties.bedrooms >= beds) {
+                    bedsMatch = true;
+                }
+            } else {
+                if (data.sources[i].properties.bedrooms == beds) {
+                    bedsMatch = true;
+                }
             }
-        } else {
-            if (data.sources[i].properties.bedrooms == beds) {
-                bedsMatch = true;
-            }
-        }
 
-        if (searchParameters["Bathrooms"] == "Any") {
-            bathsMatch = true;
-        } else if (searchParameters["Bathrooms"].indexOf("+") > 0) {
-            if (data.sources[i].properties.bathrooms >= baths) {
+            if (searchParameters["Bathrooms"] == "Any") {
                 bathsMatch = true;
+            } else if (searchParameters["Bathrooms"].indexOf("+") > 0) {
+                if (data.sources[i].properties.bathrooms >= baths) {
+                    bathsMatch = true;
+                }
+            } else {
+                if (data.sources[i].properties.bathrooms == baths) {
+                    bathsMatch = true;
+                }
             }
-        } else {
-            if (data.sources[i].properties.bathrooms == baths) {
-                bathsMatch = true;
+            if (bathsMatch && bedsMatch) {
+                graph_sources.push(data.sources[i]);
             }
         }
-        if (bathsMatch && bedsMatch) {
-            graph_sources.push(data.sources[i]);
-        }
+        buildGraph(graph_target, graph_sources, price);
     }
-    buildGraph(graph_target, graph_sources, price);
 }

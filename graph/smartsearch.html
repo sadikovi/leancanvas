@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Search</title>
+
+    <!-- Bootstrap -->
+    <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <button id="run" class="btn btn-link">Run test</button>
+    </div>
+    <!-- Javascript plugins -->
+    <script src="resources/bootstrap/js/jquery.min.js"></script>
+    <script src="resources/bootstrap/js/bootstrap.min.js"></script>
+    <script src="resources/scripts/util.js"></script>
+    <script src="resources/graph11/js/adaptivesearch.js"></script>
+    <script>
+    (function() {
+        var data = {
+            array: [
+                {aa: 1, bb: 1, cc: 1},
+                {aa: 100, bb: 1, cc: 1},
+                {aa: 200, bb: 3, cc: 2},
+                {aa: 250, bb: 4, cc: 1},
+                {aa: 300, bb: 5, cc: 2},
+                {aa: 350, bb: 2, cc: 1},
+                {aa: 420, bb: 3, cc: 1},
+                {aa: 420, bb: 3, cc: 2},
+                {aa: 480, bb: 4, cc: 3},
+                {aa: 535, bb: 3, cc: 1},
+                {aa: 600, bb: 2, cc: 2},
+                {aa: 750, bb: 4, cc: 2}
+            ]
+        };
+
+        var obj = {
+            a: 420,
+            b: 3,
+            c: 1,
+            ma: 0.6,
+            mb: 0.25,
+            mc: 0.15,
+            pa: -1,
+            pb: 1,
+            pc: 1
+        };
+
+        AdaptiveSearch.initDefaultValuesOnly(420, 3, 1);
+        for (var i=0; i<data.array.length; i++) {
+            var t = data.array[i];
+            console.log(t);
+            var r = AdaptiveSearch.estimateValue(t.aa, t.bb, t.cc);
+            console.log(r);
+        }
+        })();
+    </script>
+</body>
+</html>
