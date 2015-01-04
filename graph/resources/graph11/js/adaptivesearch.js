@@ -36,11 +36,11 @@ var AdaptiveSearch = (function() {
 
         magnitude: function(m, x) {
             if (x > B && x < 1) {
-                return (m*(A*(1-B)/(A-m)))/(x - ((A*B-m)/(A-m)));
+                return (m*(A*(1 - B)/(A - m)))/(x - ((A*B - m)/(A - m)));
             } else if (x == 1) {
                 return m;
             } else if (x > 1 && x < C) {
-                return ((A-m)/(C*C-1))*x*x + (m*C*C - A)/(C*C - 1);
+                return ((A - m)/(C*C - 1))*x*x + (m*C*C - A)/(C*C - 1);
             } else {
                 // x <= B || x >= C
                 return A;
