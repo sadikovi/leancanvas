@@ -332,7 +332,7 @@ function buildGraph(graph_target, graph_sources, price) {
         // prepare dimensions
         var width = 1100, height = 500;
         var color = d3.scale.category20();
-        var force = d3.layout.force().gravity(0.1).charge(-2000).linkDistance(10).size([width, height])
+        var force = d3.layout.force().gravity(0.2).charge(-2000).linkDistance(10).size([width, height])
         .friction(0.5)
         .distance(10)
 
