@@ -36,12 +36,13 @@ var Actions = (function() {
             Actions.hideActions(parent);
             Util.createElement("span", null, "ga-action text-muted", selected.name, parent);
             for (var i=0; i<actions.length; i++) {
-                var a = Util.createElement("a", null, "ga-action", actions[i].name, parent);
-                a.href = "javascript:void(null);";
+                var a = Util.createElement("span", null, "ga-action text-muted", null, parent);
                 a.action = actions[i].action;
+                var b = Util.createElement("a", null, "", actions[i].name, a);
+                b.href = "javascript:void(null);";
                 Util.addEventListener(a, "click", function(e) {
                     if (this.action) {
-                        this.action.call();
+                        this.action.call(this);
                     }
                 });
             }

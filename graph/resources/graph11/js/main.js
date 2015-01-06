@@ -72,6 +72,22 @@ function buildGraph(graph_target, graph_sources, price) {
             zoomout.call(this, null, step);
         });
     }
+    // rank source element
+    rankElement = function(l, d) {
+        l.innerHTML = "";
+        var a = Util.createElement("span", null, "muted", "How would you rank it?", l);
+        var b = function(classname, parent) {
+            var t = Util.createElement("div", null, "rank " + classname, null, parent);
+            Util.addEventListener(t, "click", function(e) {
+                Util.addClass(this, "rank-selected");
+                parent.innerHTML = "Update "+this.outerHTML+" will take effect with next search";
+                e.stopPropagation();
+            });
+        }
+
+        var ta = b("alert-green", l), tb = b("alert-yellow", l), tc = b("alert-red", l);
+        console.log("Update will take effect with next search");
+    }
 
     // add link attributes
     addLinkAttributes = function(link) {
@@ -130,6 +146,7 @@ function buildGraph(graph_target, graph_sources, price) {
             // add actions to display
             if (d.type == "source" && d.properties["link"]) {
                 actions.push({name:"Open link", action: function(){openlink.call(this, d.properties.link);}});
+                actions.push({name:"Wrong ranking?", action: function(){rankElement.call(this, this, d);}});
             } else if (d.type != "source") {
                 if (d.isCollapsed) {
                     actions.push({name:"Drill down", action: function(){drilldown.call(this, d);}});

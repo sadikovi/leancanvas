@@ -8,11 +8,45 @@
 
     <!-- Bootstrap -->
     <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .frame {
+            border: 1px solid #333;
+            background: #000;
+        }
+        .core {
+            fill: #fff;
+        }
+        .core-space {
+            fill: #000;
+        }
+        .wave {
+            fill: #fff;
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <button id="run" class="btn btn-link">Run test</button>
-        <div class = "container" id="trainingset"></div>
+        <div class = "container" id="trainingset">
+            <svg width="300" height="200" class="frame">
+                <line class="wave" x1="100" y1="100" x2="175" y2="100"></line>
+                <line class="wave" x1="70" y1="100" x2="100" y2="100"></line>
+
+                <line class="wave" x1="100" y1="100" x2="100" y2="122"></line>
+                <line class="wave" x1="100" y1="100" x2="100" y2="78"></line>
+
+                <line class="wave" x1="100" y1="102" x2="130" y2="114"></line>
+                <line class="wave" x1="100" y1="98" x2="120" y2="90"></line>
+
+                <line class="wave" x1="100" y1="102" x2="85" y2="108"></line>
+                <line class="wave" x1="100" y1="98" x2="80" y2="90"></line>
+
+                <circle r="10" class="core-space" cx="100" cy="100"></circle>
+                <circle r="5" class="core" cx="100" cy="100"></circle>
+            </svg>
+        </div>
     </div>
     <!-- Javascript plugins -->
     <script src="resources/bootstrap/js/jquery.min.js"></script>
@@ -82,7 +116,7 @@
                 console.log("End: Prediction: " + H(3.50, 2, 2));
             }
 
-            algorithm(training);
+            //algorithm(training);
         })();
     </script>
 </body>
