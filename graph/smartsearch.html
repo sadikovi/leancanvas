@@ -12,6 +12,7 @@
 <body>
     <div class="container">
         <button id="run" class="btn btn-link">Run test</button>
+        <div class = "container" id="trainingset"></div>
     </div>
     <!-- Javascript plugins -->
     <script src="resources/bootstrap/js/jquery.min.js"></script>
@@ -19,43 +20,69 @@
     <script src="resources/scripts/util.js"></script>
     <script src="resources/graph11/js/adaptivesearch.js"></script>
     <script>
-    (function() {
-        var data = {
-            array: [
-                {aa: 1, bb: 1, cc: 1},
-                {aa: 100, bb: 1, cc: 1},
-                {aa: 200, bb: 3, cc: 2},
-                {aa: 250, bb: 4, cc: 1},
-                {aa: 300, bb: 5, cc: 2},
-                {aa: 350, bb: 2, cc: 1},
-                {aa: 420, bb: 3, cc: 1},
-                {aa: 420, bb: 3, cc: 2},
-                {aa: 480, bb: 4, cc: 3},
-                {aa: 535, bb: 3, cc: 1},
-                {aa: 600, bb: 2, cc: 2},
-                {aa: 750, bb: 4, cc: 2}
-            ]
-        };
+        (function() {
+            var training = [
+{x1:5,x2:3,x3:1,y:1.088},
+{x1:8,x2:3,x3:1,y:1.581},
+{x1:4,x2:2,x3:1,y:0.981},
+{x1:6,x2:3,x3:1,y:1.226},
+{x1:4,x2:1,x3:1,y:1.889},
+{x1:9,x2:4,x3:2,y:2.183},
+{x1:7,x2:4,x3:2,y:1.307},
+{x1:5,x2:2,x3:1,y:1.278},
+{x1:6,x2:3,x3:2,y:1.151},
+{x1:3,x2:1,x3:1,y:1.708},
+{x1:6,x2:4,x3:2,y:1.058}
+            ];
 
-        var obj = {
-            a: 420,
-            b: 3,
-            c: 1,
-            ma: 0.6,
-            mb: 0.25,
-            mc: 0.15,
-            pa: -1,
-            pb: 1,
-            pc: 1
-        };
+            var algorithm = function(training) {
+                var th0 = 1, th1 = 1, th2 = 1, th3 = 1, th4 = 1, th5 = 1, th6 = 1;
+                var h = function(x1, x2, x3) { return th0 + th1*x1 + th2*x2 + th3*x3 + th4*x1*x2 + th5*x1*x3 + th6*x2*x3; };
+                var alpha = 0.0001;
+                var error = 0.01;
+                var H = function(x1, x2, x3) { return 1/(1+Math.pow(Math.E, -h(x1, x2, x3))); };
 
-        AdaptiveSearch.initDefaultValuesOnly(420, 3, 1);
-        for (var i=0; i<data.array.length; i++) {
-            var t = data.array[i];
-            console.log(t);
-            var r = AdaptiveSearch.estimateValue(t.aa, t.bb, t.cc);
-            console.log(r);
-        }
+                var square_diff0 = 1, square_diff1 = 1, square_diff2 = 1, square_diff3 = 1, square_diff4 = 1,
+                    square_diff5 = 1, square_diff6 = 1;
+                var j = 0;
+                while (Math.abs(square_diff0)>error || Math.abs(square_diff1)>error
+                    || Math.abs(square_diff2)>error || Math.abs(square_diff3)>error
+                    || Math.abs(square_diff4)>error || Math.abs(square_diff5)>error || Math.abs(square_diff6)>error) {
+                    square_diff0 = 0; square_diff1 = 0; square_diff2 = 0; square_diff3 = 0;
+                    square_diff4 = 0; square_diff5 = 0; square_diff6 = 0;
+                    for (var i=0; i<training.length; i++) {
+                        var diff = H(training[i].x1, training[i].x2, training[i].x3) - training[i].y;
+                        square_diff0 += diff;
+                        square_diff1 += diff*training[i].x1;
+                        square_diff2 += diff*training[i].x2;
+                        square_diff3 += diff*training[i].x3;
+                        square_diff4 += diff*training[i].x1*training[i].x2;
+                        square_diff5 += diff*training[i].x1*training[i].x3;
+                        square_diff6 += diff*training[i].x2*training[i].x3;
+                    }
+                    th0 -= alpha*square_diff0;
+                    th1 -= alpha*square_diff1;
+                    th2 -= alpha*square_diff2;
+                    th3 -= alpha*square_diff3;
+                    th4 -= alpha*square_diff4;
+                    th5 -= alpha*square_diff5;
+                    th6 -= alpha*square_diff6;
+                    j++;
+                    if (j>200000) {
+                        console.log("Timeout");
+                        console.log("Diff 0: " + square_diff0);
+                        break;
+                    }
+                }
+                console.log(j);
+                console.log("Result: th0= " + th0 + ", th1= " + th1 + ", th2= " + th2 + ", th3= " + th3);
+                for (var i=0; i<training.length; i++) {
+                    console.log("x1= " + training[i].x1 + ", x2= " + training[i].x2 + ", x3= "+training[i].x3+", H(x)= " + H(training[i].x1, training[i].x2, training[i].x3));
+                }
+                console.log("End: Prediction: " + H(3.50, 2, 2));
+            }
+
+            algorithm(training);
         })();
     </script>
 </body>

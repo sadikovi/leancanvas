@@ -26,10 +26,16 @@ var Search = Search || (function() {
             return groups;
         },
 
-        buildCheckbox: function(group, value, checked) {
+        buildCheckbox: function(group, value, checked, tooltip) {
             var l = Util.createElement("li", null, "", null, null);
             var a = Util.createElement("a", null, "", value+" ", l);
             a.setAttribute("href", "javascript:void(null);");
+            //data-toggle="tooltip" data-placement="left" title="Tooltip on left"
+            if (tooltip) {
+                a.setAttribute("data-toggle", "tooltip");
+                a.setAttribute("data-placement", "bottom");
+                a.setAttribute("title", ""+tooltip);
+            }
             var u = Util.createElement("input", null, "", null, a);
             u.setAttribute("name", "smartsearch");
             u.setAttribute("type", "checkbox");
@@ -42,7 +48,6 @@ var Search = Search || (function() {
             Util.addEventListener(u, "click", function(e) {
                 Search.setSelectedValue(group, u.checked);
             });
-            console.log(Search.getSelectedValue(group));
             return l;
         },
 
@@ -166,7 +171,7 @@ var SearchBar = SearchBar || (function() {
                     var d = Search.buildInput(elements[i].group, elements[i].placeholder, elements[i].value);
                     form.appendChild(d);
                 } else if (elements[i].type == "checkbox") {
-                    var e = Search.buildCheckbox(elements[i].group, elements[i].value, elements[i].isChecked);
+                    var e = Search.buildCheckbox(elements[i].group, elements[i].value, elements[i].isChecked, elements[i].tooltip);
                     ul.appendChild(e);
                 }
             }
@@ -191,5 +196,5 @@ var searchBarElements = [
     {group: "Bedrooms", type: "dropdown", values: ["Any", "1", "2", "3", "4", "5", "6+"]},
     {group: "Bathrooms", type: "dropdown", values: ["Any", "1", "2", "3+"]},
     {group: "Price", type: "input", value: data.default_value, placeholder: "Price/week"},
-    {group: "Adaptivesearch", type: "checkbox", value: "Adaptive search", isChecked: false}
+{group: "Adaptivesearch", type: "checkbox", value: "Adaptive search", isChecked: false, tooltip: "Group values based on how they are likely to be close to search parameters"}
 ];
