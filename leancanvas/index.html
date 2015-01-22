@@ -174,7 +174,7 @@
             function editNoteHandler() {
                 var note = this.this;
                 var dir = note.parent;
-                NoteEditor.show(note.text, note.tag, "New note for \"" + dir.name + "\"", {}, function(data, value, tag) {
+                NoteEditor.show(note.text, note.tag, "Edit note for \"" + dir.name + "\"", {}, function(data, value, tag) {
                     // modify text value of a note
                     note.modify(value, tag);
                     updateDOM();
