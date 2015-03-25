@@ -54,7 +54,7 @@ var CONTENT_LAYOUT = function() {
             var fcontent = {
                 left: [
                     { type: "text", id: null, class: "hMargined_large", text: "@2014 Lean Canvas" },
-                    { type: "link", id: null, class: "hMargined_large", text: "About", url: "http://sadikovi.github.io/leancanvas/about/", target: "blank" }
+                    { type: "link", id: null, class: "hMargined_large", text: "About", url: "about.html", target: "blank" }
                 ],
                 right: [
                     { type: "link", id: null, class: "hMargined_large", text: "@sadikovi", url: "https://github.com/sadikovi/", target: "blank" }
