@@ -1,0 +1,147 @@
+
+// general
+@notcenter-height: 58px;
+@notcenter-border-radius: 4px;
+@notcenter-font-size: 12px;
+@notcenter-line-height: 16px;
+@notcenter-display-inline-block: inline-block;
+@notcenter-display-none: none;
+
+// notification types
+@notcenter-error-background: #fef1f1;
+@notcenter-error-border-color: #e2a8a8;
+@notcenter-error-color: #d46d6d;
+
+@notcenter-warning-background: #fffae4;
+@notcenter-warning-border-color: #f4cd33;
+@notcenter-warning-color: #c39d02;
+
+@notcenter-success-background: #e8f7ed;
+@notcenter-success-border-color: #30b661;
+@notcenter-success-color: #1ba84e;
+
+// general (info) type
+@notcenter-background: #e8f7ed;
+@notcenter-border-color: #bdc4c9;
+@notcenter-color: #aaa;
+
+// loading indicator
+@notcenter-loading-indicator-width: 14px;
+@notcenter-loading-indicator-masked-width: 16px;
+@notcenter-loading-indicator-border: 3px solid;
+@notcenter-loading-indicator-mask-width: 10px;
+
+// internal classes
+@notcenter-link-color: #4183c4;
+
+div.notification-center { height: @notcenter-height; }
+
+div.notification {
+    border-radius: @notcenter-border-radius;
+    border: 1px solid @notcenter-border-color;
+    color: @notcenter-color;
+    margin: 8px;
+    padding: 8px 16px 8px 16px;
+    font-size: @notcenter-font-size;
+    line-height: @notcenter-line-height;
+    .notification-on;
+}
+
+.notification-on { display: @notcenter-display-inline-block; }
+
+.notification-off { display: @notcenter-display-none; }
+
+/* styles for different types of notifications */
+.notification.notification-error {
+    background-color: @notcenter-error-background;
+    border-color: @notcenter-error-border-color;
+    color: @notcenter-error-color;
+}
+
+.notification.notification-warning {
+    background-color: @notcenter-warning-background;
+    border-color: @notcenter-warning-border-color;
+    color: @notcenter-warning-color;
+}
+
+.notification.notification-success {
+    background-color: @notcenter-success-background;
+    border-color: @notcenter-success-border-color;
+    color: @notcenter-success-color;
+}
+
+/* loading indicator */
+
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@-o-keyframes spin {
+    from { -o-transform: rotate(0deg); }
+    to { -o-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* styles for loading indicator to match notification type */
+.loading-indicator {
+    border-color: @notcenter-color;
+    width: @notcenter-loading-indicator-width;
+    height: @notcenter-loading-indicator-width;
+}
+
+.loading-indicator.loading-indicator-error { border-color: @notcenter-error-color; }
+
+.loading-indicator.loading-indicator-warning { border-color: @notcenter-warning-color; }
+
+.loading-indicator.loading-indicator-success { border-color: @notcenter-success-color; }
+
+.loading-indicator-spinner {
+    width: @notcenter-loading-indicator-width;
+    height: @notcenter-loading-indicator-width;
+    -webkit-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+}
+
+.loading-indicator-mask {
+    width: @notcenter-loading-indicator-mask-width;
+    height: @notcenter-loading-indicator-mask-width;
+    overflow: hidden;
+}
+
+.loading-indicator-masked-circle {
+    width: @notcenter-loading-indicator-masked-width;
+    height: @notcenter-loading-indicator-masked-width;
+    border: @notcenter-loading-indicator-border;
+    border-radius: @notcenter-loading-indicator-mask-width;
+}
+
+
+/*******************/
+/* internal styles */
+.notification-content-cell {
+    display: @notcenter-display-inline-block;
+    margin: 0 4px;
+}
+
+a.notification-control {
+    color: @notcenter-link-color;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+a.notification-control:link,
+.notification-control:focus,
+.notification-control:visited,
+.notification-control:active {
+    text-decoration: none;
+}
+
+a.notification-control:hover {
+    text-decoration: underline;
+}

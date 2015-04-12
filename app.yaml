@@ -1,0 +1,33 @@
+application: decent-core-91323
+version: 1-0
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+# main webpage handler
+- url: /
+  static_files: main.html
+  upload: main.html
+
+- url: /index\.html
+  static_files: main.html
+  upload: main.html
+
+# resources handlers
+- url: /styles/(.*\.(less|css|eot|otf|svg|ttf|woff|woff2))$
+  static_files: styles/\1
+  upload: styles/(.*\.(less|css|eot|otf|svg|ttf|woff|woff2))$
+
+- url: /scripts/(.*\.(js|coffee))$
+  static_files: lib/src/\1
+  upload: lib/src/(.*\.(js|coffee))$
+
+- url: /fonts/(.*\.(ttf))$
+  static_files: fonts/\1
+  upload: fonts/(.*\.(ttf))$
+
+
+libraries:
+- name: webapp2
+  version: latest

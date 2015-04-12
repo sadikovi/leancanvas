@@ -1,0 +1,614 @@
+// Name:            Utility
+// Description:     Collection of useful utility classes to style your content
+//
+// Component:       `pl-container-*`
+//                  `pl-clearfix`
+//                  `pl-nbfc-*`
+//                  `pl-float-*`
+//                  `pl-align-*`
+//                  `pl-vertical-align-*`
+//                  `pl-height-*`
+//                  `pl-responsive-*`
+//                  `pl-margin-*`
+//                  `pl-border-*`
+//                  `pl-heading-*`
+//                  `pl-link-*`
+//                  `pl-scrollable-*`
+//                  `pl-overflow-container`
+//                  `pl-position-*`
+//                  `pl-display-*`
+//                  `pl-visible-*`
+//                  `pl-hidden-*`
+//                  `pl-invisible`
+//
+// Used by:         Overlay
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@utility-container-max-width:                   980px;
+@utility-container-padding-horizontal:          25px;
+
+@utility-container-large-max-width:             1200px;
+@utility-container-large-padding-horizontal:    35px;
+
+@utility-align-horizontal:                      15px;
+@utility-align-vertical:                        15px;
+
+@utility-height-viewport-min-height:            600px;
+
+@utility-margin:                                15px;
+@utility-margin-small:                          5px;
+@utility-margin-large:                          50px;
+@utility-margin-massive:                        100px;
+
+@utility-border-rounded:                        5px;
+
+@utility-heading-large-small-font-size:         36px;
+@utility-heading-large-small-line-height:       42px;
+@utility-heading-large-font-size:               52px;
+@utility-heading-large-line-height:             64px;
+
+@utility-link-muted-color:                      #999;
+@utility-link-muted-hover-color:                #999;
+
+@utility-scrollable-text-height:                300px;
+
+@utility-scrollable-box-height:                 170px;
+@utility-scrollable-box-padding:                10px;
+@utility-scrollable-box-border:                 #ddd;
+@utility-scrollable-box-border-width:           1px;
+
+@breakpoint-small:                              480px;
+@breakpoint-medium:                             768px;
+@breakpoint-large:                              960px;
+@breakpoint-xlarge:                             1220px;
+@breakpoint-mini-max:                           (@breakpoint-small - 1);
+@breakpoint-small-max:                          (@breakpoint-medium - 1);
+@breakpoint-medium-max:                         (@breakpoint-large - 1);
+@breakpoint-large-max:                          (@breakpoint-xlarge - 1);
+
+/* ========================================================================
+   Component: Utility
+ ========================================================================== */
+
+/* Container
+ ========================================================================== */
+
+.pl-container {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    max-width: @utility-container-max-width;
+    padding: 0 @utility-container-padding-horizontal;
+    .hook-container;
+}
+
+/* Large screen and bigger */
+@media (min-width: @breakpoint-xlarge) {
+
+    .pl-container {
+        max-width: @utility-container-large-max-width;
+        padding: 0 @utility-container-large-padding-horizontal;
+    }
+
+}
+
+/*
+ * Micro clearfix
+ */
+
+.pl-container:before,
+.pl-container:after {
+    content: "";
+    display: table;
+}
+
+.pl-container:after { clear: both; }
+
+/*
+ * Center container
+ */
+
+.pl-container-center {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+
+/* Clearing
+ ========================================================================== */
+
+/*
+ * Micro clearfix
+* `table-cell` is used with `:before` because `table` creates a 1px gap when it becomes a flex item, only in Webkit
+ * `table` is used again with `:after` because `clear` only works with block elements.
+ * Note: `display: block` with `overflow: hidden` is currently not working in the latest Safari
+ */
+
+.pl-clearfix:before {
+    content: "";
+    display: table-cell;
+}
+
+.pl-clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/*
+ *  Create a new block formatting context
+ */
+
+.pl-nbfc { overflow: hidden; }
+
+.pl-nbfc-alt {
+    display: table-cell;
+    width: 10000px;
+}
+
+
+/* Alignment of block elements
+ ========================================================================== */
+
+/*
+ * Float blocks
+ * 1. Prevent content overflow on small devices
+ */
+
+.pl-float-left { float: left; }
+.pl-float-right { float: right; }
+
+/* 1 */
+[class*='pl-float-'] { max-width: 100%; }
+
+
+/* Alignment of images and objects
+ ========================================================================== */
+
+/*
+ * Alignment
+ */
+
+[class*='pl-align-'] {
+    display: block;
+    margin-bottom: @utility-align-vertical;
+}
+
+.pl-align-left {
+    margin-right: @utility-align-horizontal;
+    float: left;
+}
+
+.pl-align-right {
+    margin-left: @utility-align-horizontal;
+    float: right;
+}
+
+/* Tablet and bigger */
+@media (min-width: @breakpoint-medium) {
+
+    .pl-align-medium-left {
+        margin-right: @utility-align-horizontal;
+        margin-bottom: @utility-align-vertical;
+        float: left;
+    }
+
+    .pl-align-medium-right {
+        margin-left: @utility-align-horizontal;
+        margin-bottom: @utility-align-vertical;
+        float: right;
+    }
+
+}
+
+.pl-align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Vertical alignment
+ ========================================================================== */
+
+/*
+ * Remove whitespace between child elements when using `inline-block`
+ */
+
+.pl-vertical-align { font-size: 0.001px; }
+
+/*
+ *  The `pl-vertical-align` container needs a specific height
+ */
+
+.pl-vertical-align:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+/*
+ * Sub-object which can have any height
+ * 1. Reset whitespace hack
+ */
+
+.pl-vertical-align-middle,
+.pl-vertical-align-bottom {
+    display: inline-block;
+    max-width: 100%;
+    /* 1 */
+    font-size: 1rem;
+}
+
+.pl-vertical-align-middle { vertical-align: middle; }
+.pl-vertical-align-bottom { vertical-align: bottom; }
+
+
+/* Height
+ ========================================================================== */
+
+/*
+ * More robust if padding and border are used
+ */
+
+[class*='pl-height'] {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*
+ * Useful to extend the `html` and `body` element to the full height of the page.
+ */
+
+.pl-height-1-1 { height: 100%; }
+
+/*
+ * Useful to create image teasers
+ */
+
+.pl-height-viewport {
+    height: 100vh;
+    min-height: @utility-height-viewport-min-height;
+}
+
+
+/* Responsive objects
+ * Note: Images are already responsive by default, see Base component
+ ========================================================================== */
+
+/*
+ * 1. Corrects `max-width` and `max-height` behavior if padding and border are used
+ */
+
+.pl-responsive-width,
+.pl-responsive-height {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*
+ * Responsiveness: Sets a maximum width relative to the parent and auto scales the height
+ * `important` needed to override `pl-img-preserve img`
+ */
+
+.pl-responsive-width {
+    max-width: 100% !important;
+    height: auto;
+}
+
+/*
+ * Responsiveness: Sets a maximum height relative to the parent and auto scales the width
+ * Only works if the parent element has a fixed height.
+ */
+
+.pl-responsive-height {
+    max-height: 100%;
+    width: auto;
+}
+
+
+/* Margin
+ ========================================================================== */
+
+/*
+ * Create a block with the same margin of a paragraph
+ * Add margin if adjacent element
+ */
+
+.pl-margin { margin-bottom: @utility-margin; }
+* + .pl-margin { margin-top: @utility-margin; }
+
+.pl-margin-top { margin-top: @utility-margin !important; }
+.pl-margin-bottom { margin-bottom: @utility-margin !important; }
+.pl-margin-left { margin-left: @utility-margin !important; }
+.pl-margin-right { margin-right: @utility-margin !important; }
+.pl-margin-all { margin: @utility-margin !important; }
+
+/*
+ * Larger margins
+ */
+
+.pl-margin-large { margin-bottom: @utility-margin-large; }
+* + .pl-margin-large { margin-top: @utility-margin-large; }
+
+.pl-margin-large-top { margin-top: @utility-margin-large !important; }
+.pl-margin-large-bottom { margin-bottom: @utility-margin-large !important; }
+.pl-margin-large-left { margin-left: @utility-margin-large !important; }
+.pl-margin-large-right { margin-right: @utility-margin-large !important; }
+.pl-margin-large-all { margin: @utility-margin-large !important; }
+
+/*
+ * Massive margins
+ */
+
+.pl-margin-massive { margin-bottom: @utility-margin-massive; }
+* + .pl-margin-massive { margin-top: @utility-margin-massive; }
+
+.pl-margin-massive-top { margin-top: @utility-margin-massive !important; }
+.pl-margin-massive-bottom { margin-bottom: @utility-margin-massive !important; }
+.pl-margin-massive-left { margin-left: @utility-margin-massive !important; }
+.pl-margin-massive-right { margin-right: @utility-margin-massive !important; }
+.pl-margin-massive-all { margin: @utility-margin-massive !important; }
+
+
+/*
+ * Smaller margins
+ */
+
+.pl-margin-small { margin-bottom: @utility-margin-small; }
+* + .pl-margin-small { margin-top: @utility-margin-small; }
+
+.pl-margin-small-top { margin-top: @utility-margin-small !important; }
+.pl-margin-small-bottom { margin-bottom: @utility-margin-small !important; }
+.pl-margin-small-left { margin-left: @utility-margin-small !important; }
+.pl-margin-small-right { margin-right: @utility-margin-small !important; }
+.pl-margin-small-all { margin: @utility-margin-small !important; }
+
+/*
+ * Remove margins
+ */
+
+.pl-margin-remove { margin: 0 !important; }
+.pl-margin-top-remove { margin-top: 0 !important; }
+.pl-margin-bottom-remove { margin-bottom: 0 !important; }
+
+
+/* Border
+ ========================================================================== */
+
+.pl-border-circle { border-radius: 50%; }
+.pl-border-rounded { border-radius: @utility-border-rounded; }
+
+
+/* Headings
+ ========================================================================== */
+
+.pl-heading-large {
+    font-size: @utility-heading-large-small-font-size;
+    line-height: @utility-heading-large-small-line-height;
+}
+
+/* Tablet and bigger */
+@media (min-width: @breakpoint-medium) {
+
+    .pl-heading-large {
+        font-size: @utility-heading-large-font-size;
+        line-height: @utility-heading-large-line-height;
+    }
+
+}
+
+
+/* Link
+ ========================================================================== */
+
+/*
+ * Let links appear in default text color
+ */
+
+.pl-link-muted,
+.pl-link-muted a { color: @utility-link-muted-color; }
+
+.pl-link-muted:hover,
+.pl-link-muted a:hover { color: @utility-link-muted-hover-color; }
+
+/*
+ * Reset link style
+ */
+
+.pl-link-reset,
+.pl-link-reset a,
+.pl-link-reset:hover,
+.pl-link-reset a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* Scrollable
+ ========================================================================== */
+
+/*
+ * Enable scrolling for preformatted text
+ */
+
+.pl-scrollable-text {
+    height: @utility-scrollable-text-height;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    resize: both;
+}
+
+/*
+ * Box with scrolling enabled
+ */
+
+.pl-scrollable-box {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: @utility-scrollable-box-height;
+    padding: @utility-scrollable-box-padding;
+    border: @utility-scrollable-box-border-width solid @utility-scrollable-box-border;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    resize: both;
+    .hook-scrollable-box;
+}
+
+.pl-scrollable-box > :last-child { margin-bottom: 0; }
+
+
+/* Overflow
+ ========================================================================== */
+
+/*
+ * Enable scrollbars if content is clipped
+ */
+
+.pl-overflow-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.pl-overflow-container > :last-child { margin-bottom: 0; }
+
+
+/* Position
+ ========================================================================== */
+
+.pl-position-absolute,
+[class*='pl-position-top'],
+[class*='pl-position-bottom'] { position: absolute !important; }
+
+.pl-position-top {
+    top: 0;
+    width: 100%;
+}
+
+.pl-position-bottom {
+    bottom: 0;
+    width: 100%;
+}
+
+.pl-position-top-left {
+    top: 0;
+    left: 0;
+}
+
+.pl-position-top-right {
+    top: 0;
+    right: 0;
+}
+
+.pl-position-bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.pl-position-bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+/*
+ * Cover
+ */
+
+.pl-position-cover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/*
+ * Relative
+ */
+
+.pl-position-relative { position: relative !important; }
+
+
+/* Display
+ ========================================================================== */
+
+/*
+ * Display
+ */
+
+.pl-display-block { display: block !important; }
+.pl-display-inline { display: inline !important; }
+.pl-display-inline-block { display: inline-block !important; }
+
+/*
+ * Visibility
+ * Avoids setting display to `block` so it works also with `inline-block` and `table`
+ */
+
+/* Desktop and bigger */
+@media (min-width: @breakpoint-large) {
+
+    .pl-visible-small { display: none !important; }
+    .pl-visible-medium { display: none !important; }
+    .pl-hidden-large { display: none !important; }
+
+}
+
+/* Tablets portrait */
+@media (min-width: @breakpoint-medium) and (max-width: @breakpoint-medium-max) {
+
+    .pl-visible-small { display: none !important; }
+    .pl-visible-large { display: none !important ; }
+    .pl-hidden-medium { display: none !important; }
+
+}
+
+/* Phone landscape and smaller*/
+@media (max-width: @breakpoint-small-max) {
+
+    .pl-visible-medium { display: none !important; }
+    .pl-visible-large { display: none !important; }
+    .pl-hidden-small { display: none !important; }
+
+}
+
+/* Remove from the flow and screen readers on any device */
+.pl-hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* It's hidden, but still affects layout */
+.pl-invisible { visibility: hidden !important; }
+
+/* Show on hover */
+.pl-visible-hover:hover .pl-hidden,
+.pl-visible-hover:hover .pl-invisible {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.pl-visible-hover-inline:hover .pl-hidden,
+.pl-visible-hover-inline:hover .pl-invisible {
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+/* Hide on touch */
+.pl-touch .pl-hidden-touch,
+.pl-notouch .pl-hidden-notouch { display: none !important; }
+
+
+// Hooks
+// ========================================================================
+
+.hook-utility-misc;
+
+.hook-container() {}
+.hook-scrollable-box() {}
+.hook-utility-misc() {}

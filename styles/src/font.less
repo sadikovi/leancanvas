@@ -1,0 +1,47 @@
+// font family
+@pl-font-family: 'Open Sans';
+// font paths
+@pl-font-path-light: "../fonts/opensans/OpenSans-Light.ttf";
+@pl-font-path-regular: "../fonts/opensans/OpenSans-Regular.ttf";
+@pl-font-path-semibold: "../fonts/opensans/OpenSans-Semibold.ttf";
+@pl-font-path-bold: "../fonts/opensans/OpenSans-Bold.ttf";
+@pl-font-path-extrabold: "../fonts/opensans/OpenSans-ExtraBold.ttf";
+// file format
+@pl-font-format-truetype: "truetype";
+
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-light) format(@pl-font-format-truetype);
+    font-weight: 300; font-style: normal;
+}
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-regular) format(@pl-font-format-truetype);
+    font-weight: 400; font-style: normal;
+}
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-regular) format(@pl-font-format-truetype);
+    font-weight: 500; font-style: normal;
+}
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-semibold) format(@pl-font-format-truetype);
+    font-weight: 600; font-style: normal;
+}
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-bold) format(@pl-font-format-truetype);
+    font-weight: 700; font-style: normal;
+}
+
+@font-face {
+    font-family: @pl-font-family;
+    src: url(@pl-font-path-extrabold) format(@pl-font-format-truetype);
+    font-weight: 800; font-style: normal;
+}
