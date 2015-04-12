@@ -1,0 +1,71 @@
+# search for dropdown elements
+# on click show menu / hide
+
+class Dropdown
+    constructor: (@dropdown, @menu, @isopen=false) ->
+        @assignPropertyToAllChildren @dropdown, "_parent_", @
+        for x in @dropdown.childNodes
+            @addEventListener(x, "click", (e)=> @toggle()) unless x == @menu
+        @close()
+        # add event handler related to document
+        @addEventListener document, "click", (e)=> @close() unless "_parent_" of e.target
+
+    toggle: -> if @isopen then @close() else @open()
+
+    close: ->
+        @removeClass @menu, "transition", "visible"
+        @addClass @menu, "transition", "hidden"
+        @isopen = false
+
+    open: ->
+        @removeClass @menu, "transition", "hidden"
+        @addClass @menu, "transition", "visible"
+        @isopen = true
+
+    addClass: (elem, classes...) ->
+        c = elem.className.split " "
+        m = c.concat (x for x in classes when x and x not in c)
+        elem.className = m.join " "
+
+    removeClass: (elem, classes...) ->
+        c = elem.className.split " "
+        elem.className = (x for x in c when x not in classes).join " "
+
+    addEventListener: (elem, event, handler) ->
+        if elem.addEventListener
+            elem.addEventListener event, handler, false
+        else if elem.attachEvent
+            elem.attachEvent 'on'+event, handler
+        else
+            elem['on'+event] = handler
+
+    assignPropertyToAllChildren: (elem, propname, propvalue) ->
+        if elem.hasChildNodes()
+            @assignPropertyToAllChildren x, propname, propvalue for x in elem.childNodes
+        elem[propname] = propvalue
+
+
+class DropdownCenter
+    constructor: (@parent=document) ->
+        @list = []
+
+    search: (parent) ->
+        @parent = parent ? @parent
+        # all div elements in parent
+        d = @parent.getElementsByTagName "div"
+        # all div elements with class "dropdown"
+        e = (x for x in d when "dropdown" in x.className.split " ")
+        # all div elements with class "dropdown" and child "menu"
+        for x in e
+            f = x.childNodes
+            for g in f
+                if "menu" in g.className.split " "
+                    # create dropdown object
+                    dr = new Dropdown x, g
+                    # append to the list
+                    @list.push dr
+                    # iterate to the next dropdown
+                    break
+        # all dropdowns are in the list
+
+@dropdownCenter ?= new DropdownCenter
