@@ -7,6 +7,14 @@ class Mapper
         parent.appendChild t if parent
         return t
 
+    addEventListener: (elem, event, handler) ->
+        if elem.addEventListener
+            elem.addEventListener event, handler, false
+        else if elem.attachEvent
+            elem.attachEvent 'on'+event, handler
+        else
+            elem['on'+event] = handler
+
     # parses map for parent specified
     # does not do anything, if map or parent is undefined
     parseMapForParent: (map, parent) =>
@@ -24,6 +32,8 @@ class Mapper
             optionselected: 'optionselected'
             children: 'children'
             text_last: 'text_last' # add children before HTML text
+            onclick: 'onclick' # adds onclick event
+            onkeyup: 'onkeyup' # adds onkeyup event
         # return of something is wrong
         return false unless map
         # map can be object or array, or DOM element
@@ -43,6 +53,11 @@ class Mapper
             c.type = map[mprs.inputtype] if mprs.inputtype of map
             c.placeholder = map[mprs.placeholder] if mprs.placeholder of map
             c.selected = map[mprs.optionselected] if mprs.optionselected of map
+            # events
+            if mprs.onclick of map and map[mprs.onclick]
+                @addEventListener c, 'click', (e) -> map[mprs.onclick].call @, e
+            if mprs.onkeyup of map and map[mprs.onkeyup]
+                @addEventListener c, 'keyup', (e) -> map[mprs.onkeyup].call @, e
             # add DOM element text node
             if mprs.title of map
                 t = document.createTextNode map[mprs.title]
@@ -55,7 +70,6 @@ class Mapper
                 else
                     map[mprs.children] = [t]
             @parseMapForParent map[mprs.children], c if mprs.children of map
-
         else
             @parseMapForParent item, parent for item in map
         # return element

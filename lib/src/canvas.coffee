@@ -1,11 +1,11 @@
 class Tag
     # colors:
-    @colors = ["yellow", "green", "blue", "orange", "purple", "red", "pink", "teal"]
-    constructor: (@id="Default", @color=Tag.colors[0], @children=[]) -> @type = "tag"
-    json: -> type: @type, id: @id, color: @color, children: (x.json() for x in @children)
+    @colors: ["yellow", "green", "blue", "orange", "purple", "red", "pink", "teal"]
+    constructor: (@id, @name, @color=Tag.colors[0], @children=[]) -> @type = "tag"
+    json: -> type: @type, id: @id, name: @name, color: @color, children: (x.json() for x in @children)
     dom: (withname=false) ->
         if withname
-            type: "div", cls: "ui tiny #{@color} label", title: @id
+            type: "div", cls: "ui tiny #{@color} label", title: @name
         else
             type: "div", cls: "ui empty circular #{@color} label"
 

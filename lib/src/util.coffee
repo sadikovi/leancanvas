@@ -10,6 +10,8 @@ class Util
         parent.appendChild elem if parent
         return elem
 
+    clear: (elem) -> elem.innerHTML = "" if elem
+
     addEventListener: (elem, event, handler) ->
         if elem.addEventListener
             elem.addEventListener event, handler, false

@@ -21,14 +21,5 @@ class Collection
                     cls: "ui fixed main menu"
                     children: leftelements
 
-    createCanvasDivider: () ->
-        divider =
-            type: "div"
-            cls: "row"
-            children:
-                type: "div"
-                cls: "divider"
-
-
 
 @collection ?= new Collection

@@ -1,5 +1,8 @@
-_canvas = document.getElementById "ln-canvas"
-throw ("Canvas is not found") unless _canvas
+canvasmenu = document.getElementById "ln-canvas-menu"
+canvasbody = document.getElementById "ln-canvas-body"
+canvastags = document.getElementById "ln-canvas-tags"
+# check that elements are in place
+throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags
 
 # build menu
 leftmenu = [
@@ -57,12 +60,10 @@ rightmenu = [
                 ]
         ]
 ]
-
-mainmenu = @mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), _canvas
-divider = @mapper.parseMapForParent @collection.createCanvasDivider(), _canvas
-
+# draw menu
+@mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), canvasmenu
 # find dropdown menus
-@dropdownCenter.search mainmenu
+@dropdownCenter.search canvasmenu
 
 # create canvas
 actions = ->
@@ -81,7 +82,7 @@ parseTags = (notetags, alltags, collect) ->
         # note tag
         continue unless "type" of notetag and notetag.type == "tag"
         if collect and notetag.id not in (x.id for x in alltags)
-            tag = new @Tag notetag.id, notetag.color
+            tag = new @Tag notetag.id, notetag.name, notetag.color
             propertags.push tag
             alltags.push tag
         else
@@ -124,4 +125,10 @@ recurLayout = (list, type, collect, alltags, actions) ->
     return result
 
 canvaslayout = layout @defaultlayout, actions()
-@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), _canvas
+tagmanager = new @TagManager canvastags, @Tag, canvaslayout.tags, =>
+    @util.clear tagmanager.parent
+    @mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+# create tag layout
+@mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+# draw canvas layout
+@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody

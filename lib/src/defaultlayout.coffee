@@ -93,7 +93,18 @@
     ]
     tags: [
         sampletag =
-            id: "sample"
+            id: "sample123"
+            name: "important"
             type: "tag"
-            color: "blue"
+            color: "red"
+        anothertag =
+            id: "idea123"
+            name: "idea"
+            type: "tag"
+            color: "yellow"
+        startups =
+            id: "cookie123"
+            name: "cookie"
+            type: "tag"
+            color: "purple"
     ]
