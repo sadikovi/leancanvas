@@ -1,5 +1,4 @@
 class Tag
-    # colors:
     @colors: ["yellow", "green", "blue", "orange", "purple", "red", "pink", "teal"]
     constructor: (@id, @name, @color=Tag.colors[0], @children=[]) -> @type = "tag"
     json: -> type: @type, id: @id, name: @name, color: @color, children: (x.json() for x in @children)
@@ -14,8 +13,8 @@ class Action
     constructor: (@id, @name, @handler, @icon) -> @type = "action"
     json: -> type: @type, id: @id, name: @name, icon: @icon
     dom: ->
-        type: "a"
-        cls: @id
+        type: "button"
+        cls: "ui secondary basic mini compact button #{@id}"
         title: @name
         text_last: true
         children: if @icon then type: "i", cls: "#{@icon} icon" else []
@@ -67,26 +66,29 @@ class Directory
         # dom
         directory =
             type: "div"
-            cls: "item pl-margin-top pl-margin-bottom"
+            cls: "item"
             children:
                 type: "div"
                 cls: "content"
-                children: [
-                    header =
-                        type: "h5"
-                        cls: "header"
-                        title: @name
-                    actions =
-                        type: "div"
-                        cls: "meta"
-                        children: (x.dom() for x in @actions)
-                    content =
-                        type: "div"
-                        cls: "description"
-                        children:
-                            type: "p"
-                            children: directoryChildren
-                ]
+                children:
+                    type: "div"
+                    cls: "ui segment pl-height-medium"
+                    children: [
+                        header =
+                            type: "div"
+                            cls: "ui top attached label"
+                            title: "#{@name}"
+                        actions =
+                            type: "div"
+                            cls: "meta"
+                            children: (x.dom() for x in @actions)
+                        content =
+                            type: "div"
+                            cls: "description pl-margin-small-top"
+                            children:
+                                type: "p"
+                                children: directoryChildren
+                    ]
 
 
 class Column
@@ -97,7 +99,7 @@ class Column
         cls: "column"
         children:
             type: "div"
-            cls: "ui divided items"
+            cls: "ui items"
             children: (x.dom() for x in @children)
 
 

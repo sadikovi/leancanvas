@@ -61,9 +61,9 @@ rightmenu = [
         ]
 ]
 # draw menu
-@mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), canvasmenu
+#@mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), canvasmenu
 # find dropdown menus
-@dropdownCenter.search canvasmenu
+#@dropdownCenter.search canvasmenu
 
 # create canvas
 actions = ->
@@ -72,7 +72,7 @@ actions = ->
         new @Action "delete", "Delete", null, "delete"
     ]
     directory: [
-        new @Action "add", "Add note", null, "add"
+        new @Action "add", "+ note", null, null
     ]
 
 parseTags = (notetags, alltags, collect) ->
@@ -129,6 +129,14 @@ tagmanager = new @TagManager canvastags, @Tag, canvaslayout.tags, =>
     @util.clear tagmanager.parent
     @mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
 # create tag layout
-@mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+#@mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
 # draw canvas layout
-@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
+#@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
+
+
+editor = new @Editor @mapper, -> console.log "test"
+editor.show("Edit note for directory 1", "Hello World!", (status, text, meta) ->
+    console.log status, text, meta
+    editor.hide()
+)
+@dropdownCenter.search editor.itself, (status, parent, elem) -> console.log status, elem

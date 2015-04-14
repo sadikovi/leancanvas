@@ -2,10 +2,12 @@
 # on click show menu / hide
 
 class Dropdown
-    constructor: (@dropdown, @menu, @isopen=false) ->
+    constructor: (@dropdown, @menu) ->
         @assignPropertyToAllChildren @dropdown, "_parent_", @
-        for x in @dropdown.childNodes
-            @addEventListener(x, "click", (e)=> @toggle()) unless x == @menu
+        #for x in @dropdown.childNodes
+        #    @addEventListener(x, "click", (e)=> @toggle()) unless x == @menu
+        @addEventListener @dropdown, "click", (e)=> @toggle()
+        @isopen = false
         @close()
         # add event handler related to document
         @addEventListener document, "click", (e)=> @close() unless "_parent_" of e.target
@@ -44,12 +46,37 @@ class Dropdown
             @assignPropertyToAllChildren x, propname, propvalue for x in elem.childNodes
         elem[propname] = propvalue
 
+class SelectDropdown extends Dropdown
+    constructor: (dropdown, menu, @onselect) ->
+        super dropdown, menu
+        for elem in menu.childNodes
+            elem._parent = @
+            @unselect elem
+            @addEventListener elem, "click", (e) ->
+                e.stopPropagation()
+                e.preventDefault()
+                if @_isselected_
+                    @_parent.unselect @
+                    @_parent.onselect?(false, @_parent, @)
+                else
+                    @_parent.select @
+                    @_parent.onselect?(true, @_parent, @)
+
+    select: (elem) ->
+        @addClass elem, "selected"
+        elem._isselected_ = document.createElement "i", elem
+        elem._isselected_.className = "checkmark icon"
+        elem.insertBefore elem._isselected_, elem.firstChild if elem.firstChild
+
+    unselect: (elem) ->
+        @removeClass elem, "selected"
+        elem.removeChild elem._isselected_ if elem._isselected_
+        elem._isselected_ = false
 
 class DropdownCenter
-    constructor: (@parent=document) ->
-        @list = []
+    constructor: (@parent=document) -> @list = []
 
-    search: (parent) ->
+    search: (parent, onselect) ->
         @parent = parent ? @parent
         # all div elements in parent
         d = @parent.getElementsByTagName "div"
@@ -59,9 +86,12 @@ class DropdownCenter
         for x in e
             f = x.childNodes
             for g in f
-                if "menu" in g.className.split " "
+                if g.className and "menu" in g.className.split " "
                     # create dropdown object
-                    dr = new Dropdown x, g
+                    if "selectable" in g.className.split " "
+                        dr = new SelectDropdown x, g, onselect
+                    else
+                        dr = new Dropdown x, g
                     # append to the list
                     @list.push dr
                     # iterate to the next dropdown

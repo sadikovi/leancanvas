@@ -18,6 +18,8 @@ class Mapper
     # parses map for parent specified
     # does not do anything, if map or parent is undefined
     parseMapForParent: (map, parent) =>
+        # return if something is wrong
+        return false unless map
         # mappers
         mprs =
             type: 'type'
@@ -34,13 +36,10 @@ class Mapper
             text_last: 'text_last' # add children before HTML text
             onclick: 'onclick' # adds onclick event
             onkeyup: 'onkeyup' # adds onkeyup event
-        # return of something is wrong
-        return false unless map
         # map can be object or array, or DOM element
         if "nodeName" of map
             # hack - add DOM element
-            c = map
-            parent.appendChild c if parent
+            parent.appendChild map if parent
         else if mprs.type of map
             # create object and add to parent
             c = @createElement map[mprs.type], parent
