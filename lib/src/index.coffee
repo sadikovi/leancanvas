@@ -61,19 +61,9 @@ rightmenu = [
         ]
 ]
 # draw menu
-#@mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), canvasmenu
+@mapper.parseMapForParent @collection.createMenu(leftmenu, rightmenu), canvasmenu
 # find dropdown menus
-#@dropdownCenter.search canvasmenu
-
-# create canvas
-actions = ->
-    note: [
-        new @Action "edit", "Edit", null, "edit"
-        new @Action "delete", "Delete", null, "delete"
-    ]
-    directory: [
-        new @Action "add", "+ note", null, null
-    ]
+@dropdownCenter.search canvasmenu
 
 parseTags = (notetags, alltags, collect) ->
     propertags = []
@@ -89,17 +79,32 @@ parseTags = (notetags, alltags, collect) ->
             propertags.push x for x in alltags when x.id == notetag.id
     return propertags
 
-layout = (object, actions) ->
+layoutParseTags = (object) ->
+    alltags = if "tags" of object then object.tags else []
+    parseTags alltags, [], true
+
+canvaslayouttags = layoutParseTags @defaultlayout
+tagmanager = new @TagManager canvastags, @Tag, canvaslayouttags, =>
+    @util.clear tagmanager.parent
+    @mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+# create tag layout
+@mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+# create editor
+editor = new @Editor @mapper, @dropdownCenter
+showEditor = ->
+    editor.show "Edit note for directory 1", "Hello World!", (status, text, meta) ->
+        console.log status, text, meta
+        editor.hide()
+    , tagmanager.getAllTags(), []
+
+layout = (object, alltags, actions) ->
     return false unless object
     # domains list, data array, and all tags list
-    [domains, data, alltags] = [[], object.data, if "tags" of object then object.tags else []]
+    [domains, data] = [[], object.data]
     return false unless data
-    # parse all tags if provided
-    alltags = parseTags alltags, [], true
-    collect = if alltags.length == 0 then true else false
     # parse data (convert into array, if necessary)
     data = [data] if "type" of data or "id" of data or "children" of data
-    domains = recurLayout data, "domain", collect, alltags, actions
+    domains = recurLayout data, "domain", false, alltags, actions
     return data: domains, tags: alltags
 
 recurLayout = (list, type, collect, alltags, actions) ->
@@ -116,27 +121,17 @@ recurLayout = (list, type, collect, alltags, actions) ->
             element = new @Column item.id
             element.children = recurLayout item.children, "directory", collect, alltags, actions
         else if type == "directory"
-            element = new @Directory item.id, item.name, item.placeholder, actions.directory
+            action = new @Action "add", "+ note", (meta)-> console.log meta
+            element = new @Directory item.id, item.name, item.placeholder, [action]
             element.children = recurLayout item.children, "note", collect, alltags, actions
         else if type == "note"
             tags = parseTags item.tags, alltags, collect
-            element = new @Note item.id, item.text, tags, actions.note
+            edit = new @Action "edit", "Edit", ((meta)-> console.log meta), "edit"
+            del = new @Action "delete", "Delete", ((meta)-> console.log meta), "delete"
+            element = new @Note item.id, item.text, tags, [edit, del]
         result.push element if element
     return result
 
-canvaslayout = layout @defaultlayout, actions()
-tagmanager = new @TagManager canvastags, @Tag, canvaslayout.tags, =>
-    @util.clear tagmanager.parent
-    @mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
-# create tag layout
-#@mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
+canvaslayout = layout @defaultlayout, canvastags
 # draw canvas layout
-#@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
-
-
-editor = new @Editor @mapper, -> console.log "test"
-editor.show("Edit note for directory 1", "Hello World!", (status, text, meta) ->
-    console.log status, text, meta
-    editor.hide()
-)
-@dropdownCenter.search editor.itself, (status, parent, elem) -> console.log status, elem
+@mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody

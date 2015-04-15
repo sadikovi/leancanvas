@@ -2,7 +2,7 @@ class ModalView
     # generic modal view to show
     constructor: (mapper, @content=[]) ->
         throw ("Mapper is undefined") unless mapper
-        @id = "#{Math.random()}.0"
+        @id = "modalview:#{Math.random()}.0"
         @ishidden = true
         @hideclass = "ui dimmer modals page transition hidden pl-hidden"
         @showclass = "ui dimmer modals page transition visible active"
@@ -89,12 +89,12 @@ class Editor extends ModalView
                                             type: "div"
                                             cls: "ui small secondary basic button"
                                             title: "Ok"
-                                            onclick: => @handler?(true, @textarea.value)
+                                            onclick: => @callback?(true)
                                         cancel =
                                             type: "div"
                                             cls: "ui small secondary basic button"
                                             title: "Cancel"
-                                            onclick: => @handler?(false)
+                                            onclick: => @callback?(false)
                                     ]
                             ]
             ]
@@ -113,64 +113,73 @@ class Editor extends ModalView
         @handler = null
         super()
 
+    callback: (status) ->
+        if status
+            @handler?(status, @textarea.value)
+        else
+            @handler?(status)
+
 
 class NoteEditor extends Editor
-    constructor: (mapper) ->
+    constructor: (@mapper, dropdownCenter) ->
+        @tagsmenu = @mapper.parseMapForParent {type: "div", cls: "menu selectable"}
+        @labels = @mapper.parseMapForParent {type: "div", cls: "item"}
+        @selectedTags = []
         tagselector =
             type: "div"
             cls: "ui segment"
-            children: [
-                selecttags =
-                    type: "div"
-                    cls: "ui floating dropdown small basic button"
-                    title: "Select tags"
-                    children: [
-                        menu =
-                            type: "div"
-                            cls: "menu selectable transition visible"
-                            children: [
-                                item1 =
-                                    type: "div"
-                                    cls: "item"
-                                    title: "Important"
-                                    text_last: true
-                                    children:
-                                        type: "div"
-                                        cls: "ui red empty circular label"
-                                item2 =
-                                    type: "div"
-                                    cls: "item"
-                                    title: "Idea"
-                                    text_last: true
-                                    children:
-                                        type: "div"
-                                        cls: "ui yellow empty circular label"
-                                item3 =
-                                    type: "div"
-                                    cls: "item"
-                                    title: "Startup"
-                                    text_last: true
-                                    children:
-                                        type: "div"
-                                        cls: "ui blue empty circular label"
-                            ]
-                    ]
-                labels =
-                    type: "div"
-                    cls: "ui basic segment"
-                    children:
+            children:
+                type: "div"
+                cls: "ui horizontal list"
+                children: [
+                    selecttags =
                         type: "div"
-                        cls: "ui breadcrumb"
+                        cls: "item"
                         children:
                             type: "div"
-                            cls: "section"
-                            children:
-                                type: "div"
-                                cls: "ui green small label"
-                                title: "sample"
-            ]
-
+                            cls: "ui floating dropdown small basic button"
+                            title: "Select tags"
+                            children: @tagsmenu
+                    @labels
+                ]
         super mapper, tagselector
+        list = dropdownCenter.search(@itself, (status, parent, elem) =>
+            # update labels
+            [@labels.innerHTML, @selectedTags] = ["", []]
+            for elem in parent.menu.childNodes
+                if elem and elem._isselected_ and elem._tag_
+                    @mapper.parseMapForParent elem._tag_.dom(true), @labels
+                    @selectedTags.push elem._tag_
+        )
+        @dropdown = if list and list.length > 0 then list[0] else null
 
+    show: (title, text, handler, alltags=[], notetags=[]) ->
+        [@tagsmenu.innerHTML, @labels.innerHTML, @selectedTags] = ["", "", []]
+        for tag in alltags
+            item =
+                type: "div"
+                id: "#{tag.id}"
+                cls: "item"
+                title: "#{tag.name}"
+                text_last: true
+                children:
+                    type: "div"
+                    cls: "ui #{tag.color} empty circular label"
+            elem = @mapper.parseMapForParent item, @tagsmenu
+            elem._tag_ = tag
+        @dropdown?.update @tagsmenu
+        # update elems
+        for elem in @tagsmenu.childNodes
+            if elem.id in (x.id for x in notetags)
+                @dropdown?.select elem
+                @mapper.parseMapForParent elem._tag_.dom(true), @labels
+                @selectedTags.push elem._tag_
+        super title, text, handler
+
+    callback: (status) ->
+        if status
+            @handler?(status, @textarea.value, @selectedTags)
+        else
+            @handler?(status)
 
 @Editor ?= NoteEditor

@@ -49,7 +49,11 @@ class Dropdown
 class SelectDropdown extends Dropdown
     constructor: (dropdown, menu, @onselect) ->
         super dropdown, menu
-        for elem in menu.childNodes
+        @assignSelectAction()
+
+    assignSelectAction: ->
+        return false unless @menu
+        for elem in @menu.childNodes
             elem._parent = @
             @unselect elem
             @addEventListener elem, "click", (e) ->
@@ -73,10 +77,18 @@ class SelectDropdown extends Dropdown
         elem.removeChild elem._isselected_ if elem._isselected_
         elem._isselected_ = false
 
+    update: (newmenu) ->
+        #@menu.innerHTML = ""
+        @menu = newmenu
+        @assignPropertyToAllChildren @menu, "_parent_", @
+        @assignSelectAction()
+
+
 class DropdownCenter
-    constructor: (@parent=document) -> @list = []
+    constructor: (@parent=document) ->
 
     search: (parent, onselect) ->
+        list = []
         @parent = parent ? @parent
         # all div elements in parent
         d = @parent.getElementsByTagName "div"
@@ -93,9 +105,10 @@ class DropdownCenter
                     else
                         dr = new Dropdown x, g
                     # append to the list
-                    @list.push dr
+                    list.push dr
                     # iterate to the next dropdown
                     break
         # all dropdowns are in the list
+        return list
 
 @dropdownCenter ?= new DropdownCenter

@@ -10,18 +10,21 @@ class Tag
 
 
 class Action
-    constructor: (@id, @name, @handler, @icon) -> @type = "action"
+    constructor: (@id, @name, @handler, @icon, @meta) -> @type = "action"
     json: -> type: @type, id: @id, name: @name, icon: @icon
     dom: ->
         type: "button"
         cls: "ui secondary basic mini compact button #{@id}"
         title: @name
         text_last: true
+        onclick: (e)=> @handler?(@meta)
         children: if @icon then type: "i", cls: "#{@icon} icon" else []
 
 
 class Note
-    constructor: (@id, @text, @tags=[], @actions=[]) -> @type = "note"
+    constructor: (@id, @text, @tags=[], @actions=[]) ->
+        @type = "note"
+        action.meta = @ for action in @actions
     modify: (@text, @tag) ->
     json: -> type: @type, id: @id, tags: (x.json() for x in @tags), text: @text, actions: (x.json() for x in @actions)
     dom: ->
@@ -50,7 +53,9 @@ class Note
 
 
 class Directory
-    constructor: (@id, @name="", @placeholder="", @actions=[], @children=[]) -> @type = "directory"
+    constructor: (@id, @name="", @placeholder="", @actions=[], @children=[]) ->
+        @type = "directory"
+        action.meta = @ for action in @actions
     json: ->
         type: @type
         id: @id
