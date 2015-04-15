@@ -113,6 +113,7 @@ layoutParseTags = (object) ->
 editor = new @Editor @mapper, @dropdownCenter
 
 editNote = (note) ->
+    return false if tagmanager.editmode
     editor.show "Edit note", note.text, (status, text, tags) =>
         if status
             tag.removeNote note for tag in note.tags
@@ -123,14 +124,19 @@ editNote = (note) ->
     , tagmanager.getAllTags(), note.tags
 
 deleteNote = (note) ->
+    return false if tagmanager.editmode
     note.parent?.removeNote note
+    tag.removeNote note for tag in note.tags
     note.parent = null
     refreshCanvas()
 
 addNote = (directory) ->
+    return false if tagmanager.editmode
     editor.show "Add note for [#{directory.name}]", "", (status, text, tags) =>
         if status
-            directory?.addNote new Note "note:#{Math.random()}.0", directory, text, tags, [editNote, deleteNote]
+            note = new Note "note:#{Math.random()}.0", directory, text, tags, [null, editNote, deleteNote]
+            tag.addNote note for tag in tags
+            directory?.addNote note
             refreshCanvas()
         editor.hide()
     , tagmanager.getAllTags(), []

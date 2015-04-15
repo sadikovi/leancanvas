@@ -1,5 +1,5 @@
 class DragUtil
-    constructor: (@draggable=null) ->
+    constructor: -> @draggable=null
 
     addClass: (elem, classes...) ->
         c = elem.className.split " "
@@ -148,3 +148,30 @@ class Dragflix
             e.stopPropagation()
 
     addDropTarget: (dropTarget) -> @dropTargets.push dropTarget
+
+
+class DragHandler
+    constructor: ->
+        @util = new DragUtil
+        @dragflix = new Dragflix @util
+
+        clearDrop: (target) ->
+            @util.hideDraggable();
+            @util.removeClass target, "target-above", "target-empty"
+            @util.removeClass document.body, "noselect"
+
+        changeDirectory: (note, olddir, newdir, targetnote) ->
+            # return if something is undefined
+            return false until note and olddir and newdir
+            # return if target note is note itself
+            return false if targetnote and note == targetnote
+
+            # remove and add notes
+            olddir.removeNote note
+            if targetnote
+                # calculate position
+                pos = i for x, i in newdir.children when x == targetnote
+                newdir.children.splice (if pos > 0 then pos else 0), 0, note
+            else
+                newdir.addNote note
+            note.parent = newdir

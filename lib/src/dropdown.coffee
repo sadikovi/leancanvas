@@ -4,13 +4,13 @@
 class Dropdown
     constructor: (@dropdown, @menu) ->
         @assignPropertyToAllChildren @dropdown, "_parent_", @
-        #for x in @dropdown.childNodes
-        #    @addEventListener(x, "click", (e)=> @toggle()) unless x == @menu
-        @addEventListener @dropdown, "click", (e)=> @toggle()
+        for x in @dropdown.childNodes
+            @addEventListener(x, "click", (e)=> @toggle()) unless x == @menu
         @isopen = false
         @close()
         # add event handler related to document
-        @addEventListener document, "click", (e)=> @close() unless "_parent_" of e.target
+        @addEventListener document, "click", (e)=>
+            @close() unless "_parent_" of e.target and e.target._parent_ == @
 
     toggle: -> if @isopen then @close() else @open()
 

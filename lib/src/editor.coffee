@@ -137,9 +137,15 @@ class NoteEditor extends Editor
                         cls: "item"
                         children:
                             type: "div"
-                            cls: "ui floating dropdown small basic button"
-                            title: "Select tags"
-                            children: @tagsmenu
+                            cls: "ui floating dropdown"
+                            children: [
+                                selectbtn =
+                                    type: "div"
+                                    cls: "ui small basic button"
+                                    title: "Select tags"
+                                @tagsmenu
+                            ]
+
                     @labels
                 ]
         super mapper, tagselector
