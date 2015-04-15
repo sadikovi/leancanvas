@@ -43,14 +43,14 @@ class Mapper
         else if mprs.type of map
             # create object and add to parent
             c = @createElement map[mprs.type], parent
-            c.id = map[mprs.id] if mprs.id of map
-            c.className = map[mprs.cls] if mprs.cls of map
-            c.href = map[mprs.href] if mprs.href of map
-            c.src = map[mprs.src] if mprs.src of map
+            c.id = "#{map[mprs.id]}" if mprs.id of map
+            c.className = "#{map[mprs.cls]}" if mprs.cls of map
+            c.href = "#{map[mprs.href]}" if mprs.href of map
+            c.src = "#{map[mprs.src]}" if mprs.src of map
             # input parameters
-            c.value = map[mprs.inputvalue] if mprs.inputvalue of map
-            c.type = map[mprs.inputtype] if mprs.inputtype of map
-            c.placeholder = map[mprs.placeholder] if mprs.placeholder of map
+            c.value = "#{map[mprs.inputvalue]}" if mprs.inputvalue of map
+            c.type = "#{map[mprs.inputtype]}" if mprs.inputtype of map
+            c.placeholder = "#{map[mprs.placeholder]}" if mprs.placeholder of map
             c.selected = map[mprs.optionselected] if mprs.optionselected of map
             # events
             if mprs.onclick of map and map[mprs.onclick]
@@ -59,7 +59,7 @@ class Mapper
                 @addEventListener c, 'keyup', (e) -> map[mprs.onkeyup].call @, e
             # add DOM element text node
             if mprs.title of map
-                t = document.createTextNode map[mprs.title]
+                t = document.createTextNode "#{map[mprs.title]}"
                 if mprs.children of map
                     map[mprs.children] = [map[mprs.children]] unless length of map
                     if mprs.text_last of map and map[mprs.text_last]

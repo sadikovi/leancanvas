@@ -1,7 +1,14 @@
 class Tag
     @colors: ["yellow", "green", "blue", "orange", "purple", "red", "pink", "teal"]
-    constructor: (@id, @name, @color=Tag.colors[0], @children=[]) -> @type = "tag"
+
+    constructor: (@id, @name, @notes=[], @color=Tag.colors[0], @children=[]) -> @type = "tag"
+
+    addNote: (note) -> @notes.push note unless not note or note in @notes
+
+    removeNote: (note) -> @notes = (x for x in @notes when x != note)
+
     json: -> type: @type, id: @id, name: @name, color: @color, children: (x.json() for x in @children)
+
     dom: (withname=false) ->
         if withname
             type: "div", cls: "ui tiny #{@color} label", title: @name
@@ -10,23 +17,40 @@ class Tag
 
 
 class Action
-    constructor: (@id, @name, @handler, @icon, @meta) -> @type = "action"
+    constructor: (@id, @parent, @name, @handler, @icon) -> @type = "action"
+
     json: -> type: @type, id: @id, name: @name, icon: @icon
+
     dom: ->
         type: "button"
-        cls: "ui secondary basic mini compact button #{@id}"
+        cls: "ui secondary basic mini compact button"
         title: @name
         text_last: true
-        onclick: (e)=> @handler?(@meta)
+        onclick: (e)=> @handler?(@parent)
         children: if @icon then type: "i", cls: "#{@icon} icon" else []
 
 
 class Note
-    constructor: (@id, @text, @tags=[], @actions=[]) ->
+    constructor: (@id, @parent, @text, @tags=[], handlers=[]) ->
         @type = "note"
-        action.meta = @ for action in @actions
-    modify: (@text, @tag) ->
-    json: -> type: @type, id: @id, tags: (x.json() for x in @tags), text: @text, actions: (x.json() for x in @actions)
+        @actions = [
+            new Action "id:#{@id}-drag", @, "Drag", null, "maximize"
+            new Action "id:#{@id}-edit", @, "Edit", null, "edit"
+            new Action "id:#{@id}-delete", @, "Delete", null, "delete"
+        ]
+        for action, i in @actions
+            action.handler = handlers[i] if i < handlers.length
+
+    addTag: (tag) -> @tags.push tag unless not tag or tag in @tags
+
+    removeTag: (tag) -> @tags = (x for x in @tags when x != tag)
+
+    json: ->
+        type: @type
+        id: @id
+        tags: (x.json() for x in @tags)
+        text: @text
+
     dom: ->
         type: "div"
         cls: "ui segment"
@@ -43,7 +67,7 @@ class Note
                         children: (x.dom() for x in @actions)
                     text =
                         type: "div"
-                        cls: "text"
+                        cls: "text pl-text-prewrap"
                         title: @text
                     tags =
                         type: "div"
@@ -53,9 +77,19 @@ class Note
 
 
 class Directory
-    constructor: (@id, @name="", @placeholder="", @actions=[], @children=[]) ->
+    constructor: (@id, @parent, @name="", @placeholder="", handlers=[], @children=[]) ->
         @type = "directory"
-        action.meta = @ for action in @actions
+        @isdeleted = false
+        @actions = [
+            new Action "add", @, "+ note", null
+        ]
+        for action, i in @actions
+            action.handler = handlers[i] if i < handlers.length
+
+    addNote: (note) -> @children.push note unless not note or note in @children
+
+    removeNote: (note) -> @children = (x for x in @children when x != note)
+
     json: ->
         type: @type
         id: @id
@@ -63,6 +97,7 @@ class Directory
         placeholder: @placeholder
         actions: (x.json() for x in @actions)
         children: (x.json() for x in @children)
+
     dom: ->
         if @children.length
             directoryChildren = (x.dom() for x in @children)
@@ -77,7 +112,7 @@ class Directory
                 cls: "content"
                 children:
                     type: "div"
-                    cls: "ui segment pl-height-medium"
+                    cls: "ui secondary segment pl-height-medium"
                     children: [
                         header =
                             type: "div"
@@ -97,11 +132,13 @@ class Directory
 
 
 class Column
-    constructor: (@id, @children=[]) -> @type = "column"
+    constructor: (@id, @parent, @children=[]) -> @type = "column"
+
     json: -> type: @type, id: @id, children: (x.json() for x in @children)
+
     dom: ->
         type: "div"
-        cls: "column"
+        cls: "column pl-column-min-padding"
         children:
             type: "div"
             cls: "ui items"
@@ -109,8 +146,10 @@ class Column
 
 
 class Domain
-    constructor: (@id, @children=[]) -> @type = "domain"
+    constructor: (@id, @parent, @children=[]) -> @type = "domain"
+
     json: -> type: @type, id: @id, children: (x.json() for x in @children)
+
     dom: ->
         todigit = (n) ->
             a = "1": "one", "2": "two", "3": "three", "4": "four", "5": "five", "6": "six", "7": "seven"

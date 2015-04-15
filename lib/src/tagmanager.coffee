@@ -98,7 +98,7 @@ class TagManager
         tagid = "tag:#{Math.random()}.0"
         @tags[tagid] = new UpdateTagPanel @Tag.colors, null, null, (status, text, color) =>
             if status and text and text != "" and color and color in @Tag.colors
-                tag = new @Tag tagid, text, color
+                tag = new @Tag tagid, text, [], color
                 @tags[tagid] = new TagElement tag, @
             else
                 delete @tags[tagid]
@@ -122,6 +122,7 @@ class TagManager
         return false if @editmode
         editmode = true
         delete @tags[tag.id] if tag
+        note.removeTag tag for note in tag.notes if tag
         editmode = false
         @onupdate?()
 
