@@ -4,9 +4,9 @@ class NoteUtil
     createElement: (tagname, id, cls, text, parent) ->
         return false unless tagname
         elem = document.createElement tagname
-        elem.className = cls if cls
-        elem.id = id if id
-        elem.innerHTML = text if text
+        elem.className = "#{cls}" if cls
+        elem.id = "#{id}" if id
+        elem.innerHTML = @markdown text if text
         parent.appendChild elem if parent
         return elem
 
@@ -35,6 +35,17 @@ class NoteUtil
 
     hasClass: (elem, cls) ->
         return cls in elem.className.split ' '
+
+    markdown: (text) ->
+        re = ///^https?\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$///i
+        a = []
+        for x in text.split " "
+            rl = x.match re
+            if rl and rl.length
+                a.push "<a class=\"notification-control\" href=\"#{rl[0]}\" target=\"blank\">#{rl[0]}</a>"
+            else
+                a.push "#{x}"
+        return a.join " "
 
 
 class NotificationCenter
@@ -75,9 +86,9 @@ class NotificationCenter
         # reassign notification type
         notification.type = typeobj
         # text node message
-        notification.textnode.element.innerHTML = msg if msg
+        notification.textnode.element.innerHTML = @util.markdown msg if msg
         # loading indicator
-        notification.loadnode.element.innerHTML = ''
+        notification.loadnode.element.innerHTML = ""
         @_createLoadingIndicator notification.loadnode.element, typeobj.licls if isLoader
         # control panel
         # clear actions

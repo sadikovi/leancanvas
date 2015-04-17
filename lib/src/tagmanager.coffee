@@ -151,6 +151,7 @@ class TagManager
                                 cls: "ui horizontal list"
                                 children: (v.dom() for k, v of @tags)
                     ]
+                    
     getAllTags: -> (v.tag for k, v of @tags)
 
 @TagManager ?= TagManager

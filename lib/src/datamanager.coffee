@@ -43,15 +43,17 @@ class DataManager
         , (status, result) =>
             if result
                 @parseJson result
-                , ((obj) -> success?(new SuccessDataResult {gistid: obj.id, url: "https://api.github.com/gists/"}))
+                , ((obj) -> success?(new SuccessDataResult {gistid: obj.id, url: "https://gist.github.com/anonymous/"}))
                 , ((err) -> error?(new ErrorDataResult "Error #{err}"))
             else
                 error?(new WarningDataResult "Result is empty")
         , (status, result) -> error?(new ErrorDataResult "Error occuried during saving")
 
-    loadGistFromGithub: (gistid, success, error) ->
+    loadGistFromGithub: (gistid="", success, error) ->
         # gist id: 079ed7ea5951493514ba
         # send get request
+        # extract gist id (can be link)
+        [..., gistid] = (x for x in gistid.split "/")
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         @loader.sendrequest "get", "https://api.github.com/gists/#{gistid}", headers, null
         , (status, result) =>
@@ -81,10 +83,10 @@ class DataManager
             if c and c.length
                 value = (x for x in c.split(";") when x.split("=")[0] == @COOKIE_NAME)
                 gistid = if value and value.length then value[0].split("=")[1].trim() else ""
-                success?(gistid)
+                success?(new SuccessDataResult gistid)
             else
-                error?("Nothing to load. Cookies are empty")
+                error?(new ErrorDataResult "Nothing to load. Cookies are empty")
         else
-            error?("Cannot get content. Cookies are disabled")
+            error?(new ErrorDataResult "Cannot get content. Cookies are disabled")
 
 @datamanager ?= new DataManager @loader

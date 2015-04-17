@@ -181,7 +181,6 @@ recurLayout = (list, type, collect, alltags, parent) ->
 refreshCanvas = ->
     @util.clear canvasbody
     @mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
-    console.log (x.json() for x in canvaslayout.data)
 
 resetCanvas = (obj=@defaultlayout) ->
     canvaslayouttags = layoutParseTags obj
@@ -196,14 +195,14 @@ resetCanvas = (obj=@defaultlayout) ->
     canvaslayout = layout obj, canvaslayouttags
     refreshCanvas()
 
-resetCanvas()
-
 # save something on github
 savegist = (locally=false) ->
     # show loading notification
     savenote = @notificationcenter.show @notificationcenter.type.Info, "Saving...", -1, true, null, null, canvasnote
     # build payload
-    payload = {data: (x.json() for x in canvaslayout.data)}
+    payload =
+        data: (x.json() for x in canvaslayout.data)
+        tags: (x.json() for x in tagmanager.getAllTags())
     @datamanager.saveGistOnGithub payload
     , (result) =>
         if result.type == "success"
@@ -213,7 +212,7 @@ savegist = (locally=false) ->
                 , => @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved successfully", 10000, false, (->), null
                 , (result) => @notificationcenter.change savenote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
             else
-                @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved, here is url: #{result.data.url}#{result.data.gistid}", 10000, false, (->), null
+                @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved, here is link: #{result.data.url}#{result.data.gistid}", 10000, false, (->), null
         else
             @notificationcenter.change savenote, @notificationcenter.type.Warning, "#{result.msg}", null, false, null, (->)
     , (result) =>
@@ -225,7 +224,6 @@ loadgist = (gistid) ->
     @datamanager.loadGistFromGithub gistid
     , (result) =>
         if result.type == "success"
-            console.log result
             # parse json
             @datamanager.parseJson(result.data
             , (obj) ->
@@ -236,3 +234,10 @@ loadgist = (gistid) ->
             @notificationcenter.change loadnote, @notificationcenter.type.Warning, "#{result.msg}", null, false, null, (->)
     , (result) =>
         @notificationcenter.change loadnote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
+
+# load saved canvas from the start or load default
+@datamanager.getContentFromCookie (res) =>
+    loadgist res.data
+, (err) =>
+    @notificationcenter.show @notificationcenter.type.Warning, "#{err.msg}", null, false, null, null, canvasnote
+    resetCanvas()
