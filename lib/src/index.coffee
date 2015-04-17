@@ -1,15 +1,17 @@
 canvasmenu = document.getElementById "ln-canvas-menu"
 canvasbody = document.getElementById "ln-canvas-body"
 canvastags = document.getElementById "ln-canvas-tags"
+canvasnote = document.getElementById "ln-canvas-note"
 # check that elements are in place
-throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags
+throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags and canvasnote
 
 # init global variables
 [canvaslayout, canvaslayouttags, tagmanager] = [null, null, null]
 
 # dropdown controls
-loadinput = @mapper.parseMapForParent {type: "input", inputtype: "text", placeholder: "Paste link..."}
+loadinput = @mapper.parseMapForParent {type: "input", inputtype: "text", placeholder: "Paste Gist id..."}
 loadbtn = @mapper.parseMapForParent {type: "button", cls: "ui primary button pl-text-thin", title: "Go!"}
+@util.addEventListener loadbtn, "click", (e) => loadgist loadinput.value
 
 # build menu
 mainmenu =
@@ -48,6 +50,7 @@ mainmenu =
                     cls: "item"
                     title: "Save"
                     text_last: true
+                    onclick: (e) => savegist(true)
                     children:
                         type: "i"
                         cls: "save icon"
@@ -56,6 +59,7 @@ mainmenu =
                     cls: "item"
                     title: "Save as Gist"
                     text_last: true
+                    onclick: (e) => savegist(false)
                     children:
                         type: "i"
                         cls: "github alternate icon"
@@ -134,7 +138,7 @@ addNote = (directory) ->
     return false if tagmanager.editmode
     editor.show "Add note for [#{directory.name}]", "", (status, text, tags) =>
         if status
-            note = new Note "note:#{Math.random()}.0", directory, text, tags, [null, editNote, deleteNote]
+            note = new Note "note:#{Math.random()}.0", directory, text, tags, [editNote, deleteNote]
             tag.addNote note for tag in tags
             directory?.addNote note
             refreshCanvas()
@@ -169,7 +173,7 @@ recurLayout = (list, type, collect, alltags, parent) ->
             element.children = recurLayout item.children, "note", collect, alltags, element
         else if type == "note"
             tags = parseTags item.tags, alltags, collect
-            element = new @Note item.id, parent, item.text, tags, [null, editNote, deleteNote]
+            element = new @Note item.id, parent, item.text, tags, [editNote, deleteNote]
             tag.addNote element for tag in tags
         result.push element if element
     return result
@@ -193,3 +197,42 @@ resetCanvas = (obj=@defaultlayout) ->
     refreshCanvas()
 
 resetCanvas()
+
+# save something on github
+savegist = (locally=false) ->
+    # show loading notification
+    savenote = @notificationcenter.show @notificationcenter.type.Info, "Saving...", -1, true, null, null, canvasnote
+    # build payload
+    payload = {data: (x.json() for x in canvaslayout.data)}
+    @datamanager.saveGistOnGithub payload
+    , (result) =>
+        if result.type == "success"
+            if locally
+                gistid = result.data.gistid
+                @datamanager.saveContentIntoCookie gistid
+                , => @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved successfully", 10000, false, (->), null
+                , (result) => @notificationcenter.change savenote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
+            else
+                @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved, here is url: #{result.data.url}#{result.data.gistid}", 10000, false, (->), null
+        else
+            @notificationcenter.change savenote, @notificationcenter.type.Warning, "#{result.msg}", null, false, null, (->)
+    , (result) =>
+        @notificationcenter.change savenote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
+
+loadgist = (gistid) ->
+    # show loading notification
+    loadnote = @notificationcenter.show @notificationcenter.type.Info, "Loading...", -1, true, null, null, canvasnote
+    @datamanager.loadGistFromGithub gistid
+    , (result) =>
+        if result.type == "success"
+            console.log result
+            # parse json
+            @datamanager.parseJson(result.data
+            , (obj) ->
+                resetCanvas(obj)
+                @notificationcenter.change loadnote, @notificationcenter.type.Success, "Loaded", null, false, (->), null
+            , (err) -> @notificationcenter.change loadnote, @notificationcenter.type.Error, "Error: #{err}", null, false, null, (->))
+        else
+            @notificationcenter.change loadnote, @notificationcenter.type.Warning, "#{result.msg}", null, false, null, (->)
+    , (result) =>
+        @notificationcenter.change loadnote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)

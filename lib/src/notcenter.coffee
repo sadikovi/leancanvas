@@ -1,4 +1,4 @@
-class Util
+class NoteUtil
     constructor: ->
 
     createElement: (tagname, id, cls, text, parent) ->
@@ -40,7 +40,7 @@ class Util
 class NotificationCenter
     constructor: ->
         @time = 3000
-        @util = new Util
+        @util = new NoteUtil
         @title_ok = 'Ok'
         @title_cancel = 'Cancel'
         # global notification types
@@ -59,13 +59,10 @@ class NotificationCenter
             notification_warning: 'notification-warning'
             notification_error: 'notification-error'
             notification_control: 'notification-control'
-            loading_indicator: 'loading-indicator'
-            loading_indicator_spinner: 'loading-indicator-spinner'
-            loading_indicator_mask: 'loading-indicator-mask'
-            loading_indicator_masked_circle: 'loading-indicator-masked-circle'
-            loading_indicator_success: 'loading-indicator-success'
-            loading_indicator_warning: 'loading-indicator-warning'
-            loading_indicator_error: 'loading-indicator-error'
+            loading_indicator: 'pl-loader active'
+            loading_indicator_success: 'success'
+            loading_indicator_warning: 'warning'
+            loading_indicator_error: 'error'
 
     change: (notification, type, msg, time, isLoader, okhandler, cancelhandler) ->
         return false unless notification
@@ -183,10 +180,7 @@ class NotificationCenter
 
     _createLoadingIndicator: (parent, typecls=false) ->
         main = @util.createElement 'div', null, @classes.loading_indicator, null, parent
-        spinner = @util.createElement 'div', null, @classes.loading_indicator_spinner, null, main
-        mask = @util.createElement 'div', null, @classes.loading_indicator_mask, null, spinner
-        maskcircle = @util.createElement 'div', null, @classes.loading_indicator_masked_circle, null, mask
-        @util.addClass maskcircle, typecls if typecls
+        @util.addClass main, typecls if typecls
         return main
 
     _createControlPanel: (notification, okhandler, cancelhandler) ->

@@ -7,13 +7,15 @@
     <title>Lean canvas</title>
     <link rel="stylesheet/less" type="text/css" href="/styles/src/text.less">
     <link rel="stylesheet/less" type="text/css" href="/styles/src/utility.less">
-    <link rel="stylesheet/less" type="text/css" href="./styles/src/font.less">
+    <link rel="stylesheet/less" type="text/css" href="/styles/src/font.less">
+    <link rel="stylesheet/less" type="text/css" href="/styles/src/notcenter.less">
     <link rel="stylesheet" type="text/css" href="./styles/semantic.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js"></script>
 </head>
 <body>
     <div class="pl-max-body-width pl-container-center">
         <div class="ui basic segment" id="ln-canvas-menu"></div>
+        <div class="ui basic segment" id="ln-canvas-note"></div>
         <div class="ui basic segment">
             <div class="ui grid" style="padding: .5rem;" id="ln-canvas-tags"></div>
         </div>
@@ -29,6 +31,9 @@
     <script type="text/coffeescript" src="/scripts/tagmanager.coffee"></script>
     <script type="text/coffeescript" src="/scripts/defaultlayout.coffee"></script>
     <script type="text/coffeescript" src="/scripts/editor.coffee"></script>
+    <script type="text/coffeescript" src="/scripts/notcenter.coffee"></script>
+    <script type="text/coffeescript" src="/scripts/loader.coffee"></script>
+    <script type="text/coffeescript" src="/scripts/datamanager.coffee"></script>
     <script type="text/coffeescript" src="/scripts/index.coffee"></script>
 </body>
 </html>

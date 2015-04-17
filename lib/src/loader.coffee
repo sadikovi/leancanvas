@@ -14,9 +14,9 @@ class Loader
         xmlhttp.onreadystatechange= ->
             if xmlhttp.readyState is 4
                 if 200 <= xmlhttp.status < 300
-                    success xmlhttp.status, xmlhttp.responseText
+                    success? xmlhttp.status, xmlhttp.responseText
                 else
-                    error xmlhttp.status, xmlhttp.responseText
+                    error? xmlhttp.status, xmlhttp.responseText
         # prepare and send request (always async)
         xmlhttp.open method, url, true
         for key, value of headers

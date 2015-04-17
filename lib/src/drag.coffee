@@ -175,3 +175,21 @@ class DragHandler
             else
                 newdir.addNote note
             note.parent = newdir
+
+@draghandler ?= new DragHandler
+
+@draghandler.dragflix.setDrag (drag) =>
+    @draghandler.util.addClass drag, "draggable"
+    @draghandler.util.addClass documen.body, "noselect"
+
+@draghandler.dragflix.setDrop (drag, target) =>
+    @draghandler.clearDrop target
+    @draghandler.changeDirectory drag.original.obj, drag.original.parentobj, target.parentobj, target.obj
+, (drag, target) => @draghandler.clearDrop target
+
+@draghandler.dragflix.setMoveOver (target) =>
+    if target.obj
+        @draghandler.util.addClass target, "target-above"
+    else
+        @draghandler.util.addClass target, "target-empty"
+, (target) => @draghandler.util.removeClass target, "target-empty", "target-above"

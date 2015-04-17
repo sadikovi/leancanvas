@@ -70,58 +70,6 @@ div.notification {
     color: @notcenter-success-color;
 }
 
-/* loading indicator */
-
-@-webkit-keyframes spin {
-    from { -webkit-transform: rotate(0deg); }
-    to { -webkit-transform: rotate(360deg); }
-}
-
-@-o-keyframes spin {
-    from { -o-transform: rotate(0deg); }
-    to { -o-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* styles for loading indicator to match notification type */
-.loading-indicator {
-    border-color: @notcenter-color;
-    width: @notcenter-loading-indicator-width;
-    height: @notcenter-loading-indicator-width;
-}
-
-.loading-indicator.loading-indicator-error { border-color: @notcenter-error-color; }
-
-.loading-indicator.loading-indicator-warning { border-color: @notcenter-warning-color; }
-
-.loading-indicator.loading-indicator-success { border-color: @notcenter-success-color; }
-
-.loading-indicator-spinner {
-    width: @notcenter-loading-indicator-width;
-    height: @notcenter-loading-indicator-width;
-    -webkit-animation: spin 1s infinite linear;
-    -o-animation: spin 1s infinite linear;
-    animation: spin 1s infinite linear;
-}
-
-.loading-indicator-mask {
-    width: @notcenter-loading-indicator-mask-width;
-    height: @notcenter-loading-indicator-mask-width;
-    overflow: hidden;
-}
-
-.loading-indicator-masked-circle {
-    width: @notcenter-loading-indicator-masked-width;
-    height: @notcenter-loading-indicator-masked-width;
-    border: @notcenter-loading-indicator-border;
-    border-radius: @notcenter-loading-indicator-mask-width;
-}
-
-
 /*******************/
 /* internal styles */
 .notification-content-cell {
@@ -144,4 +92,95 @@ a.notification-control:link,
 
 a.notification-control:hover {
     text-decoration: underline;
+}
+
+
+/* loader */
+
+.pl-loader {
+  display: none;
+  position: relative;
+  vertical-align: middle;
+  margin: 0em;
+  left: 0em;
+  top: 0em;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+}
+
+/* Static Shape */
+.pl-loader:before {
+  position: absolute;
+  content: '';
+  top: 0%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 500rem;
+  border: 0.2em solid rgba(0, 0, 0, 0.1);
+}
+
+/* Active Shape */
+.pl-loader:after {
+  position: absolute;
+  content: '';
+  top: 0%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  -webkit-animation: loader .6s linear;
+  animation: loader .6s linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  border-radius: 500rem;
+  border-color: #aaaaaa transparent transparent;
+  border-style: solid;
+  border-width: 0.2em;
+  box-shadow: 0px 0px 0px 1px transparent;
+}
+
+/* Active Animation */
+@keyframes loader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sizes */
+.pl-loader {
+    width: 1.4em;
+    height: 1.4em;
+    font-size: 1em;
+}
+
+.pl-loader:before,
+.pl-loader:after {
+    width: 1.4em;
+    height: 1.4em;
+    margin: 0em 0em 0em -0.7em;
+}
+
+.pl-loader.active,
+.pl-loader.visible {
+  display: inline-block;
+}
+.pl-loader.disabled,
+.pl-loader.hidden {
+  display: none;
+}
+
+.pl-loader.success:after {
+    border-color: @notcenter-success-border-color transparent transparent;
+}
+
+.pl-loader.warning:after {
+    border-color: @notcenter-warning-border-color transparent transparent;
+}
+
+.pl-loader.error:after {
+    border-color: @notcenter-error-border-color transparent transparent;
 }

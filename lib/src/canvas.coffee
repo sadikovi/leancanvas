@@ -34,7 +34,6 @@ class Note
     constructor: (@id, @parent, @text, @tags=[], handlers=[]) ->
         @type = "note"
         @actions = [
-            new Action "id:#{@id}-drag", @, "Drag", null, "maximize"
             new Action "id:#{@id}-edit", @, "Edit", null, "edit"
             new Action "id:#{@id}-delete", @, "Delete", null, "delete"
         ]
