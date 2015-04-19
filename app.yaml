@@ -1,5 +1,5 @@
-application: decent-core-91323
-version: 1-0
+application: shapedkite
+version: 1-0-2
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -18,18 +18,41 @@ handlers:
   static_files: about.html
   upload: about.html
 
+- url: /help
+  static_files: help.html
+  upload: help.html
+
+
 # resources handlers
 - url: /styles/(.*\.(less|css|eot|otf|svg|ttf|woff|woff2))$
   static_files: styles/\1
   upload: styles/(.*\.(less|css|eot|otf|svg|ttf|woff|woff2))$
 
 - url: /scripts/(.*\.(js|coffee))$
-  static_files: lib/src/\1
-  upload: lib/src/(.*\.(js|coffee))$
+  static_files: lib/dict/\1
+  upload: lib/dict/(.*\.(js|coffee))$
 
 - url: /fonts/(.*\.(ttf))$
   static_files: fonts/\1
   upload: fonts/(.*\.(ttf))$
+
+# templates
+- url: /templates/(.*\.(js|coffee))$
+  static_files: lib/templates/\1
+  upload: lib/templates/(.*\.(js|coffee))$
+
+# images
+- url: /images/(.*\.(ico|png|jpg|jpeg))$
+  static_files: img/\1
+  upload: img/(.*\.(ico|png|jpg|jpeg))$
+
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
 
 
 libraries:

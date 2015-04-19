@@ -1,0 +1,790 @@
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-Regular.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/opensans/OpenSans-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+div.notification-center {
+  height: 58px;
+}
+div.notification {
+  border-radius: 4px;
+  border: 1px solid #bdc4c9;
+  color: #aaaaaa;
+  margin: 8px;
+  padding: 8px 16px 8px 16px;
+  font-size: 12px;
+  line-height: 16px;
+  display: inline-block;
+}
+.notification-on {
+  display: inline-block;
+}
+.notification-off {
+  display: none;
+}
+/* styles for different types of notifications */
+.notification.notification-error {
+  background-color: #fef1f1;
+  border-color: #e2a8a8;
+  color: #d46d6d;
+}
+.notification.notification-warning {
+  background-color: #fffae4;
+  border-color: #f4cd33;
+  color: #c39d02;
+}
+.notification.notification-success {
+  background-color: #e8f7ed;
+  border-color: #30b661;
+  color: #1ba84e;
+}
+/*******************/
+/* internal styles */
+.notification-content-cell {
+  display: inline-block;
+  margin: 0 4px;
+}
+a.notification-control {
+  color: #4183c4;
+  cursor: pointer;
+  margin: 0 2px;
+}
+a.notification-control:link,
+.notification-control:focus,
+.notification-control:visited,
+.notification-control:active {
+  text-decoration: none;
+}
+a.notification-control:hover {
+  text-decoration: underline;
+}
+/* loader */
+.pl-loader {
+  display: none;
+  position: relative;
+  vertical-align: middle;
+  margin: 0em;
+  left: 0em;
+  top: 0em;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+}
+/* Static Shape */
+.pl-loader:before {
+  position: absolute;
+  content: '';
+  top: 0%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 500rem;
+  border: 0.2em solid rgba(0, 0, 0, 0.1);
+}
+/* Active Shape */
+.pl-loader:after {
+  position: absolute;
+  content: '';
+  top: 0%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  -webkit-animation: loader .6s linear;
+  animation: loader .6s linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  border-radius: 500rem;
+  border-color: #aaaaaa transparent transparent;
+  border-style: solid;
+  border-width: 0.2em;
+  box-shadow: 0px 0px 0px 1px transparent;
+}
+/* Active Animation */
+@keyframes loader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Sizes */
+.pl-loader {
+  width: 1.4em;
+  height: 1.4em;
+  font-size: 1em;
+}
+.pl-loader:before,
+.pl-loader:after {
+  width: 1.4em;
+  height: 1.4em;
+  margin: 0em 0em 0em -0.7em;
+}
+.pl-loader.active,
+.pl-loader.visible {
+  display: inline-block;
+}
+.pl-loader.disabled,
+.pl-loader.hidden {
+  display: none;
+}
+.pl-loader.success:after {
+  border-color: #30b661 transparent transparent;
+}
+.pl-loader.warning:after {
+  border-color: #f4cd33 transparent transparent;
+}
+.pl-loader.error:after {
+  border-color: #e2a8a8 transparent transparent;
+}
+/* ========================================================================
+   Component: Text
+ ========================================================================== */
+/* Size modifiers
+ ========================================================================== */
+.pl-text-small {
+  font-size: 11px;
+  line-height: 16px;
+}
+.pl-text-large {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: normal;
+}
+/* Weight modifiers
+ ========================================================================== */
+.pl-text-bold {
+  font-weight: bold !important;
+}
+.pl-text-thin {
+  font-weight: 300 !important;
+}
+/* Color modifiers
+ ========================================================================== */
+.pl-text-muted {
+  color: #999999 !important;
+}
+.pl-text-primary {
+  color: #007ee5 !important;
+}
+.pl-text-success {
+  color: #449d44 !important;
+}
+.pl-text-warning {
+  color: #e28327 !important;
+}
+.pl-text-danger {
+  color: #d9534f !important;
+}
+.pl-text-contrast {
+  color: #ffffff !important;
+}
+/* Alignment modifiers
+ ========================================================================== */
+.pl-text-left {
+  text-align: left !important;
+}
+.pl-text-right {
+  text-align: right !important;
+}
+.pl-text-center {
+  text-align: center !important;
+}
+.pl-text-justify {
+  text-align: justify !important;
+}
+.pl-text-top {
+  vertical-align: top !important;
+}
+.pl-text-middle {
+  vertical-align: middle !important;
+}
+.pl-text-bottom {
+  vertical-align: bottom !important;
+}
+/* Wrap modifiers
+ ========================================================================== */
+/*
+ * Prevent text from wrapping onto multiple lines
+ */
+.pl-text-nowrap {
+  white-space: nowrap;
+}
+/*
+ * Prevent text from wrapping onto multiple lines, and truncate with an ellipsis
+ */
+.pl-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/*
+ * Break strings if their length exceeds the width of their container
+ */
+.pl-text-break {
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+.pl-text-prewrap {
+  white-space: pre-wrap;
+}
+/* ========================================================================
+   Component: Utility
+ ========================================================================== */
+/* Container
+ ========================================================================== */
+.pl-container {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  max-width: 980px;
+  padding: 0 25px;
+}
+/* Large screen and bigger */
+@media (min-width: 1200px) {
+  .pl-container {
+    max-width: 1500px;
+    padding: 0 35px;
+  }
+}
+/*
+ * Micro clearfix
+ */
+.pl-container:before,
+.pl-container:after {
+  content: "";
+  display: table;
+}
+.pl-container:after {
+  clear: both;
+}
+/*
+ * Center container
+ */
+.pl-container-center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.pl-max-body-width {
+  max-width: 2400px !important;
+}
+.pl-column-min-padding {
+  padding-left: 0.3rem !important;
+  padding-right: 0.3rem !important;
+}
+/* Clearing
+ ========================================================================== */
+/*
+ * Micro clearfix
+* `table-cell` is used with `:before` because `table` creates a 1px gap when it becomes a flex item, only in Webkit
+ * `table` is used again with `:after` because `clear` only works with block elements.
+ * Note: `display: block` with `overflow: hidden` is currently not working in the latest Safari
+ */
+.pl-clearfix:before {
+  content: "";
+  display: table-cell;
+}
+.pl-clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/*
+ *  Create a new block formatting context
+ */
+.pl-nbfc {
+  overflow: hidden;
+}
+.pl-nbfc-alt {
+  display: table-cell;
+  width: 10000px;
+}
+/* Alignment of block elements
+ ========================================================================== */
+/*
+ * Float blocks
+ * 1. Prevent content overflow on small devices
+ */
+.pl-float-left {
+  float: left;
+}
+.pl-float-right {
+  float: right;
+}
+/* 1 */
+[class*='pl-float-'] {
+  max-width: 100%;
+}
+/* Alignment of images and objects
+ ========================================================================== */
+/*
+ * Alignment
+ */
+[class*='pl-align-'] {
+  display: block;
+  margin-bottom: 15px;
+}
+.pl-align-left {
+  margin-right: 15px;
+  float: left;
+}
+.pl-align-right {
+  margin-left: 15px;
+  float: right;
+}
+/* Tablet and bigger */
+@media (min-width: 768px) {
+  .pl-align-medium-left {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    float: left;
+  }
+  .pl-align-medium-right {
+    margin-left: 15px;
+    margin-bottom: 15px;
+    float: right;
+  }
+}
+.pl-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Vertical alignment
+ ========================================================================== */
+/*
+ * Remove whitespace between child elements when using `inline-block`
+ */
+.pl-vertical-align {
+  font-size: 0.001px;
+}
+/*
+ *  The `pl-vertical-align` container needs a specific height
+ */
+.pl-vertical-align:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+/*
+ * Sub-object which can have any height
+ * 1. Reset whitespace hack
+ */
+.pl-vertical-align-middle,
+.pl-vertical-align-bottom {
+  display: inline-block;
+  max-width: 100%;
+  /* 1 */
+  font-size: 1rem;
+}
+.pl-vertical-align-middle {
+  vertical-align: middle;
+}
+.pl-vertical-align-bottom {
+  vertical-align: bottom;
+}
+/* Height
+ ========================================================================== */
+/*
+ * More robust if padding and border are used
+ */
+[class*='pl-height'] {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/*
+ * Useful to extend the `html` and `body` element to the full height of the page.
+ */
+.pl-height-1-1 {
+  height: 100%;
+}
+/*
+ * Useful to create image teasers
+ */
+.pl-height-viewport {
+  height: 100vh;
+  min-height: 600px;
+}
+.pl-height-medium {
+  min-height: 170px;
+}
+/* Responsive objects
+ * Note: Images are already responsive by default, see Base component
+ ========================================================================== */
+/*
+ * 1. Corrects `max-width` and `max-height` behavior if padding and border are used
+ */
+.pl-responsive-width,
+.pl-responsive-height {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/*
+ * Responsiveness: Sets a maximum width relative to the parent and auto scales the height
+ * `important` needed to override `pl-img-preserve img`
+ */
+.pl-responsive-width {
+  max-width: 100% !important;
+  height: auto;
+}
+/*
+ * Responsiveness: Sets a maximum height relative to the parent and auto scales the width
+ * Only works if the parent element has a fixed height.
+ */
+.pl-responsive-height {
+  max-height: 100%;
+  width: auto;
+}
+/* Margin
+ ========================================================================== */
+/*
+ * Create a block with the same margin of a paragraph
+ * Add margin if adjacent element
+ */
+.pl-margin {
+  margin-bottom: 15px;
+}
+* + .pl-margin {
+  margin-top: 15px;
+}
+.pl-margin-top {
+  margin-top: 15px !important;
+}
+.pl-margin-bottom {
+  margin-bottom: 15px !important;
+}
+.pl-margin-left {
+  margin-left: 15px !important;
+}
+.pl-margin-right {
+  margin-right: 15px !important;
+}
+.pl-margin-all {
+  margin: 15px !important;
+}
+/*
+ * Larger margins
+ */
+.pl-margin-large {
+  margin-bottom: 50px;
+}
+* + .pl-margin-large {
+  margin-top: 50px;
+}
+.pl-margin-large-top {
+  margin-top: 50px !important;
+}
+.pl-margin-large-bottom {
+  margin-bottom: 50px !important;
+}
+.pl-margin-large-left {
+  margin-left: 50px !important;
+}
+.pl-margin-large-right {
+  margin-right: 50px !important;
+}
+.pl-margin-large-all {
+  margin: 50px !important;
+}
+/*
+ * Massive margins
+ */
+.pl-margin-massive {
+  margin-bottom: 100px;
+}
+* + .pl-margin-massive {
+  margin-top: 100px;
+}
+.pl-margin-massive-top {
+  margin-top: 100px !important;
+}
+.pl-margin-massive-bottom {
+  margin-bottom: 100px !important;
+}
+.pl-margin-massive-left {
+  margin-left: 100px !important;
+}
+.pl-margin-massive-right {
+  margin-right: 100px !important;
+}
+.pl-margin-massive-all {
+  margin: 100px !important;
+}
+/*
+ * Smaller margins
+ */
+.pl-margin-small {
+  margin-bottom: 5px;
+}
+* + .pl-margin-small {
+  margin-top: 5px;
+}
+.pl-margin-small-top {
+  margin-top: 5px !important;
+}
+.pl-margin-small-bottom {
+  margin-bottom: 5px !important;
+}
+.pl-margin-small-left {
+  margin-left: 5px !important;
+}
+.pl-margin-small-right {
+  margin-right: 5px !important;
+}
+.pl-margin-small-all {
+  margin: 5px !important;
+}
+/*
+ * Remove margins
+ */
+.pl-margin-remove {
+  margin: 0 !important;
+}
+.pl-margin-top-remove {
+  margin-top: 0 !important;
+}
+.pl-margin-bottom-remove {
+  margin-bottom: 0 !important;
+}
+/* Border
+ ========================================================================== */
+.pl-border-circle {
+  border-radius: 50%;
+}
+.pl-border-rounded {
+  border-radius: 5px;
+}
+/* Headings
+ ========================================================================== */
+.pl-heading-large {
+  font-size: 36px;
+  line-height: 42px;
+}
+/* Tablet and bigger */
+@media (min-width: 768px) {
+  .pl-heading-large {
+    font-size: 52px;
+    line-height: 64px;
+  }
+}
+/* Link
+ ========================================================================== */
+/*
+ * Let links appear in default text color
+ */
+.pl-link-muted,
+.pl-link-muted a {
+  color: #999999;
+}
+.pl-link-muted:hover,
+.pl-link-muted a:hover {
+  color: #999999;
+}
+/*
+ * Reset link style
+ */
+.pl-link-reset,
+.pl-link-reset a,
+.pl-link-reset:hover,
+.pl-link-reset a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+/* Scrollable
+ ========================================================================== */
+/*
+ * Enable scrolling for preformatted text
+ */
+.pl-scrollable-text {
+  height: 300px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  resize: both;
+}
+/*
+ * Box with scrolling enabled
+ */
+.pl-scrollable-box {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 170px;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  resize: both;
+}
+.pl-scrollable-box > :last-child {
+  margin-bottom: 0;
+}
+/* Overflow
+ ========================================================================== */
+/*
+ * Enable scrollbars if content is clipped
+ */
+.pl-overflow-container {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pl-overflow-container > :last-child {
+  margin-bottom: 0;
+}
+/* Position
+ ========================================================================== */
+.pl-position-absolute,
+[class*='pl-position-top'],
+[class*='pl-position-bottom'] {
+  position: absolute !important;
+}
+.pl-position-top {
+  top: 0;
+  width: 100%;
+}
+.pl-position-bottom {
+  bottom: 0;
+  width: 100%;
+}
+.pl-position-top-left {
+  top: 0;
+  left: 0;
+}
+.pl-position-top-right {
+  top: 0;
+  right: 0;
+}
+.pl-position-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+.pl-position-bottom-right {
+  bottom: 0;
+  right: 0;
+}
+/*
+ * Cover
+ */
+.pl-position-cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+/*
+ * Relative
+ */
+.pl-position-relative {
+  position: relative !important;
+}
+/* Display
+ ========================================================================== */
+/*
+ * Display
+ */
+.pl-display-block {
+  display: block !important;
+}
+.pl-display-inline {
+  display: inline !important;
+}
+.pl-display-inline-block {
+  display: inline-block !important;
+}
+/*
+ * Visibility
+ * Avoids setting display to `block` so it works also with `inline-block` and `table`
+ */
+/* Desktop and bigger */
+@media (min-width: 960px) {
+  .pl-visible-small {
+    display: none !important;
+  }
+  .pl-visible-medium {
+    display: none !important;
+  }
+  .pl-hidden-large {
+    display: none !important;
+  }
+}
+/* Tablets portrait */
+@media (min-width: 768px) and (max-width: 959px) {
+  .pl-visible-small {
+    display: none !important;
+  }
+  .pl-visible-large {
+    display: none !important ;
+  }
+  .pl-hidden-medium {
+    display: none !important;
+  }
+}
+/* Phone landscape and smaller*/
+@media (max-width: 767px) {
+  .pl-visible-medium {
+    display: none !important;
+  }
+  .pl-visible-large {
+    display: none !important;
+  }
+  .pl-hidden-small {
+    display: none !important;
+  }
+}
+/* Remove from the flow and screen readers on any device */
+.pl-hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+/* It's hidden, but still affects layout */
+.pl-invisible {
+  visibility: hidden !important;
+}
+/* Show on hover */
+.pl-visible-hover:hover .pl-hidden,
+.pl-visible-hover:hover .pl-invisible {
+  display: block !important;
+  visibility: visible !important;
+}
+.pl-visible-hover-inline:hover .pl-hidden,
+.pl-visible-hover-inline:hover .pl-invisible {
+  display: inline-block !important;
+  visibility: visible !important;
+}
+/* Hide on touch */
+.pl-touch .pl-hidden-touch,
+.pl-notouch .pl-hidden-notouch {
+  display: none !important;
+}

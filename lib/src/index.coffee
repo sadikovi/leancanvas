@@ -9,7 +9,7 @@ throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags an
 [canvaslayout, canvaslayouttags, tagmanager] = [null, null, null]
 
 # dropdown controls
-loadinput = @mapper.parseMapForParent {type: "input", inputtype: "text", placeholder: "Paste Gist id..."}
+loadinput = @mapper.parseMapForParent {type: "input", inputtype: "text", placeholder: "Paste Gist id or link..."}
 loadbtn = @mapper.parseMapForParent {type: "button", cls: "ui primary button pl-text-thin", title: "Go!"}
 @util.addEventListener loadbtn, "click", (e) => loadgist loadinput.value
 
@@ -36,6 +36,11 @@ mainmenu =
             cls: "item"
             title: "About"
             href: "/about"
+        help =
+            type: "a"
+            cls: "item"
+            title: "Help"
+            href: "/help"
         rightmenu =
             type: "div"
             cls: "right menu"
@@ -54,6 +59,15 @@ mainmenu =
                     children:
                         type: "i"
                         cls: "save icon"
+                load =
+                    type: "a"
+                    cls: "item"
+                    title: "Load"
+                    text_last: true
+                    onclick: (e) => loadlastsave()
+                    children:
+                        type: "i"
+                        cls: "paste icon"
                 saveasgist =
                     type: "a"
                     cls: "item"
@@ -94,6 +108,8 @@ mainmenu =
 @mapper.parseMapForParent mainmenu, canvasmenu
 # find dropdown menus
 @dropdownCenter.search canvasmenu
+# create editor
+editor = new @Editor @mapper, @dropdownCenter
 
 parseTags = (notetags, alltags, collect) ->
     propertags = []
@@ -112,9 +128,6 @@ parseTags = (notetags, alltags, collect) ->
 layoutParseTags = (object) ->
     alltags = if "tags" of object then object.tags else []
     parseTags alltags, [], true
-
-# create editor
-editor = new @Editor @mapper, @dropdownCenter
 
 editNote = (note) ->
     return false if tagmanager.editmode
@@ -152,37 +165,48 @@ layout = (object, alltags) ->
     return false unless data
     # parse data (convert into array, if necessary)
     data = [data] if "type" of data or "id" of data or "children" of data
+    # recursive parsing of layout
+    recurLayout = (list, type, collect, alltags, parent) ->
+        result = []
+        return result unless list and "length" of list
+        for item in list
+            # data check
+            continue unless "type" of item and item.type == type
+            # parse element
+            if type == "domain"
+                element = new @Domain item.id, parent
+                element.children = recurLayout item.children, "column", collect, alltags, element
+            else if type == "column"
+                element = new @Column item.id, parent
+                element.children = recurLayout item.children, "directory", collect, alltags, element
+            else if type == "directory"
+                element = new @Directory item.id, parent, item.name, item.placeholder, [addNote]
+                element.children = recurLayout item.children, "note", collect, alltags, element
+            else if type == "note"
+                tags = parseTags item.tags, alltags, collect
+                element = new @Note item.id, parent, item.text, tags, [editNote, deleteNote]
+                tag.addNote element for tag in tags
+            result.push element if element
+        return result
     domains = recurLayout data, "domain", false, alltags, null
     return data: domains, tags: alltags
 
-recurLayout = (list, type, collect, alltags, parent) ->
-    result = []
-    return result unless list and "length" of list
-    for item in list
-        # data check
-        continue unless "type" of item and item.type == type
-        # parse element
-        if type == "domain"
-            element = new @Domain item.id, parent
-            element.children = recurLayout item.children, "column", collect, alltags, element
-        else if type == "column"
-            element = new @Column item.id, parent
-            element.children = recurLayout item.children, "directory", collect, alltags, element
-        else if type == "directory"
-            element = new @Directory item.id, parent, item.name, item.placeholder, [addNote]
-            element.children = recurLayout item.children, "note", collect, alltags, element
-        else if type == "note"
-            tags = parseTags item.tags, alltags, collect
-            element = new @Note item.id, parent, item.text, tags, [editNote, deleteNote]
-            tag.addNote element for tag in tags
-        result.push element if element
-    return result
+layoutcheck = (layout, template) ->
+    recurCheck = (llist, tlist) ->
+        return false unless llist and tlist and llist.length == tlist.length
+        flag = true
+        for t, i in tlist
+            continue if t.type in ["note", "tag"] or not t.children
+            return false unless t.type == llist[i].type
+            flag = flag and recurCheck llist[i]?.children, t.children
+        return flag
+    return recurCheck layout.data, template.data
 
 refreshCanvas = ->
     @util.clear canvasbody
     @mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
 
-resetCanvas = (obj=@defaultlayout) ->
+resetCanvas = (obj=@template_leancanvas) ->
     canvaslayouttags = layoutParseTags obj
     tagmanager = new @TagManager canvastags, @Tag, canvaslayouttags, =>
         @util.clear tagmanager.parent
@@ -193,7 +217,16 @@ resetCanvas = (obj=@defaultlayout) ->
     @mapper.parseMapForParent tagmanager.dom(), tagmanager.parent
     # create general layout
     canvaslayout = layout obj, canvaslayouttags
+    # perform check and report error
+    unless obj == @template_leancanvas
+        unless layoutcheck obj, @template_leancanvas
+            @notificationcenter.show @notificationcenter.type.Warning, "Layout does not match template. Default layout will be loaded", null, false, null, null, canvasnote
+            resetCanvas(@template_leancanvas)
+            return false
     refreshCanvas()
+    # show notification
+    if obj == @template_leancanvas
+        @notificationcenter.show @notificationcenter.type.Success, "Layout reset", null, false, null, null, canvasnote
 
 # save something on github
 savegist = (locally=false) ->
@@ -208,9 +241,9 @@ savegist = (locally=false) ->
         if result.type == "success"
             if locally
                 gistid = result.data.gistid
-                @datamanager.saveContentIntoCookie gistid
-                , => @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved successfully", 10000, false, (->), null
-                , (result) => @notificationcenter.change savenote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
+                @datamanager.saveContentIntoCookie gistid,
+                (=> @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved successfully", 10000, false, (->), null),
+                ((result) => @notificationcenter.change savenote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->))
             else
                 @notificationcenter.change savenote, @notificationcenter.type.Success, "Saved, here is link: #{result.data.url}#{result.data.gistid}", 10000, false, (->), null
         else
@@ -226,18 +259,22 @@ loadgist = (gistid) ->
         if result.type == "success"
             # parse json
             @datamanager.parseJson(result.data
-            , (obj) ->
+            , (obj) =>
                 resetCanvas(obj)
                 @notificationcenter.change loadnote, @notificationcenter.type.Success, "Loaded", null, false, (->), null
-            , (err) -> @notificationcenter.change loadnote, @notificationcenter.type.Error, "Error: #{err}", null, false, null, (->))
+            , (err) => @notificationcenter.change loadnote, @notificationcenter.type.Error, "Error: #{err}", null, false, null, (->))
         else
             @notificationcenter.change loadnote, @notificationcenter.type.Warning, "#{result.msg}", null, false, null, (->)
     , (result) =>
         @notificationcenter.change loadnote, @notificationcenter.type.Error, "#{result.msg}", null, false, null, (->)
 
-# load saved canvas from the start or load default
-@datamanager.getContentFromCookie (res) =>
-    loadgist res.data
-, (err) =>
-    @notificationcenter.show @notificationcenter.type.Warning, "#{err.msg}", null, false, null, null, canvasnote
-    resetCanvas()
+loadlastsave = ->
+    # load saved canvas from the start or load default
+    @datamanager.getContentFromCookie (res) =>
+        loadgist res.data
+    , (err) =>
+        @notificationcenter.show @notificationcenter.type.Warning, "#{err.msg}", null, false, null, null, canvasnote
+        resetCanvas()
+
+# automatically call load last save
+loadlastsave()

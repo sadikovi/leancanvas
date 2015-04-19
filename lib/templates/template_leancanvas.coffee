@@ -1,4 +1,4 @@
-@defaultlayout =
+@template_leancanvas =
     data: [
         domain1 =
             type: "domain"
@@ -13,28 +13,6 @@
                             id: "canvas_problem"
                             name: "Problem"
                             placeholder: "Top 3 problems..."
-                            children: [
-                                note1 =
-                                    type: "note"
-                                    id: "123"
-                                    text: "Hello world!"
-                                note2 =
-                                    type: "note"
-                                    id: "123"
-                                    text: "Very long note to figure out how it influences spaces!"
-                                    tags: [
-                                        sampletag =
-                                            id: "sample123"
-                                            name: "important"
-                                            type: "tag"
-                                            color: "red"
-                                        anothertag =
-                                            id: "idea123"
-                                            name: "idea"
-                                            type: "tag"
-                                            color: "yellow"
-                                    ]
-                            ]
                     ]
                 column2 =
                     type: "column"
@@ -100,11 +78,6 @@
                             id: "canvas_cost_structure"
                             name: "Cost structure"
                             placeholder: "Customer Acquisition Costs\r\nDistribution Costs\r\nHosting\r\nPeople, etc..."
-                            children: [
-                                type: "note"
-                                id: "123"
-                                text: "Hello world!"
-                            ]
                     ]
                 column7 =
                     type: "column"
