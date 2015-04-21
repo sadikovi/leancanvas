@@ -21,7 +21,7 @@ mainmenu =
         header =
             type: "div"
             cls: "item pl-text-bold"
-            title: "Lean canvas"
+            title: "Lean canvas v1.1.0"
         github =
             type: "a"
             cls: "item"
@@ -36,11 +36,11 @@ mainmenu =
             cls: "item"
             title: "About"
             href: "/about"
-        help =
+        previous =
             type: "a"
             cls: "item"
-            title: "Help"
-            href: "/help"
+            title: "v1.0.2"
+            href: "http://sadikovi.github.io/leancanvas/"
         rightmenu =
             type: "div"
             cls: "right menu"

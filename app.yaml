@@ -1,5 +1,5 @@
 application: shapedkite
-version: 1-0-2
+version: 1-1-0
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -17,10 +17,6 @@ handlers:
 - url: /about
   static_files: about.html
   upload: about.html
-
-- url: /help
-  static_files: help.html
-  upload: help.html
 
 
 # resources handlers

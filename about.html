@@ -1,126 +1,99 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head profile="http://www.w3.org/2005/10/profile">
-        <title>Lean Canvas - About</title>
-        <meta charset='utf8'></meta>
-        <link rel="shortcut icon" href="resources/images/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="resources/styles/general.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/pagelayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/buttonlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/notifylayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/notelayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/directorylayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/columnlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/domainlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/noteeditorlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/modalviewlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/alertlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="resources/styles/taglayout.css"></link>
-
-        <script src="resources/scripts/util.js"></script>
-        <script src="resources/scripts/sources.js"></script>
-        <script src="resources/scripts/contentmanager.js"></script>
-        <script src="resources/scripts/header.js"></script>
-        <script src="resources/scripts/footer.js"></script>
-        <script src="resources/scripts/notification.js"></script>
-        <script src="resources/scripts/noteeditor.js"></script>
-        <script src="resources/scripts/loader.js"></script>
-        <script src="resources/scripts/datamanager.js"></script>
-        <script src="resources/scripts/modalview.js"></script>
-        <script src="resources/scripts/tagmanager.js"></script>
-
-        <script src="resources/scripts/defaultlayout.js"></script>
-        <script src="resources/scripts/contentlayout.js"></script>
-        <script src="resources/scripts/note.js"></script>
-        <script src="resources/scripts/directory.js"></script>
-        <script src="resources/scripts/column.js"></script>
-        <script src="resources/scripts/domain.js"></script>
-    </head>
-    <body>
-        <div class="wrapper" id="wrapper">
-            <div class="page_header">
-                <div class="page_width centered" id="header">
-                </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lean canvas | About</title>
+    <link href="/images/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="/styles/dict/main.css">
+    <link rel="stylesheet" type="text/css" href="/styles/semantic.min.css">
+</head>
+<body>
+    <div class="pl-max-body-width pl-container-center">
+        <div class="ui basic segment" id="ln-canvas-menu">
+            <div class="ui fixed main menu">
+                <a class="item pl-text-bold" href="/">Back to lean canvas</a>
+                <a class="item" href="https://github.com/sadikovi/leancanvas">
+                    <i class="github icon"></i>Github
+                </a>
             </div>
-            <div class="page_notify hAlignCenter" id="notify_wrapper">
-            </div>
-            <div class="page_body centered" id="body_wrapper">
-                <div class="page-body-size-normal centered">
-                    <div class="page-body-content-general-text hAlignLeft">
-                        <p>
+        </div>
+        <div class="pl-container pl-container-center">
+            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-body">
+                <div class="one column centered row">
+                    <div class="column">
+                        <div class="ui segment">
                             <h1>Lean canvas</h1>
-                            The Lean Canvas is a lean startup adaptation of the Business Model Canvas. The lean canvas focuses on addressing broad customer problems and solutions and delivering them to customer segments through a unique value proposition. You can read more about it on <a href="http://en.wikipedia.org/wiki/Lean_startup">Wikipedia</a> or <a href="http://theleanstartup.com/">The Lean Startup</a>.
+                            The Lean Canvas is a lean startup adaptation of the
+                            Business Model Canvas. The lean canvas focuses on
+                            addressing broad customer problems and solutions and
+                            delivering them to customer segments through a unique
+                            value proposition. You can read more about it on
+                            <a href="http://en.wikipedia.org/wiki/Lean_startup">Wikipedia</a>
+                            or <a href="http://theleanstartup.com/">The Lean Startup</a>.
+
                             <h3>The whole idea</h3>
-                            The whole idea of all that is to use simple tool online without spending money on buying existing solutions or printing lean canvas every time you decide to make changes.
+                            The whole idea of all that is to use simple tool
+                            online without spending money on buying existing
+                            solutions or printing lean canvas every time you
+                            decide to make changes.
+
                             <h3>How it works</h3>
-                            The canvas is represented as a set of columns. Each column consists of one or two directories, which has got its own name and description. Each directory is a folder for notes that you may create, and is supposed to organise them into different categories, such <b>problems</b>, <b>solutions</b> and etc. Directory has a number of controls:
-                            <div id="directory_controls" class="alert tip-blue vMargined_large"></div>
-                            Note has several controls to work with it:
-                            <div id="note_controls_edit" class="alert tip-blue vMargined_large"></div>
-                            <div id="note_controls_delete" class="alert tip-blue vMargined_large"></div>
-                            <div id="note_controls_move" class="alert tip-blue vMargined_large"></div>
-                            Top bar includes: <b>New</b> to load new clear canvas, everything that was created before will be deleted.
-                            <b>Save</b> to save current canvas to Github as Gist and save url into cookies.
-                            <div class="alert tip-red vMargined_large">
-                                <b>Note</b> that if cookies are disabled, nothing will be saved and error message will be displayed.
-                            </div>
-                            <b>Save as Gist</b> saves current canvas on Github as a Gist and shows you link when it is done (here one example of it <a href="https://gist.github.com/anonymous/b1c5d8ff55e199f53a22">https://gist.github.com/anonymous/b1c5d8ff55e199f53a22</a>). Sometimes it is worth to copy and save link to continue working, in case cookies are disabled or cleared every day. <b>Load Gist</b> allows you to load saved Gist link and build canvas, that you may have been working on. You have to paste (or type if you want) link that you can get using <b>Save as Gist</b>.
-                            <div class="alert tip-orange vMargined_large">
-                                <b>Note</b> that Github API has a limit for creating and loading anonymous Gists (about 60 requests per hour). If you exceed this you will get an error and will be unable to save data.
-                            </div>
+                            You must have cookies enabled to save template that
+                            you are working on locally. I am still looking for
+                            saving them on server somewhere.
+                            <div class="ui divider"></div>
+                            The canvas is represented as a set of columns. Each
+                            column consists of one or two directories, which has
+                            got its own name and description. Each directory is
+                            a folder for notes that you may create, and is
+                            supposed to organise them into different categories,
+                            such <b>problems</b>, <b>solutions</b> and etc.
+                            You can add note to a directory with
+                            <span class="ui label">+ note</span>
+                            <div class="ui divider"></div>
+                            Note can be edited using <span class="ui label">Edit</span>
+                            or deleted using <span class="ui label">Delete</span>
+                            The new thing in this version is tags, so now you can
+                            assign multiple tags to the note using dropdown menu,
+                            instead of only one previously.
+                            <div class="ui divider"></div>
+                            Create a tag with <span class="ui label">+ tag</span>
+                            button, select colour by clicking on the left square
+                            and type tag's name in.
+                            You cannot create tags from within editor (but it is
+                            something to think about).
+                            And there is no drag-n-drop feature yet.
+
+                            <h3>Menu controls</h3>
+                            You can visit github page and load previous version
+                            using controls on left side.
+                            <span class="ui label">New layout</span> allows you
+                            to load new clear template. <span class="ui label">Save</span>
+                            saves template locally using cookies, <span class="ui label">Load</span>
+                            loads stored template. When you go to the website, it
+                            will try loading stored template anyway.
+                            <span class="ui label">Save as Gist</span> and
+                            <span class="ui label">Load Gist</span> save and load
+                            gist from Github respectivelly. It is recommended not
+                            only save your work locally, but also save it as Gist,
+                            thus later you can paste link and load template again.
+
+                            <h3>Compatibility with older version</h3>
+                            New lean canvas can load templates that were created
+                            using v.1.0.2, though tags (note colours) will not
+                            be imported.
+
+
                             <h3>Contact and Bug Report</h3>
-                            To contact regarding bugs or just to say hi, please email <a href="mailto:ivan.sadikov@lincolnuni.ac.nz?Subject=Lean%20Canvas" >ivan.sadikov@lincolnuni.ac.nz</a>
-                        </p>
+                            To contact regarding bugs or just to say hi, please
+                            <a href="mailto:ivan.sadikov@lincolnuni.ac.nz?Subject=Lean%20Canvas v1.1.0">email me</a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="page_footer hAlignCenter">
-                <div class="footer_content centered page_width" id="footer">
-                </div>
-            </div>
         </div>
-        <script>
-            function fill_directory_controls() {
-                var p = document.getElementById("directory_controls");
-                var add = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_ADD, "", p);
-                var descAdd = Util.createElement("span", null, null, " - Add a new note to the directory", p);
-            }
-
-            function fill_note_controls() {
-                var p = document.getElementById("note_controls_edit");
-                var edit = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_EDIT, "", p);
-                var descEdit = Util.createElement("span", null, null, " - Edit selected note", p);
-
-                var p = document.getElementById("note_controls_delete");
-                var edit = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_DELETE, "", p);
-                var descEdit = Util.createElement("span", null, null, " - Delete selected note", p);
-
-                var p = document.getElementById("note_controls_move");
-                var edit = Util.createImage(null, "alert-image hMargined_normal", Source.IMG_NOTE_MOVE, "", p);
-                var descEdit = Util.createElement("span", null, null, " - Drag selected note", p);
-            }
-
-            if (Util.isBadIE()) {
-                document.getElementById("body_wrapper").innerHTML = "";
-                Util.createElement(
-                    "div",
-                    null,
-                    "alert tip-red page-body-size-normal centered",
-                    "Browser version (IE8 or older IE browsers) is not supported. Please choose other browser instead.",
-                    document.getElementById("body_wrapper")
-                );
-            } else {
-                // load header...
-                Header.display(document.getElementById("header"), CONTENT_LAYOUT.header_about());
-                // ... load footer
-                Footer.display(document.getElementById("footer"), CONTENT_LAYOUT.footer());
-
-                // initialize notification center
-                NotificationCenter.init("notify_wrapper");
-
-                fill_directory_controls();
-                fill_note_controls();
-            }
-        </script>
-    </body>
+    </div>
+</body>
 </html>
