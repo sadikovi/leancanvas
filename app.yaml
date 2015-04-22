@@ -7,12 +7,12 @@ threadsafe: true
 handlers:
 # main webpage handler
 - url: /
-  static_files: main.html
-  upload: main.html
+  static_files: index.html
+  upload: index.html
 
 - url: /index\.html
-  static_files: main.html
-  upload: main.html
+  static_files: index.html
+  upload: index.html
 
 - url: /about
   static_files: about.html

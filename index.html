@@ -1,229 +1,35 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head profile="http://www.w3.org/2005/10/profile">
-        <title>Lean Canvas</title>
-        <meta charset='utf8'></meta>
-        <link rel="shortcut icon" href="./resources/images/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="./resources/styles/general.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/pagelayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/buttonlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/notelayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/directorylayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/columnlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/domainlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/noteeditorlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/modalviewlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/alertlayout.css"></link>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/taglayout.css"></link>
-
-        <script src="./resources/scripts/util.js"></script>
-        <script src="./resources/scripts/sources.js"></script>
-        <script src="./resources/scripts/contentmanager.js"></script>
-        <script src="./resources/scripts/header.js"></script>
-        <script src="./resources/scripts/footer.js"></script>
-        <script src="./resources/scripts/noteeditor.js"></script>
-        <script src="./resources/scripts/loader.js"></script>
-        <script src="./resources/scripts/datamanager.js"></script>
-        <script src="./resources/scripts/modalview.js"></script>
-        <script src="./resources/scripts/tagmanager.js"></script>
-
-        <script src="./resources/scripts/defaultlayout.js"></script>
-        <script src="./resources/scripts/contentlayout.js"></script>
-        <script src="./resources/scripts/note.js"></script>
-        <script src="./resources/scripts/directory.js"></script>
-        <script src="./resources/scripts/column.js"></script>
-        <script src="./resources/scripts/domain.js"></script>
-
-        <link rel="stylesheet" type="text/css" href="./resources/styles/drag.css"></link>
-        <script src="./resources/scripts/drag.js"></script>
-        <script src="./resources/scripts/draghandler.js"></script>
-
-        <script src="./resources/scripts/notificationcenter.js"></script>
-        <link rel="stylesheet" type="text/css" href="./resources/styles/notificationcenter.css"></link>
-    </head>
-    <body>
-        <div class="wrapper" id="wrapper">
-            <div class="page_header">
-                <div class="page_width centered" id="header">
-                </div>
-            </div>
-            <div class="page_notify hAlignCenter" id="notify_wrapper">
-            </div>
-            <div class="page_body centered" id="body_wrapper">
-            </div>
-            <div class="page_footer hAlignCenter">
-                <div class="footer_content centered page_width" id="footer">
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lean canvas</title>
+    <link href="/images/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="/styles/dict/main.css">
+    <link rel="stylesheet" type="text/css" href="/styles/semantic.min.css">
+</head>
+<body>
+    <div class="pl-max-body-width pl-container-center">
+        <div class="ui basic segment" id="ln-canvas-menu"></div>
+        <div class="pl-container pl-container-center pl-text-center" style="min-height:50px;" id="ln-canvas-note"></div>
+        <div class="pl-container pl-container-center">
+            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-tags"></div>
         </div>
-        <script>
-            //update canvas and load default content
-            function globalNewHandler() {
-                ContentManager.buildPageLayout(DEFAULT_LAYOUT.data);
-                updateDOM();
-                NotificationCenter.show(NotificationType.Success, "Enjoy freedom of the blank canvas...", null, false, null, null, notifyWrapper);
-            }
-
-            // save on github handler
-            function globalSaveGistHandler() {
-                var json = JSON.parse(ContentManager.generateJSON());
-                // run notification
-                var t = NotificationCenter.show(NotificationType.Info, "Saving on Github...", -1, true, null, null, notifyWrapper);
-
-                DataManager.saveGistOnGithub(
-                    json,
-                    /* success */
-                    function(result) {
-                        var url = "<a href=\"" + result.html_url + "\" target=\"blank\">" + result.html_url + "</a>";
-                        var msg = "@Saved file: " + url + ". Dont forget to copy link somewhere!";
-                        NotificationCenter.change(t, NotificationType.Success, msg, 10000, false, function() {}, null);
-                    },
-                    /* error */
-                    function(result) {
-                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-                        var msg = "@Error: "+result.message+ ", see link: " + url;
-                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
-                    }
-                );
-            }
-
-            // load on github handler
-            function globalLoadGistHandler() {
-                var input = document.getElementById("modal_view_load_gist_input");
-                var link = (input)?input.value:"";
-                // run notification
-                var t = NotificationCenter.show(NotificationType.Info, "Loading Gist from Github...", -1, true, null, null, notifyWrapper);
-
-                DataManager.loadGistFromGithub(
-                    link,
-                    /* success */
-                    function(result) {
-                        var msg = "@Gist is loaded. Dont forget to save, if you need it!";
-                        ContentManager.buildPageLayout(result.data);
-                        updateDOM();
-                        NotificationCenter.change(t, NotificationType.Success, msg, 5000, false, function() {}, null);
-                    },
-                    /* error */
-                    function(result) {
-                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-                        var msg = "@Error: "+result.message+ ", see link: " + url;
-                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
-                    }
-                );
-            }
-
-            // save handler: saves on github and saves url in cookies
-            function globalSaveHandler() {
-                var json = JSON.parse(ContentManager.generateJSON());
-
-                // run notification
-                var t = NotificationCenter.show(NotificationType.Info, "Saving...", -1, true, null, null, notifyWrapper);
-
-                DataManager.saveContentIntoCookie(
-                    json,
-                    /* success */
-                    function(result) {
-                        var msg = Util.getCurrentDateTime() + " @Saved";
-                        NotificationCenter.change(t, NotificationType.Success, msg, null, false, null, null);
-                    },
-                    /* error */
-                    function(result) {
-                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-                        var msg = "@Error: "+result.message+ ", see link: " + url;
-                        NotificationCenter.change(t, NotificationType.Error, msg, 5000, false, null, null);
-                    }
-                );
-            }
-
-            // load handler: takes url from cookies and loads content from github
-            function globalLoadHandler() {
-                // run notification
-                var t = NotificationCenter.show(NotificationType.Info, "Loading...", -1, true, null, null, notifyWrapper);
-                DataManager.getContentFromCookie(
-                    /* success */
-                    function(result) {
-                        var msg = Util.getCurrentDateTime() + " @Loaded...";
-
-                        ContentManager.buildPageLayout(result.data);
-                        updateDOM();
-                        NotificationCenter.change(t, NotificationType.Success, msg, null, false, null, null);
-                    },
-                    /* error */
-                    function(result) {
-                        var url = "<a href=\"" + result.documentation_url + "\" target=\"blank\">" + result.documentation_url + "</a>";
-                        var msg = ((result.type && result.type=="warning")?"@Warning: ":"@Error: ")+result.message+ ", see link: " + url;
-                        var notifType = (result.type && result.type=="warning")?NotificationType.Warning:NotificationType.Error;
-                        NotificationCenter.change(t, notifType, msg, 5000, false, null, null);
-                    }
-                );
-            }
-
-            // note handler: add new note
-            function addNoteHandler() {
-                var dir = this.this;
-                NoteEditor.show("", null, "New note for \"" + dir.name + "\"", {}, function(data, value, tag) {
-                    // create new note and assign to directory
-                    var a = new Note(Util.generateId(), value, tag, dir, CONTENT_LAYOUT.note());
-                    dir.append(a);
-                    updateDOM();
-                    NotificationCenter.show(NotificationType.Success, "Note has been added", null, false, null, null, notifyWrapper);
-                });
-            }
-
-            // note handler: edit the note
-            function editNoteHandler() {
-                var note = this.this;
-                var dir = note.parent;
-                NoteEditor.show(note.text, note.tag, "Edit note for \"" + dir.name + "\"", {}, function(data, value, tag) {
-                    // modify text value of a note
-                    note.modify(value, tag);
-                    updateDOM();
-                    NotificationCenter.show(NotificationType.Success, "Note has been edited", null, false, null, null, notifyWrapper);
-                });
-            }
-
-            // note handler: delete the note
-            function deleteNoteHandler() {
-                var note = this.this;
-                var dir = note.parent;
-                dir.remove(note.id);
-                updateDOM();
-                NotificationCenter.show(NotificationType.Success, "Note has been deleted", null, false, null, null, notifyWrapper);
-            }
-
-            // update DOM
-            function updateDOM() {
-                document.getElementById("body_wrapper").innerHTML = "";
-                document.getElementById("body_wrapper").appendChild(ContentManager.generateDOM());
-            }
-
-            // load all the data
-            // check for bad browser version
-            if (Util.isBadIE()) {
-                document.getElementById("body_wrapper").innerHTML = "";
-                Util.createElement(
-                    "div",
-                    null,
-                    "alert tip-red page-body-size-normal centered",
-                    "Browser version (IE8 or older IE browsers) is not supported. Please choose other browser instead.",
-                    document.getElementById("body_wrapper")
-                );
-            } else {
-                // load header...
-                Header.display(document.getElementById("header"), CONTENT_LAYOUT.header());
-                // ... load footer
-                Footer.display(document.getElementById("footer"), CONTENT_LAYOUT.footer());
-
-                // build default layout
-                ContentManager.buildPageLayout(DEFAULT_LAYOUT.data);
-                // and update everything
-                updateDOM();
-
-                // set parent element for all notifications
-                var notifyWrapper = document.getElementById("notify_wrapper");
-                /* load data from cookies every time page is refreshed */
-                globalLoadHandler();
-            }
-        </script>
-    </body>
+        <div class="pl-container pl-container-center">
+            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-body"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/templates/template_leancanvas.js"></script>
+    <script type="text/javascript" src="/scripts/util.js"></script>
+    <script type="text/javascript" src="/scripts/mapper.js"></script>
+    <script type="text/javascript" src="/scripts/dropdown.js"></script>
+    <script type="text/javascript" src="/scripts/canvas.js"></script>
+    <script type="text/javascript" src="/scripts/tagmanager.js"></script>
+    <script type="text/javascript" src="/scripts/editor.js"></script>
+    <script type="text/javascript" src="/scripts/notcenter.js"></script>
+    <script type="text/javascript" src="/scripts/loader.js"></script>
+    <script type="text/javascript" src="/scripts/datamanager.js"></script>
+    <script type="text/javascript" src="/scripts/index.js"></script>
+</body>
 </html>
