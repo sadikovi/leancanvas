@@ -4,8 +4,8 @@ class ModalView
         throw ("Mapper is undefined") unless mapper
         @id = "modalview:#{Math.random()}.0"
         @ishidden = true
-        @hideclass = "ui dimmer modals page transition hidden pl-hidden"
-        @showclass = "ui dimmer modals page transition visible active"
+        @hideclass = "ui dimmer page transition hidden pl-hidden"
+        @showclass = "ui dimmer page transition visible active"
         # add dom to document.body
         @itself = mapper.parseMapForParent @dom(), document.body
         # locking mechanism (by default it is off)
@@ -39,20 +39,17 @@ class ModalView
         # call handler
         handler?(false)
 
+
 class Editor extends ModalView
     # Editor class that takes text as content
-    constructor: (mapper, meta) ->
+    constructor: (mapper, metacontent=null, desccontent=null) ->
         throw ("Mapper is undefined") unless mapper
         # properties
-        [@title, @text, @meta] = ["Editor", "", (meta ? [])]
+        @title = "Editor"
         # templates
         header = type: "div", cls: "ui tip attached label", title: "#{@title}"
-        metacontent = type: "div", cls: "meta-content pl-container-center", children: @meta
-        textarea = type: "textarea", title: "#{@text}"
         # pointers to the templates
         @header = mapper.parseMapForParent header
-        @metaarea = mapper.parseMapForParent metacontent
-        @textarea = mapper.parseMapForParent textarea
         @handler = null
 
         content =
@@ -70,17 +67,17 @@ class Editor extends ModalView
                             type: "div"
                             cls: "content"
                             children: [
-                                @metaarea
+                                meta =
+                                    type: "div"
+                                    cls: "meta-content pl-container-center"
+                                    children: metacontent
                                 desc =
                                     type: "div"
                                     cls: "description pl-container-center"
                                     children:
                                         type: "div"
                                         cls: "ui form"
-                                        children:
-                                            type: "div"
-                                            cls: "field"
-                                            children: @textarea
+                                        children: desccontent
                                 extra =
                                     type: "div"
                                     cls: "ui compact basic segment pl-container-center"
@@ -101,26 +98,54 @@ class Editor extends ModalView
         # call super with editor content and onupdate
         super mapper, content
 
-    show: (title, text, handler) ->
+    show: (title, handler) ->
         @header.innerHTML = "#{@title}" + if title then " | #{title}" else ""
-        @textarea.value = if text then "#{text}" else "#{@text}"
         @handler = handler ? null
         super()
 
     hide: ->
         @header.innerHTML = "#{@title}"
-        @textarea.value = @text
         @handler = null
         super()
 
-    callback: (status) ->
-        if status
-            @handler?(status, @textarea.value)
-        else
-            @handler?(status)
+    callback: (status) -> @handler?(status)
 
 
-class NoteEditor extends Editor
+class TextEditor extends Editor
+    # Editor class that takes text as content
+    constructor: (mapper, meta) ->
+        throw ("Mapper is undefined") unless mapper
+        # properties
+        @text = ""
+        # templates
+        @textarea = mapper.parseMapForParent {type: "textarea", title: "#{@text}"}
+        metacontent =
+            type: "div"
+            cls: "meta-content pl-container-center"
+            children: meta
+        desc =
+            type: "div"
+            cls: "description pl-container-center"
+            children:
+                type: "div"
+                cls: "ui form"
+                children:
+                    type: "div"
+                    cls: "field"
+                    children: @textarea
+        # call super with editor content and onupdate
+        super mapper, metacontent, desc
+
+    show: (title, text, handler) ->
+        @textarea.value = if text then "#{text}" else "#{@text}"
+        super title, handler
+
+    hide: ->
+        @textarea.value = @text
+        super()
+
+
+class NoteEditor extends TextEditor
     constructor: (@mapper, dropdownCenter) ->
         @tagsmenu = @mapper.parseMapForParent {type: "div", cls: "menu selectable"}
         @labels = @mapper.parseMapForParent {type: "div", cls: "item"}
@@ -188,4 +213,101 @@ class NoteEditor extends Editor
         else
             @handler?(status)
 
+
+class List
+    constructor: (@name, @object, @onselect, children=[], mapper) ->
+        [@collapsed, @selected] = [true, false]
+        @itself = mapper.parseMapForParent {type: "a", cls: "item", children:[]}
+        @toggler = mapper.parseMapForParent {type: "i", cls: "triangle icon", onclick: (e)-> @_parent_.toggle()}, @itself
+        @toggler._parent_ = @
+        # metaitem for text selection
+        @selectlabel = mapper.parseMapForParent {type: "div", cls: "ui label", title: "#{@name}", onclick: (e)-> @_parent_.select()}
+        @selectlabel._parent_ = @
+        metaitem =
+            type: "div"
+            cls: "content"
+            children: @selectlabel
+        mapper.parseMapForParent metaitem, @itself
+        if children and children.length
+            @box = mapper.parseMapForParent {type: "div", cls: "list", children: children}, @itself
+        @collapse()
+        @unselect()
+
+    collapse: ->
+        @box?.className = "ui list pl-hidden"
+        @toggler?.className = "right triangle icon"
+        @collapsed = true
+
+    expand: ->
+        @box?.className = "ui list pl-visible"
+        @toggler?.className = "down triangle icon"
+        @collapsed = false
+
+    toggle: ->
+        if @collapsed
+            @expand()
+        else
+            @collapse()
+
+    select: ->
+        return false if @selected
+        @selected = true
+        @selectlabel?.className = "ui blue label"
+        @onselect?(@)
+
+    unselect: ->
+        return false unless @selected
+        @selected = false
+        @selectlabel?.className = "ui label"
+
+    dom: -> @itself
+
+
+class MoveEditor extends Editor
+    constructor: (@mapper) ->
+        @navigator = @mapper.parseMapForParent {type: "div",cls: "ui list"}
+        @selected = null
+        description =
+            type: "div"
+            cls: "ui segment"
+            title: "[Directory] -> note is appended, [note] -> note is added before selected"
+        navigation =
+            type: "div"
+            cls: "ui segment pl-scrollable-box"
+            children: @navigator
+        super @mapper, description, navigation
+
+    buildList: (array) ->
+        # directory has name and children
+        # note has name
+        return null unless array and array.length
+        lists = []
+        for x in array
+            type = x?.type
+            name = x.name ? (if x.text.length > 50 then "#{x.text[0..50]}..." else x.text)
+            children = @buildList x.children
+            list = new List "#{type} [ #{name} ]", x, @resetSelected, children, @mapper
+            lists.push list.dom()
+        return lists
+
+    show: (title, handler, directories) ->
+        @navigator.innerHTML = ""
+        @selected = null
+        lists = @buildList directories
+        if lists and lists.length
+            @navigator.appendChild x for x in lists
+        super title, handler
+
+    hide: ->
+        @selected = null
+        super()
+
+    resetSelected: (note) =>
+        @selected?.unselect()
+        @selected = note
+
+    callback: (status) -> @handler?(status, @selected?.object)
+
+
 @Editor ?= NoteEditor
+@Mover ?= MoveEditor

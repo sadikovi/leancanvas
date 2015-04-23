@@ -110,6 +110,7 @@ mainmenu =
 @dropdownCenter.search canvasmenu
 # create editor
 editor = new @Editor @mapper, @dropdownCenter
+mover = new @Mover @mapper
 
 parseTags = (notetags, alltags, collect) ->
     propertags = []
@@ -131,7 +132,7 @@ layoutParseTags = (object) ->
 
 editNote = (note) ->
     return false if tagmanager.editmode
-    editor.show "Edit note", note.text, (status, text, tags) =>
+    editor.show "Edit note for [ #{note.parent.name} ]", note.text, (status, text, tags) =>
         if status
             tag.removeNote note for tag in note.tags
             [note.text, note.tags] = [text, tags]
@@ -147,11 +148,44 @@ deleteNote = (note) ->
     note.parent = null
     refreshCanvas()
 
+moveNote = (note) ->
+    collectDir = (layout) ->
+        dirs = []
+        recurcollect = (array, dirs) ->
+            return false unless array and array.length
+            for x in array
+                if x instanceof @Directory
+                    dirs.push x
+                else
+                    recurcollect x.children, dirs
+        if layout
+            recurcollect layout.data, dirs
+        return dirs
+
+    # show move dialog
+    mover.show "Move note", ((status, selected) =>
+        if status
+            if selected and selected != note and selected != note.parent
+                if selected.type == "directory"
+                    note.parent?.removeNote note
+                    note.parent = selected
+                    selected.addNote note
+                else if selected.type == "note" and selected.parent
+                    note.parent?.removeNote note
+                    note.parent = selected.parent
+                    _i = 0
+                    for x, i in selected.parent.children
+                        _i = i if x == selected
+                    selected.parent.children.splice _i, 0, note
+            refreshCanvas()
+        mover.hide()
+    ), collectDir canvaslayout
+
 addNote = (directory) ->
     return false if tagmanager.editmode
-    editor.show "Add note for [#{directory.name}]", "", (status, text, tags) =>
+    editor.show "Add note for [ #{directory.name} ]", "", (status, text, tags) =>
         if status
-            note = new Note "note:#{Math.random()}.0", directory, text, tags, [editNote, deleteNote]
+            note = new Note "note:#{Math.random()}.0", directory, text, tags, [editNote, deleteNote, moveNote]
             tag.addNote note for tag in tags
             directory?.addNote note
             refreshCanvas()
@@ -184,7 +218,7 @@ layout = (object, alltags) ->
                 element.children = recurLayout item.children, "note", collect, alltags, element
             else if type == "note"
                 tags = parseTags item.tags, alltags, collect
-                element = new @Note item.id, parent, item.text, tags, [editNote, deleteNote]
+                element = new @Note item.id, parent, item.text, tags, [editNote, deleteNote, moveNote]
                 tag.addNote element for tag in tags
             result.push element if element
         return result

@@ -24,9 +24,9 @@ handlers:
   static_files: styles/\1
   upload: styles/(.*\.(less|css|eot|otf|svg|ttf|woff|woff2))$
 
-- url: /scripts/(.*\.(js|coffee))$
-  static_files: lib/dict/\1
-  upload: lib/dict/(.*\.(js|coffee))$
+- url: /scripts/(src|dict)/(.*\.(js|coffee))$
+  static_files: lib/\1/\2
+  upload: lib/(.*?)/(.*\.(js|coffee))$
 
 - url: /fonts/(.*\.(ttf))$
   static_files: fonts/\1

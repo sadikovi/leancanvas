@@ -34,8 +34,9 @@ class Note
     constructor: (@id, @parent, @text, @tags=[], handlers=[]) ->
         @type = "note"
         @actions = [
-            new Action "id:#{@id}-edit", @, "Edit", null, "edit"
-            new Action "id:#{@id}-delete", @, "Delete", null, "delete"
+            new Action "id:#{@id}-edit", @, "E", null, "edit"
+            new Action "id:#{@id}-delete", @, "D", null, "delete"
+            new Action "id:#{@id}-move", @, "M", null, "share"
         ]
         for action, i in @actions
             action.handler = handlers[i] if i < handlers.length

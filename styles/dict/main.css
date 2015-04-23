@@ -640,7 +640,7 @@ a.notification-control:hover {
 .pl-scrollable-box {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  height: 170px;
+  height: 270px;
   padding: 10px;
   border: 1px solid #dddddd;
   overflow: auto;
@@ -767,6 +767,10 @@ a.notification-control:hover {
 .pl-hidden {
   display: none !important;
   visibility: hidden !important;
+}
+.pl-visible {
+  display: block !important;
+  visibility: visible !important;
 }
 /* It's hidden, but still affects layout */
 .pl-invisible {
