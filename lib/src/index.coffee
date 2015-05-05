@@ -48,8 +48,13 @@ mainmenu =
                 newcanvas =
                     type: "a"
                     cls: "item"
-                    title: "New canvas"
+                    title: "* Lean canvas"
                     onclick: (e) => resetCanvas()
+                simplecanvas =
+                    type: "a"
+                    cls: "item"
+                    title: "* Simple canvas"
+                    onclick: (e) => resetSimpleCanvas()
                 save =
                     type: "a"
                     cls: "item"
@@ -223,7 +228,7 @@ layout = (object, alltags) ->
             result.push element if element
         return result
     domains = recurLayout data, "domain", false, alltags, null
-    return data: domains, tags: alltags
+    return id: object.id, data: domains, tags: alltags
 
 layoutcheck = (layout, template) ->
     recurCheck = (llist, tlist) ->
@@ -240,7 +245,14 @@ refreshCanvas = ->
     @util.clear canvasbody
     @mapper.parseMapForParent (x.dom() for x in canvaslayout.data), canvasbody
 
-resetCanvas = (obj=@template_leancanvas) ->
+resetSimpleCanvas = (obj=@template_simplecanvas) ->
+    unless @template_simplecanvas
+        @notificationcenter.show @notificationcenter.type.Warning, "Template not found. Default layout will be loaded", null, false, null, null, canvasnote
+        resetCanvas()
+    else
+        resetCanvas obj, @template_simplecanvas
+
+resetCanvas = (obj=@template_leancanvas, template=@template_leancanvas) ->
     canvaslayouttags = layoutParseTags obj
     tagmanager = new @TagManager canvastags, @Tag, canvaslayouttags, =>
         @util.clear tagmanager.parent
@@ -252,14 +264,14 @@ resetCanvas = (obj=@template_leancanvas) ->
     # create general layout
     canvaslayout = layout obj, canvaslayouttags
     # perform check and report error
-    unless obj == @template_leancanvas
-        unless layoutcheck obj, @template_leancanvas
+    unless obj == template
+        unless layoutcheck obj, template
             @notificationcenter.show @notificationcenter.type.Warning, "Layout does not match template. Default layout will be loaded", null, false, null, null, canvasnote
             resetCanvas(@template_leancanvas)
             return false
     refreshCanvas()
     # show notification
-    if obj == @template_leancanvas
+    if obj == template
         @notificationcenter.show @notificationcenter.type.Success, "Layout reset", null, false, null, null, canvasnote
 
 # save something on github
@@ -268,6 +280,7 @@ savegist = (locally=false) ->
     savenote = @notificationcenter.show @notificationcenter.type.Info, "Saving...", -1, true, null, null, canvasnote
     # build payload
     payload =
+        id: canvaslayout.id
         data: (x.json() for x in canvaslayout.data)
         tags: (x.json() for x in tagmanager.getAllTags())
     @datamanager.saveGistOnGithub payload
@@ -294,7 +307,10 @@ loadgist = (gistid) ->
             # parse json
             @datamanager.parseJson(result.data
             , (obj) =>
-                resetCanvas(obj)
+                if obj.id and obj.id == @template_simplecanvas.id
+                    resetSimpleCanvas(obj)
+                else
+                    resetCanvas(obj)
                 @notificationcenter.change loadnote, @notificationcenter.type.Success, "Loaded", null, false, (->), null
             , (err) => @notificationcenter.change loadnote, @notificationcenter.type.Error, "Error: #{err}", null, false, null, (->))
         else

@@ -1,5 +1,5 @@
-@template_leancanvas =
-    id: "template_leancanvas"
+@template_simplecanvas =
+    id: "template_simplecanvas"
     data: [
         domain1 =
             type: "domain"
@@ -24,11 +24,6 @@
                             id: "canvas_solution"
                             name: "Solution"
                             placeholder: "Top 3 features..."
-                        canvas_key_metrics =
-                            type: "directory"
-                            id: "canvas_key_metrics"
-                            name: "Key metrics"
-                            placeholder: "Key activities you measure..."
                     ]
                 column3 =
                     type: "column"
@@ -40,6 +35,11 @@
                             name: "Unique value proposition"
                             placeholder: "Single, clear, compelling message that states why you are different and worth buying..."
                     ]
+            ]
+        domain2 =
+            type: "domain"
+            id: "domain2"
+            children: [
                 column4 =
                     type: "column"
                     id: "column4"
@@ -49,11 +49,6 @@
                             id: "canvas_unfair_advantage"
                             name: "Unfair advantage"
                             placeholder: "Cannot be easily copied or bought..."
-                        canvas_channels =
-                            type: "directory"
-                            id: "canvas_channels"
-                            name: "Channels"
-                            placeholder: "Path to customers..."
                     ]
                 column5 =
                     type: "column"
@@ -66,13 +61,34 @@
                             placeholder: "Target customers..."
                     ]
             ]
-        domain2 =
+
+        domain3 =
             type: "domain"
-            id: "domain2"
+            id: "domain3"
             children: [
                 column6 =
                     type: "column"
                     id: "column6"
+                    children: [
+                        canvas_channels =
+                            type: "directory"
+                            id: "canvas_channels"
+                            name: "Channels"
+                            placeholder: "Path to customers..."
+                    ]
+                column7 =
+                    type: "column"
+                    id: "column7"
+                    children: [
+                        canvas_key_metrics =
+                            type: "directory"
+                            id: "canvas_key_metrics"
+                            name: "Key metrics"
+                            placeholder: "Key activities you measure..."
+                    ]
+                column8 =
+                    type: "column"
+                    id: "column8"
                     children: [
                         canvas_cost_structure =
                             type: "directory"
@@ -80,9 +96,9 @@
                             name: "Cost structure"
                             placeholder: "Customer Acquisition Costs\r\nDistribution Costs\r\nHosting\r\nPeople, etc..."
                     ]
-                column7 =
+                column9 =
                     type: "column"
-                    id: "column7"
+                    id: "column9"
                     children: [
                         canvas_revenue_streams =
                             type: "directory"
