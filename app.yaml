@@ -33,9 +33,9 @@ handlers:
   upload: fonts/(.*\.(ttf))$
 
 # templates
-- url: /templates/(.*\.(js|coffee))$
-  static_files: lib/templates/\1
-  upload: lib/templates/(.*\.(js|coffee))$
+- url: /templates/(src|dict)/(.*\.(js|coffee))$
+  static_files: templates/\1/\2
+  upload: templates/(.*?)/(.*\.(js|coffee))$
 
 # images
 - url: /images/(.*\.(ico|png|jpg|jpeg))$

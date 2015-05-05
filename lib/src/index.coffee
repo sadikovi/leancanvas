@@ -135,6 +135,8 @@ layoutParseTags = (object) ->
     alltags = if "tags" of object then object.tags else []
     parseTags alltags, [], true
 
+#################################################
+# note actions
 editNote = (note) ->
     return false if tagmanager.editmode
     editor.show "Edit note for [ #{note.parent.name} ]", note.text, (status, text, tags) =>
@@ -197,6 +199,7 @@ addNote = (directory) ->
         editor.hide()
     , tagmanager.getAllTags(), []
 
+# building layout
 layout = (object, alltags) ->
     return false unless object
     # domains list, data array, and all tags list
@@ -230,6 +233,7 @@ layout = (object, alltags) ->
     domains = recurLayout data, "domain", false, alltags, null
     return id: object.id, data: domains, tags: alltags
 
+# checking layout to match template
 layoutcheck = (layout, template) ->
     recurCheck = (llist, tlist) ->
         return false unless llist and tlist and llist.length == tlist.length
