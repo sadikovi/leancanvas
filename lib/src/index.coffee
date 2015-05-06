@@ -2,11 +2,12 @@ canvasmenu = document.getElementById "ln-canvas-menu"
 canvasbody = document.getElementById "ln-canvas-body"
 canvastags = document.getElementById "ln-canvas-tags"
 canvasnote = document.getElementById "ln-canvas-note"
+canvastitle = document.getElementById "ln-canvas-title"
 # check that elements are in place
-throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags and canvasnote
+throw ("Canvas is not found") unless canvasmenu and canvasbody and canvastags and canvasnote and canvastitle
 
 # init global variables
-[canvaslayout, canvaslayouttags, tagmanager] = [null, null, null]
+[canvaslayout, canvaslayouttags, tagmanager, titlemanager] = [null, null, null, null]
 
 # dropdown controls
 loadinput = @mapper.parseMapForParent {type: "input", inputtype: "text", placeholder: "Paste Gist id or link..."}
@@ -231,7 +232,7 @@ layout = (object, alltags) ->
             result.push element if element
         return result
     domains = recurLayout data, "domain", false, alltags, null
-    return id: object.id, data: domains, tags: alltags
+    return id: object.id, title: object.title, data: domains, tags: alltags
 
 # checking layout to match template
 layoutcheck = (layout, template) ->
@@ -273,6 +274,15 @@ resetCanvas = (obj=@template_leancanvas, template=@template_leancanvas) ->
             @notificationcenter.show @notificationcenter.type.Warning, "Layout does not match template. Default layout will be loaded", null, false, null, null, canvasnote
             resetCanvas(@template_leancanvas)
             return false
+    # create title layout
+    titlemanager = new @TitleManager canvastitle, =>
+        @util.clear canvastitle
+        @mapper.parseMapForParent titlemanager.dom(), titlemanager.parent
+        # TODO: refactor that, create separate functions
+    titlemanager.addTitle canvaslayout.title
+    @util.clear titlemanager.parent
+    @mapper.parseMapForParent titlemanager.dom(), titlemanager.parent
+    # refresh canvas
     refreshCanvas()
     # show notification
     if obj == template
@@ -285,6 +295,7 @@ savegist = (locally=false) ->
     # build payload
     payload =
         id: canvaslayout.id
+        title: titlemanager.getTitle()
         data: (x.json() for x in canvaslayout.data)
         tags: (x.json() for x in tagmanager.getAllTags())
     @datamanager.saveGistOnGithub payload
