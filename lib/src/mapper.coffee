@@ -27,6 +27,7 @@ class Mapper
             id: 'id'
             title: 'title'
             href: 'href'
+            target: 'target'
             src: 'src'
             inputvalue: 'inputvalue'
             inputtype: 'inputtype'
@@ -46,6 +47,7 @@ class Mapper
             c.id = "#{map[mprs.id]}" if mprs.id of map
             c.className = "#{map[mprs.cls]}" if mprs.cls of map
             c.href = "#{map[mprs.href]}" if mprs.href of map
+            c.target = "#{map[mprs.target]}" if mprs.target of map
             c.src = "#{map[mprs.src]}" if mprs.src of map
             # input parameters
             c.value = "#{map[mprs.inputvalue]}" if mprs.inputvalue of map

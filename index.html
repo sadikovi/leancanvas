@@ -11,16 +11,27 @@
 </head>
 <body>
     <div class="pl-max-body-width pl-container-center">
-        <div class="ui basic segment" id="ln-canvas-menu"></div>
-        <div class="pl-container pl-container-center pl-text-center" style="min-height:50px;" id="ln-canvas-note"></div>
-        <div class="pl-container pl-container-center">
-            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-tags"></div>
+        <!--div class="ui basic segment" id="ln-canvas-menu"></div>
+        <div class="ui basic segment" style="min-height:50px;" id="ln-canvas-note"></div-->
+        <div class="ui basic segment" id="ln-canvas-menu">
+            <div class="ui one item fixed menu">
+                <div class="item">
+                    <div class="ui list">
+                        <div class="item" id="ln-canvas-menu-content"></div>
+                        <div class="item" id="ln-canvas-note"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="pl-container pl-container-center">
-            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-title"></div>
+        <div class="ui basic segment"></div>
+        <div class="ui basic horizontal segment">
+            <div class="ui grid" id="ln-canvas-tags"></div>
         </div>
-        <div class="pl-container pl-container-center">
-            <div class="ui grid" style="padding: .5rem;" id="ln-canvas-body"></div>
+        <div class="ui basic horizontal segment">
+            <div class="ui grid" id="ln-canvas-title"></div>
+        </div>
+        <div class="ui basic horizontal segment">
+            <div class="ui grid" id="ln-canvas-body"></div>
         </div>
     </div>
     <!-- loading js scripts -->

@@ -1,4 +1,4 @@
-canvasmenu = document.getElementById "ln-canvas-menu"
+canvasmenu = document.getElementById "ln-canvas-menu-content"
 canvasbody = document.getElementById "ln-canvas-body"
 canvastags = document.getElementById "ln-canvas-tags"
 canvasnote = document.getElementById "ln-canvas-note"
@@ -17,97 +17,153 @@ loadbtn = @mapper.parseMapForParent {type: "button", cls: "ui primary button pl-
 # build menu
 mainmenu =
     type: "div"
-    cls: "ui fixed main menu"
+    cls: "ui two column grid"
     children: [
-        header =
+        left =
             type: "div"
-            cls: "item pl-text-bold"
-            title: "Lean canvas v1.1.0"
-        github =
-            type: "a"
-            cls: "item"
-            title: "Github"
-            href: "https://github.com/sadikovi/leancanvas"
-            text_last: true
+            cls: "six wide column"
             children:
-                type: "i"
-                cls: "github icon"
-        about =
-            type: "a"
-            cls: "item"
-            title: "About"
-            href: "/about"
-        previous =
-            type: "a"
-            cls: "item"
-            title: "v1.0.2"
-            href: "http://sadikovi.github.io/leancanvas/"
-        rightmenu =
-            type: "div"
-            cls: "right menu"
-            children: [
-                newcanvas =
-                    type: "a"
-                    cls: "item"
-                    title: "* Lean canvas"
-                    onclick: (e) => resetCanvas()
-                simplecanvas =
-                    type: "a"
-                    cls: "item"
-                    title: "* Simple canvas"
-                    onclick: (e) => resetSimpleCanvas()
-                save =
-                    type: "a"
-                    cls: "item"
-                    title: "Save"
-                    text_last: true
-                    onclick: (e) => savegist(true)
-                    children:
-                        type: "i"
-                        cls: "save icon"
-                load =
-                    type: "a"
-                    cls: "item"
-                    title: "Load"
-                    text_last: true
-                    onclick: (e) => loadlastsave()
-                    children:
-                        type: "i"
-                        cls: "paste icon"
-                saveasgist =
-                    type: "a"
-                    cls: "item"
-                    title: "Save as Gist"
-                    text_last: true
-                    onclick: (e) => savegist(false)
-                    children:
-                        type: "i"
-                        cls: "github alternate icon"
-                loadgist =
+                type: "div"
+                cls: "ui basic horizontal segment"
+                children:
                     type: "div"
-                    cls: "ui dropdown item"
-                    text_last: true
+                    cls: "ui breadcrumb"
                     children: [
-                        github =
-                            type: "i"
-                            cls: "github alternate icon"
-                        span =
-                            type: "span"
-                            title: "Load Gist"
-                        dropdown =
-                            type: "i"
-                            cls: "dropdown icon"
-                        menu =
+                        header =
                             type: "div"
-                            cls: "menu"
+                            cls: "active section"
+                            title: "Lean canvas v1.1.0"
+                        divider = type: "div", cls: "divider", title: "|"
+                        github =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "Github"
+                                href: "https://github.com/sadikovi/leancanvas"
+                                target: "_blank"
+                                text_last: true
+                                children:
+                                    type: "i"
+                                    cls: "github icon"
+                        about =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "About"
+                                href: "/about"
+                                target: "_blank"
+                        previous =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "v1.0.2"
+                                href: "http://sadikovi.github.io/leancanvas/"
+                                target: "_blank"
+                    ]
+        middle =
+            type: "div"
+            cls: "four wide column"
+            children:
+                type: "div"
+                cls: "ui basic horizontal segment"
+                children:
+                    type: "div"
+                    cls: "ui breadcrumb"
+                    children: [
+                        newcanvas =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "[ Lean ]"
+                                onclick: (e) => resetCanvas()
+                        simplecanvas =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "[ Simple ]"
+                                onclick: (e) => resetSimpleCanvas()
+                    ]
+        right =
+            type: "div"
+            cls: "six wide column"
+            children:
+                type: "div"
+                cls: "ui basic horizontal segment"
+                children:
+                    type: "div"
+                    cls: "ui breadcrumb"
+                    children: [
+                        save =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "Save"
+                                text_last: true
+                                onclick: (e) => savegist(true)
+                                children:
+                                    type: "i"
+                                    cls: "save icon"
+                        load =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "Load"
+                                text_last: true
+                                onclick: (e) => loadlastsave()
+                                children:
+                                    type: "i"
+                                    cls: "paste icon"
+                        saveasgist =
+                            type: "div"
+                            cls: "section"
+                            children:
+                                type: "div"
+                                cls: "ui small compact basic secondary button"
+                                title: "Save as Gist"
+                                text_last: true
+                                onclick: (e) => savegist(false)
+                                children:
+                                    type: "i"
+                                    cls: "github alternate icon"
+                        loadgist =
+                            type: "div"
+                            cls: "ui small compact basic button dropdown"
+                            text_last: true
                             children: [
-                                input =
+                                github =
+                                    type: "i"
+                                    cls: "github alternate icon"
+                                span =
+                                    type: "span"
+                                    title: "Load Gist"
+                                dropdown =
+                                    type: "i"
+                                    cls: "dropdown icon"
+                                menu =
                                     type: "div"
-                                    cls: "ui action mini input"
-                                    children: [loadinput, loadbtn]
+                                    cls: "menu pl-position-right-auto"
+                                    children: [
+                                        input =
+                                            type: "div"
+                                            cls: "ui action mini input"
+                                            children: [loadinput, loadbtn]
+                                    ]
                             ]
                     ]
-            ]
     ]
 
 # draw menu

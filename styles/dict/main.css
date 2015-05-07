@@ -76,7 +76,7 @@ div.notification {
   margin: 0 4px;
 }
 a.notification-control {
-  color: #4183c4;
+  color: #4183c4 !important;
   cursor: pointer;
   margin: 0 2px;
 }
@@ -702,6 +702,13 @@ a.notification-control:hover {
   bottom: 0;
   left: 0;
   right: 0;
+}
+.pl-position-right-auto {
+  left: auto !important;
+  right: 0 !important;
+}
+.pl-position-left-auto {
+  left: auto !important;
 }
 /*
  * Relative
