@@ -38,7 +38,7 @@ mainmenu =
                             type: "div"
                             cls: "section"
                             children:
-                                type: "div"
+                                type: "a"
                                 cls: "ui small compact basic secondary button"
                                 title: "Github"
                                 href: "https://github.com/sadikovi/leancanvas"
@@ -51,7 +51,7 @@ mainmenu =
                             type: "div"
                             cls: "section"
                             children:
-                                type: "div"
+                                type: "a"
                                 cls: "ui small compact basic secondary button"
                                 title: "About"
                                 href: "/about"
@@ -60,7 +60,7 @@ mainmenu =
                             type: "div"
                             cls: "section"
                             children:
-                                type: "div"
+                                type: "a"
                                 cls: "ui small compact basic secondary button"
                                 title: "v1.0.2"
                                 href: "http://sadikovi.github.io/leancanvas/"
